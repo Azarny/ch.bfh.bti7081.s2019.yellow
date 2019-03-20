@@ -1,0 +1,3 @@
+[submodule "docs"]
+	path = docs
+	url = https://github.com/Azarny/ch.bfh.bti7081.s2019.yellow.wiki.git
