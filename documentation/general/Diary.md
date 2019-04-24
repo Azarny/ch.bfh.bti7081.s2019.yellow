@@ -1,5 +1,22 @@
 # Meetings
 
+## 24.04.2019
+Teilnehmer: Yaron, Lucien, Simon, Nadine
+
+Themen:
+* Domain Model entworfen 
+* Klassenmodell besprochen
+* Sequenzdiagramme besprochen
+* Fragen geklärt 
+* Bewertung für vorgehende Tasks erhalten
+
+### Tasks
+|Name|Bis wann|Wer|Information|
+|---|---|---|---|
+|Model-Entwurf in Visio abbilden|29.04.2019|Lucien|Datei erstellen und im Workspace ablegen|
+|Klassenmodell erstellen|29.04.2019|Nadine|Grafik erstellen / generieren|
+|Sequenzdiagramme - Erstellung planen|26.04.2019|Team|Verantwortung und Task definieren|
+
 ## 08.04.2019
 Teilnehmer: Yaron, Lucien, Michelle, Simon, Nadine
 
