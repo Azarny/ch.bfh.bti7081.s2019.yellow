@@ -1,5 +1,29 @@
 # Meetings
 
+## 29.04.2019
+Teilnehmer: Yaron, Lucien, Simon
+
+Themen:
+* Teilergebnisse besprochen und angepasst
+* Dokument ergänzt und Abgabe
+
+## 26.04.2019
+Teilnehmer: Yaron, Lucien, Simon, Nadine
+
+Themen:
+* Domain Model nachkorrigiert 
+* Klassenmodell konzipiert
+* Sequenzdiagramme konzipiert
+* Fragen geklärt 
+
+### Tasks
+|Name|Bis wann|Wer|Information|
+|---|---|---|---|
+|Klassenmodell erstellen|29.04.2019|Nadine|Grafik erstellen / generieren|
+|Sequenzdiagramm - Seminarerstellung |29.04.2019|Yaron|Grafik erstellen / generieren|
+|Sequenzdiagramm - Seminare Suchen|29.04.2019|Michelle|Grafik erstellen / generieren|
+|Dokument vorbereiten|29.04.2019|Simon|Inhalte folgen noch|
+
 ## 24.04.2019
 Teilnehmer: Yaron, Lucien, Simon, Nadine
 
