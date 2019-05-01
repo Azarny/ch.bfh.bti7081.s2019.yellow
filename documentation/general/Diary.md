@@ -89,8 +89,8 @@ Themen:
 Use Cases:
 * Wiki lesen
 * neuer Wiki Eintrag hinzufügen
-* Seminar anzeigen und suchen
-* Seminar hinzufügen (als Admin)
+* model.Seminar anzeigen und suchen
+* model.Seminar hinzufügen (als Admin)
 * Frage im Forum stellen
 * Frage im Forum beantworten
 
