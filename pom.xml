@@ -6,7 +6,9 @@
 
     <groupId>ch.bfh.bti7081.s2019.yellow</groupId>
     <artifactId>healthApp</artifactId>
+    <name>healthApp</name>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
