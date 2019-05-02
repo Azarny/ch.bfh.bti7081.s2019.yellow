@@ -1,5 +1,22 @@
 # Meetings
 
+## 01.05.2019
+Teilnehmer: Yaron, Lucien, Simon, Nadine, Michelle
+
+Themen:
+* Klassendiagramm
+* Aufsetzen Vaadin
+* Fragen geklärt
+* Aufgaben verteilt
+
+### Tasks
+|Name|Bis wann|Wer|Information|
+|---|---|---|---|
+|Klassenmodell erstellen|03.05.2019|Nadine|Grafik erstellen / generieren|
+|Product Backlog erstellen|03.05.2019|Nadine||
+|Komponenten und Deployment Diagramm |03.05.2019|Michelle|Grafik erstellen / generieren|
+|Sprint Backlog befüllen |03.05.2019| tbd | |
+
 ## 29.04.2019
 Teilnehmer: Yaron, Lucien, Simon
 
