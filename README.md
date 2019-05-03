@@ -5,3 +5,7 @@ Die generelle Dokumentation (**Diary**, Interviews, Personas, etc) befindet sich
 
 <br>Die Ergebnisse aus den verschiedenen Tasks sind unter `/documentation/Task{Nummer}` zu finden. 
 <br>Der Code zu der Applikation befindet sich unter `/src/...`
+
+## Namenskonvention Branches
+Neue Branches werden wiefolgt benannt:
+[Nummer, z. B. 17-1]-[Beschreibung]
