@@ -1,5 +1,21 @@
 # Meetings
 
+## 03.05.2019
+Teilnehmer: Yaron, Lucien, Simon, Nadine, Michelle
+
+Themen:
+* Sprint Backlog Tasks für Sprint 1 definieren
+* Feedback Task4
+* Fragen geklärt
+* Aufgaben verteilt
+
+### Tasks
+|Name|Bis wann|Wer|Information|
+|---|---|---|---|
+|Task-Descriptions für Sprint-Backlogs hinzufügen|06.05.2019|alle||
+|Klassenmodell erstellen|06.05.2019|Lucien|Grafik erstellen / generieren|
+|Dokumentation Task5|06.05.2019|Yaron||
+
 ## 01.05.2019
 Teilnehmer: Yaron, Lucien, Simon, Nadine, Michelle
 
