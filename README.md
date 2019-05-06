@@ -1,4 +1,11 @@
 # ch.bfh.bti7081.s2019.yellow
 Repository für Kurs Software Engineering and Design an der BFH
 
-In order to see the documentation, please check the Wiki
+Die generelle Dokumentation (**Diary**, Interviews, Personas, etc) befindet sich im unter /documentation/... . 
+
+<br>Die Ergebnisse aus den verschiedenen Tasks sind unter `/documentation/Task{Nummer}` zu finden. 
+<br>Der Code zu der Applikation befindet sich unter `/src/...`
+
+## Namenskonvention Branches
+Neue Branches werden wiefolgt benannt:
+[Nummer, z. B. 17-1]-[Beschreibung]
