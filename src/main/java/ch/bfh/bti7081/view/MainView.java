@@ -1,4 +1,4 @@
-package ch.bfh.bti7081;
+package ch.bfh.bti7081.view;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.notification.Notification;
