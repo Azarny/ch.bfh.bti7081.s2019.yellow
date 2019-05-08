@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="ch.bfh.bti7081.s2019.yellow:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>ch.bfh.bti7081.s2019.yellow</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="healthApp-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="ch.bfh.bti7081.s2019.yellow:war exploded" />
+    </root>
+  </artifact>
+</component>
