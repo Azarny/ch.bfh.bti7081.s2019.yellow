@@ -84,4 +84,27 @@ public class Seminar {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public boolean validate(String street, String houseNumber, String plz, String location, String title, String date, String category, String link, String description){
+        // array contains values [value][RegEx pattern] for each field
+        String[][] validationSet = {
+            {street,""},
+            {houseNumber,""},
+            {plz,""},
+            {location,""},
+            {title,""},
+            {date,""},
+            {category,""},
+            {link,""},
+            {description,""}
+        };
+
+        for (String[] set: validationSet) {
+            if(true){
+                return false;
+            }
+        }
+        return true;
+
+    }
 }
