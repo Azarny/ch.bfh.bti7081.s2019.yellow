@@ -21,14 +21,6 @@ public class SeminarManager {
     }
 
     public static Seminar createSeminar(Seminar seminar) {
-        System.out.println(seminar.getTitle());
-        System.out.println(seminar.getDate());
-        System.out.println(seminar.getCategory().getName());
-        System.out.println(seminar.getHouseNumber());
-        System.out.println(seminar.getPlz());
-        System.out.println(seminar.getStreet());
-        System.out.println(seminar.getLink());
-
         throw new IllegalArgumentException("Not implemented yet.");
     }
 
