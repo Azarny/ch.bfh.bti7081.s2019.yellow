@@ -40,7 +40,7 @@ public class NewSeminarView extends VerticalLayout {
     private TextField seminarStreetNbr = new TextField("Nr.");
     private FormLayout streetComposite = new FormLayout(seminarStreet,seminarStreetNbr);
 
-    private NumberField seminarPlz = new NumberField ("PLZ");
+    private NumberField seminarPlz = new NumberField("PLZ");
     private TextField seminarPlace = new TextField ("Ort");
     private FormLayout placeComposite = new FormLayout(seminarPlace,seminarPlz);
 
@@ -49,9 +49,7 @@ public class NewSeminarView extends VerticalLayout {
 
     private Label errorMessage = new Label("Hier könnte ihre Fehlermeldung stehen.");
 
-    //private NativeButton save = new NativeButton("Save");
     private Button save = new Button("Save", new Icon(VaadinIcon.PLUS));
-    //private NativeButton reset = new NativeButton("Reset");
     private Button reset = new Button("Reset", new Icon(VaadinIcon.ERASER));
     private HorizontalLayout formActions = new HorizontalLayout(save,reset);
 
@@ -87,10 +85,10 @@ public class NewSeminarView extends VerticalLayout {
         binder.bind(seminarDescription, Seminar::getDescription, Seminar::setDescription);
         binder.bind(seminarStreet, Seminar::getStreet, Seminar::setStreet);
         binder.bind(seminarStreetNbr, Seminar::getHouseNumber, Seminar::setHouseNumber);
-
-        //binder.bind(seminarPlz, s->s.getPlz().doubleValue(), Seminar::setPlz);
-
-
+        binder.forField(seminarPlz).
+                //withConverter(UI-Value to Model, Model-Value to UI, Error Message if not succesfull)
+                withConverter(Double::intValue, Integer::doubleValue,"Bitte eine PLZ eingeben").
+                bind(Seminar::getPlz, Seminar::setPlz);
 
         this.add(title);
         this.add(seminarForm);
