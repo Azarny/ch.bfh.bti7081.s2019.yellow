@@ -50,14 +50,17 @@ public class NewSeminarView extends VerticalLayout {
     private Label errorMessage = new Label("Hier könnte ihre Fehlermeldung stehen.");
 
     private Button save = new Button("Save", new Icon(VaadinIcon.PLUS));
-    private Button reset = new Button("Reset", new Icon(VaadinIcon.ERASER));
-    private HorizontalLayout formActions = new HorizontalLayout(save,reset);
+    private Button cancel = new Button("Cancel", new Icon(VaadinIcon.EXIT));
+
+    private HorizontalLayout formActions = new HorizontalLayout(save,cancel);
 
 
     private Binder<Seminar> binder = new Binder<>();
     private Seminar newSeminar = new Seminar();
+
     public NewSeminarView(){
         seminarForm.add(seminarTitle);
+        seminarForm.add(seminarDateTime);
         seminarForm.add(seminarCategory);
         seminarForm.add(streetComposite);
         seminarForm.add(placeComposite);
@@ -65,30 +68,40 @@ public class NewSeminarView extends VerticalLayout {
         seminarForm.add(seminarDescription);
 
         seminarTitle.setRequiredIndicatorVisible(true);
-        seminarCategory.setRequiredIndicatorVisible(true);
-        seminarDescription.setRequiredIndicatorVisible(true);
-        seminarLink.setRequiredIndicatorVisible(true);
         seminarDateTime.setRequiredIndicatorVisible(true);
-        seminarPlz.setRequiredIndicatorVisible(true);
+        seminarCategory.setRequiredIndicatorVisible(true);
+        //streetComposite
         seminarStreet.setRequiredIndicatorVisible(true);
-        seminarPlace.setRequiredIndicatorVisible(true);
         seminarStreetNbr.setRequiredIndicatorVisible(true);
+        //placeComposite
+        seminarPlz.setRequiredIndicatorVisible(true);
+        seminarPlace.setRequiredIndicatorVisible(true);
+        seminarLink.setRequiredIndicatorVisible(true);
+        seminarDescription.setRequiredIndicatorVisible(true);
 
+        //Category-Settings
         seminarCategory.setLabel("Kategorie");
         seminarCategory.setItems(SeminarCategoryManager.getSeminarCategories());
         seminarCategory.setTextRenderer(SeminarCategory::getName);
         seminarCategory.setItemLabelGenerator(SeminarCategory::getName);
+        seminarCategory.setEmptySelectionAllowed(false);
 
+
+        //Binder-Configuration
         binder.bind(seminarTitle, Seminar::getTitle, Seminar::setTitle);
         binder.bind(seminarDateTime, Seminar::getDate, Seminar::setDate);
-        binder.bind(seminarCategory, Seminar::getCategory, Seminar::setCategory);
-        binder.bind(seminarDescription, Seminar::getDescription, Seminar::setDescription);
+        //Kategorie ist notwendig
+        binder.forField(seminarCategory).asRequired("Bitte eine Kategorie wählen.").
+                bind(Seminar::getCategory, Seminar::setCategory);
         binder.bind(seminarStreet, Seminar::getStreet, Seminar::setStreet);
         binder.bind(seminarStreetNbr, Seminar::getHouseNumber, Seminar::setHouseNumber);
         binder.forField(seminarPlz).
                 //withConverter(UI-Value to Model, Model-Value to UI, Error Message if not succesfull)
                 withConverter(Double::intValue, Integer::doubleValue,"Bitte eine PLZ eingeben").
                 bind(Seminar::getPlz, Seminar::setPlz);
+        binder.bind(seminarPlace, Seminar::getLocation, Seminar::setLocation);
+        binder.bind(seminarLink, Seminar::getLink, Seminar::setLink);
+        binder.bind(seminarDescription, Seminar::getDescription, Seminar::setDescription);
 
         this.add(title);
         this.add(seminarForm);
@@ -98,6 +111,7 @@ public class NewSeminarView extends VerticalLayout {
         save.addClickListener(event -> {
             if (binder.writeBeanIfValid(newSeminar)) {
                 SeminarManager.createSeminar(newSeminar);
+                save.getUI().ifPresent(ui -> ui.navigate("seminar"));
             } else {
                 BinderValidationStatus<Seminar> validate = binder.validate();
                 String errorText = validate.getFieldValidationStatuses()
@@ -106,11 +120,12 @@ public class NewSeminarView extends VerticalLayout {
                         .map(Optional::get).distinct()
                         .collect(Collectors.joining(", "));
                 errorMessage.setText("There are errors: " + errorText);
+
             }
         });
-        reset.addClickListener(event -> {
-            binder.readBean(null);
-            errorMessage.setText("");
+
+        cancel.addClickListener(event -> {
+            cancel.getUI().ifPresent(ui -> ui.navigate("seminar"));
         });
     }
 }

@@ -29,15 +29,11 @@ public class LocalDateTimePicker extends CustomField<LocalDateTime> {
     }
 
     @Override
-    protected void setPresentationValue(
-            LocalDateTime newPresentationValue) {
-        datePicker.setValue(newPresentationValue != null ?
-                newPresentationValue.toLocalDate() :
-                null);
-        timePicker.setValue(newPresentationValue != null ?
-                newPresentationValue.toLocalTime() :
-                null);
-
+    protected void setPresentationValue(LocalDateTime newPresentationValue) {
+        if (newPresentationValue != null){
+            datePicker.setValue(newPresentationValue.toLocalDate());
+            timePicker.setValue(newPresentationValue.toLocalTime());
+        }
     }
 
 }
