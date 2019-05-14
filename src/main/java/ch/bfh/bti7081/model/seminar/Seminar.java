@@ -1,6 +1,5 @@
 package ch.bfh.bti7081.model.seminar;
 
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 public class Seminar {
@@ -14,6 +13,7 @@ public class Seminar {
     private String url;
     private String description;
 
+    // the user can only save events that are in the next x years
     private int maxYearsInFuture = 5;
 
     public String getStreet() {
@@ -30,6 +30,7 @@ public class Seminar {
     }
 
     public void setHouseNumber(String houseNumber) throws IllegalArgumentException{
+        // a house number can only have one char after the digits
         if (!houseNumber.matches("^\\d*\\w$")) throw new IllegalArgumentException("No valid house number.");
         this.houseNumber = houseNumber;
     }
@@ -39,6 +40,7 @@ public class Seminar {
     }
 
     public void setPlz(Integer plz) throws IllegalArgumentException{
+        // there are plz that have 6 digits
         if(plz == null || !((plz > 999 && plz < 10000) || (plz > 99999 && plz < 1000000))) throw new IllegalArgumentException("No valid PLZ.");
         this.plz = plz;
     }
@@ -72,7 +74,6 @@ public class Seminar {
     }
 
     public SeminarCategory getCategory(){
-
         return category;
     }
 
@@ -86,7 +87,11 @@ public class Seminar {
     }
 
     public void setUrl(String url) throws IllegalArgumentException{
-        if (!url.matches("^((https?|ftp)://)?(\\w+\\.)+(\\w{2}|\\w{3})(/\\S+(\\./\\S+)*)?$")) throw new IllegalArgumentException("No valid URL.");
+        //regex pattern description:
+        //^((https?|ftp)://)? --> allows http://, https:// and nothing
+        // (\w+\.)+(\w{2}|\w{3}) --> allows url with one or more "parts" before the .topleveldomain. top level domains are made of 2 or 3 chars
+        // (/\S+(\./\S+)*)?$ --> allows all the stuff after the last / but no whitespaces
+        if (!url.matches("^((https?)://)?(\\w+\\.)+(\\w{2}|\\w{3})(/\\S+(\\./\\S+)*)?$")) throw new IllegalArgumentException("No valid URL.");
         this.url = url;
     }
 
@@ -99,6 +104,7 @@ public class Seminar {
         this.description = description;
     }
 
+    // one query creation of seminar possible
     public Seminar(String street, String houseNumber, Integer plz, String location, String title, LocalDateTime date, SeminarCategory category, String url, String description){
             setStreet(street);
             setHouseNumber(houseNumber);
@@ -111,6 +117,7 @@ public class Seminar {
             setDescription(description);
     }
 
+    // default constructor needed because of overload
     public Seminar(){}
 
 
