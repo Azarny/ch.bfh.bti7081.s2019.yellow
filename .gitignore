@@ -3,3 +3,4 @@ ch.bfh.bti7081.s2019.yellow/.settings/
 !.idea/
 .idea/*
 !.idea/runConfigurations/
+target/*

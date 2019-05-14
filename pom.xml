@@ -8,36 +8,52 @@
     <artifactId>healthApp</artifactId>
     <name>healthApp</name>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
 
-    <prerequisites>
-        <maven>3</maven>
-    </prerequisites>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.1.4.RELEASE</version>
+    </parent>
 
     <properties>
-        <vaadin.version>8.3.3</vaadin.version>
-        <vaadin.plugin.version>8.3.3</vaadin.plugin.version>
-        <jetty.plugin.version>9.4.9.v20180320</jetty.plugin.version>
-        <hibernate.version>5.2.16.Final</hibernate.version>
-        <hibernateModelGen.version>5.2.16.Final</hibernateModelGen.version>
-        <h2.version>1.4.197</h2.version>
-        <log4j.version>2.11.0</log4j.version>
-        <junit.version>3.8.2</junit.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <!-- If there are no local customizations, this can also be "fetch" or "cdn" -->
-        <vaadin.widgetset.mode>local</vaadin.widgetset.mode>
-        <skipTests>true</skipTests>
+        <java.version>1.8</java.version>
+        <javax.version>4.0.1</javax.version>
+        <vaadin.version>10.0.13</vaadin.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>vaadin-addons</id>
-            <url>http://maven.vaadin.com/vaadin-addons</url>
-        </repository>
-    </repositories>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <!-- tag::starter[] -->
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-spring-boot-starter</artifactId>
+        </dependency>
+        <!-- end::starter[] -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${javax.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+    </dependencies>
+
+    <!-- tag::bom[] -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -49,130 +65,13 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-server</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-push</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-client-compiled</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-themes</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>${hibernate.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-jpamodelgen</artifactId>
-            <version>${hibernateModelGen.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>${h2.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-api</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-        </dependency>
-    </dependencies>
+    <!-- end::bom[] -->
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.21.0</version>
-                <configuration>
-                    <skipTests>${skipTests}</skipTests>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                    <!-- Exclude an unnecessary file generated by the GWT compiler. -->
-                    <packagingExcludes>WEB-INF/classes/VAADIN/widgetsets/WEB-INF/**</packagingExcludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.vaadin</groupId>
-                <artifactId>vaadin-maven-plugin</artifactId>
-                <version>${vaadin.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>update-theme</goal>
-                            <goal>update-widgetset</goal>
-                            <goal>compile</goal>
-                            <!-- Comment out compile-theme goaltracker to use on-the-fly theme compilation -->
-                            <goal>compile-theme</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.0.0</version>
-                <!-- Clean up also any pre-compiled themes -->
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>src/main/webapp/VAADIN/themes</directory>
-                            <includes>
-                                <include>**/styles.css</include>
-                                <include>**/styles.scss.cache</include>
-                            </includes>
-                        </fileset>
-                    </filesets>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>${jetty.plugin.version}</version>
-                <configuration>
-                    <!-- NEED to Change watch directory -->
-                    <scanIntervalSeconds>0</scanIntervalSeconds>
-                    <systemProperties>
-                        <systemProperty>
-                            <name>SkipTestDataImporting</name>
-                            <value>${skipTests}</value>
-                        </systemProperty>
-                    </systemProperties>
-                </configuration>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

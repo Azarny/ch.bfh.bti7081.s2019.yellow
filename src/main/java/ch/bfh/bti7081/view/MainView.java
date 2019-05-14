@@ -7,7 +7,6 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Component;
 @UIScope
 @Tag("home-view")
 @Route(value = "", layout = Layout.class)
-@PWA(name = "Project Base for Vaadin Flow", shortName = "Project Base")
 public class MainView extends VerticalLayout {
     private String loremipsum = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, " +
             "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, " +
