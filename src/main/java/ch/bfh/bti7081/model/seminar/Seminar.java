@@ -1,17 +1,26 @@
 package ch.bfh.bti7081.model.seminar;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 public class Seminar {
+    @NotBlank(message="Street name can't be empty.")
     private String street;
+    @NotBlank(message="House number can't be empty.")
     private String houseNumber;
     private Integer plz;
+    @NotBlank(message="Location can't be empty.")
     private String location;
+    @NotBlank(message="Title can't be empty.")
     private String title;
     private LocalDateTime date;
     private SeminarCategory category;
-    private String link;
+    @NotBlank(message="URL can't be empty.")
+    private String url;
+    @NotBlank(message="Description can't be empty.")
     private String description;
+
+    private int maxYearsInFuture = 5;
 
     public String getStreet() {
         return street;
@@ -26,6 +35,7 @@ public class Seminar {
     }
 
     public void setHouseNumber(String houseNumber) {
+        if (!houseNumber.matches("^\\d*\\w$")) throw new IllegalArgumentException("No valid house number.");
         this.houseNumber = houseNumber;
     }
 
@@ -34,6 +44,7 @@ public class Seminar {
     }
 
     public void setPlz(Integer plz) {
+        if(plz == null || !((plz > 999 && plz < 10000) || (plz > 99999 && plz > 1000000))) throw new IllegalArgumentException("No valid PLZ.");
         this.plz = plz;
     }
 
@@ -58,6 +69,8 @@ public class Seminar {
     }
 
     public void setDate(LocalDateTime date) {
+        if (date.isBefore(LocalDateTime.now())) throw new IllegalArgumentException("Date can't be in the past.");
+        if (date.isAfter(LocalDateTime.now().plusYears(maxYearsInFuture))) throw new IllegalArgumentException("Please do not enter events more than " + maxYearsInFuture + " years away.");
         this.date = date;
     }
 
@@ -69,12 +82,13 @@ public class Seminar {
         this.category = category;
     }
 
-    public String getLink() {
-        return link;
+    public String getUrl() {
+        return url;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setUrl(String url) {
+        if (!url.matches("@(https?|ftp)://(-\\.)?([^\\s/?\\.#-]+\\.?)+(/[^\\s]*)?$@iS")) throw new IllegalArgumentException("No valid URL.");
+        this.url = url;
     }
 
     public String getDescription() {
@@ -85,26 +99,5 @@ public class Seminar {
         this.description = description;
     }
 
-    public boolean validate(String street, String houseNumber, String plz, String location, String title, String date, String category, String link, String description){
-        // array contains values [value][RegEx pattern] for each field
-        String[][] validationSet = {
-            {street,""},
-            {houseNumber,""},
-            {plz,""},
-            {location,""},
-            {title,""},
-            {date,""},
-            {category,""},
-            {link,""},
-            {description,""}
-        };
 
-        for (String[] set: validationSet) {
-            if(true){
-                return false;
-            }
-        }
-        return true;
-
-    }
 }
