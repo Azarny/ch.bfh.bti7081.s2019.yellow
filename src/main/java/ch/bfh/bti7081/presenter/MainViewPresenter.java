@@ -7,41 +7,42 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
+import java.util.*;
+import java.util.stream.Collectors;
 public class MainViewPresenter {
-    private MainViewContent view;
-    private SeminarManager seminarManager;
-
-    public MainViewPresenter(MainViewContent view, SeminarManager manager) {
-        this.view = view;
-        this.seminarManager = manager;
-
+    public MainViewPresenter(MainViewContent view) {
         // generate next seminars on startup
-        this.view.setSeminarsLayout(this.getNextSeminaries());
+        view.setFeatureView(this.getNextSeminaries());
     }
 
+    /**
+     * creates a VerticalLayout with a title and the next few seminaries to display on the homepage
+     * @return VerticalLayout to add to view
+     */
     private VerticalLayout getNextSeminaries() {
         VerticalLayout nextSeminars = new VerticalLayout(new H2("Nächste Seminare"));
         List<Seminar> seminaries = SeminarManager.getSeminaries();
-        seminaries.sort((s1, s2) -> s1.getDate().compareTo(s2.getDate()));
+        seminaries.sort(Comparator.comparing(Seminar::getDate));
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.YYYY");
 
-        // get n first seminaries and display them
-        int seminarCount = 5;
-        if (seminarCount > seminaries.size()) {
-            seminarCount = seminaries.size();
-        }
-        for (int i = 0; i < seminarCount; i++) {
+        // get next few seminaries
+        long nextSeminariesCount = 5;
+        seminaries = seminaries.stream()
+                .filter(s -> s.getDate().compareTo(now) > 0)
+                .limit(nextSeminariesCount)
+                .collect(Collectors.toList());
+
+        // collect the necessary information from the seminaries and prepare them for display
+        for (Seminar seminar : seminaries) {
             nextSeminars.add(new Label(
-                    seminaries.get(i).getDate().format(DateTimeFormatter.BASIC_ISO_DATE) + " - " +
-                            seminaries.get(i).getLocation() + " - " +
-                            seminaries.get(i).getTitle()
-            ));
+                    seminar.getDate().format(dateTimeFormatter) + " - " +
+                            seminar.getTitle() + " (" + seminar.getLocation() + ")")
+            );
         }
-        //TODO
+
         return nextSeminars;
     }
 }
