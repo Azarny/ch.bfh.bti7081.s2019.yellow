@@ -4,20 +4,14 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 public class Seminar {
-    @NotBlank(message="Street name can't be empty.")
     private String street;
-    @NotBlank(message="House number can't be empty.")
     private String houseNumber;
     private Integer plz;
-    @NotBlank(message="Location can't be empty.")
     private String location;
-    @NotBlank(message="Title can't be empty.")
     private String title;
     private LocalDateTime date;
     private SeminarCategory category;
-    @NotBlank(message="URL can't be empty.")
     private String url;
-    @NotBlank(message="Description can't be empty.")
     private String description;
 
     private int maxYearsInFuture = 5;
@@ -26,7 +20,8 @@ public class Seminar {
         return street;
     }
 
-    public void setStreet(String street) {
+    public void setStreet(String street) throws IllegalArgumentException {
+        if (street.trim().length() < 2) throw new IllegalArgumentException("Street names have to be 2 chars at min.");
         this.street = street;
     }
 
@@ -34,7 +29,7 @@ public class Seminar {
         return houseNumber;
     }
 
-    public void setHouseNumber(String houseNumber) {
+    public void setHouseNumber(String houseNumber) throws IllegalArgumentException{
         if (!houseNumber.matches("^\\d*\\w$")) throw new IllegalArgumentException("No valid house number.");
         this.houseNumber = houseNumber;
     }
@@ -43,8 +38,8 @@ public class Seminar {
         return plz;
     }
 
-    public void setPlz(Integer plz) {
-        if(plz == null || !((plz > 999 && plz < 10000) || (plz > 99999 && plz > 1000000))) throw new IllegalArgumentException("No valid PLZ.");
+    public void setPlz(Integer plz) throws IllegalArgumentException{
+        if(plz == null || !((plz > 999 && plz < 10000) || (plz > 99999 && plz < 1000000))) throw new IllegalArgumentException("No valid PLZ.");
         this.plz = plz;
     }
 
@@ -53,6 +48,7 @@ public class Seminar {
     }
 
     public void setLocation(String location) {
+        if (location.trim().length() < 2) throw new IllegalArgumentException("The location have to be 2 chars at min.");
         this.location = location;
     }
 
@@ -61,6 +57,7 @@ public class Seminar {
     }
 
     public void setTitle(String title) {
+        if (title.trim().length() < 2) throw new IllegalArgumentException("The title have to be 2 chars at min.");
         this.title = title;
     }
 
@@ -68,17 +65,19 @@ public class Seminar {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDateTime date) throws  IllegalArgumentException {
         if (date.isBefore(LocalDateTime.now())) throw new IllegalArgumentException("Date can't be in the past.");
         if (date.isAfter(LocalDateTime.now().plusYears(maxYearsInFuture))) throw new IllegalArgumentException("Please do not enter events more than " + maxYearsInFuture + " years away.");
         this.date = date;
     }
 
-    public SeminarCategory getCategory() {
+    public SeminarCategory getCategory(){
+
         return category;
     }
 
-    public void setCategory(SeminarCategory category) {
+    public void setCategory(SeminarCategory category) throws IllegalArgumentException {
+        if (category == null) throw new IllegalArgumentException("Category can't be empty");
         this.category = category;
     }
 
@@ -86,8 +85,8 @@ public class Seminar {
         return url;
     }
 
-    public void setUrl(String url) {
-        if (!url.matches("@(https?|ftp)://(-\\.)?([^\\s/?\\.#-]+\\.?)+(/[^\\s]*)?$@iS")) throw new IllegalArgumentException("No valid URL.");
+    public void setUrl(String url) throws IllegalArgumentException{
+        if (!url.matches("^((https?|ftp)://)?(\\w+\\.)+(\\w{2}|\\w{3})(/\\S+(\\./\\S+)*)?$")) throw new IllegalArgumentException("No valid URL.");
         this.url = url;
     }
 
@@ -96,8 +95,23 @@ public class Seminar {
     }
 
     public void setDescription(String description) {
+        if (description.trim().length() < 2) throw new IllegalArgumentException("The description have to be 2 chars at min.");
         this.description = description;
     }
+
+    public Seminar(String street, String houseNumber, Integer plz, String location, String title, LocalDateTime date, SeminarCategory category, String url, String description){
+            setStreet(street);
+            setHouseNumber(houseNumber);
+            setPlz(plz);
+            setLocation(location);
+            setTitle(title);
+            setDate(date);
+            setCategory(category);
+            setUrl(url);
+            setDescription(description);
+    }
+
+    public Seminar(){}
 
 
 }

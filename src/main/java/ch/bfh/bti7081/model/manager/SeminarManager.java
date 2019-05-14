@@ -38,7 +38,7 @@ public class SeminarManager {
                 "Dr. Luis Alvador gibt Ihnen einen Überblick über die medizinischen Informationen, " +
                 "eine Podiumsdiskussion mit Angehörigen findet statt.");
         seminarMock1.setHouseNumber("102");
-        seminarMock1.setLink("https://vaadin.com");
+        seminarMock1.setUrl("https://vaadin.com");
         seminarMock1.setLocation("Bern");
         seminarMock1.setTitle("Wie unterstütze ich einen Angehörigen?");
         seminarMock1.setStreet("Wankdorffeldstrasse");
@@ -51,7 +51,7 @@ public class SeminarManager {
         seminarMock2.setDescription("Betroffene erzählen von Ihren Problemen im Umgang mit der Krankheit " +
                 "und zeigen wie Sie diese tagtäglich überwinden.");
         seminarMock2.setHouseNumber("5");
-        seminarMock2.setLink("https://www.nzz.ch/");
+        seminarMock2.setUrl("https://www.nzz.ch/");
         seminarMock2.setLocation("Bern");
         seminarMock2.setTitle("Sozialphobie - Mit der Angst umgehen");
         seminarMock2.setStreet(" Schanzenstrasse");
@@ -65,7 +65,7 @@ public class SeminarManager {
                 "die Ihnen von Ihren Erlebnissen erzählen. Treffen Sie uns zu einem Feierabendbier. " +
                 "Mehr unter dem Link. ");
         seminarMock3.setHouseNumber("18");
-        seminarMock3.setLink("https://www.zeit.de/index");
+        seminarMock3.setUrl("https://www.zeit.de/index");
         seminarMock3.setLocation("Rothrist");
         seminarMock3.setTitle("Angehörigentreffen");
         seminarMock3.setStreet("Bachweg");
@@ -78,7 +78,7 @@ public class SeminarManager {
         seminarMock4.setDescription("Ein Treffen mit anderen Betroffenen. Hier können Sie sich entspannt " +
                 "fühlen, niemand wird sie verurteilen, da wir dasselbe tagtäglich auch durchmachen.");
         seminarMock4.setHouseNumber("420");
-        seminarMock4.setLink("https://de.wikipedia.org/wiki/Soziale_Phobie");
+        seminarMock4.setUrl("https://de.wikipedia.org/wiki/Soziale_Phobie");
         seminarMock4.setLocation("Zürich");
         seminarMock4.setTitle("Betroffenenhöck");
         seminarMock4.setStreet("Badenerstrasse");
@@ -90,8 +90,7 @@ public class SeminarManager {
 
     private static LocalDateTime dateGenerator(String timeToParse){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime formatDateTime = LocalDateTime.parse(timeToParse, formatter);
-        return formatDateTime;
+        return LocalDateTime.parse(timeToParse, formatter);
     }
 
 
