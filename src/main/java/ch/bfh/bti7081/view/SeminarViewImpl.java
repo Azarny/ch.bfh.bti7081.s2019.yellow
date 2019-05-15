@@ -2,6 +2,7 @@ package ch.bfh.bti7081.view;
 
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
+import ch.bfh.bti7081.model.seminar.SeminarFilter;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -15,17 +16,21 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.binder.BinderValidationStatus;
+import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class SeminarViewImpl extends VerticalLayout {
 
   private VerticalLayout SeminarFilterLayout = new VerticalLayout();
   private VerticalLayout SeminarListLayout = new VerticalLayout();
-  private Label lbl = new Label("");
   private Dialog details = new Dialog();
   private FormLayout filterLayout = new FormLayout();
   private Grid<Seminar> seminarGrid = new Grid<>();
@@ -44,46 +49,60 @@ public class SeminarViewImpl extends VerticalLayout {
   }
 
   /*
-  * Generates the layout with the filter-possibilities
+  * Generates the filter-layout with Binder
   *
   * Author: oppls7
   * */
   private void generateFilterLayout(){
+    Binder<SeminarFilter> binder = new Binder<>();
+    SeminarFilter seminarFilter = new SeminarFilter();
     TextField searchTf = new TextField();
-    searchTf.setLabel("Suche:");
-    searchTf.setPlaceholder("Suchen...");
+    searchTf.setLabel("Suchebegriff:");
+    binder.forField(searchTf).bind(SeminarFilter::getKeyword, SeminarFilter::setKeyword);
+
     DatePicker fromDateDp = new DatePicker();
     fromDateDp.setLabel("Datum von:");
-    fromDateDp.setPlaceholder("von...");
+    binder.forField(fromDateDp).bind(SeminarFilter::getFromDate, SeminarFilter::setFromDate);
+
     DatePicker toDateDp = new DatePicker();
     toDateDp.setLabel("Datum bis:");
-    toDateDp.setPlaceholder("bis...");
+    binder.forField(toDateDp).bind(SeminarFilter::getToDate, SeminarFilter::setToDate);
+
     categoriesCb.setLabel("Kategorien:");
-    categoriesCb.setPlaceholder("Kategorie wählen...");
     categoriesCb.setItemLabelGenerator(SeminarCategory::getName);
-    categoriesCb.addValueChangeListener(event -> {
-      SeminarCategory selectedCategory = categoriesCb.getValue();
-      if (selectedCategory != null) {
-        lbl.setText("Selected Category: " + selectedCategory.getName());
-      } else {
-        lbl.setText("No Category is selected");
-      }
-    });
+    binder.forField(categoriesCb).bind(SeminarFilter::getCategory, SeminarFilter::setCategory);
+
     TextField ortTf = new TextField();
     ortTf.setLabel("Ort:");
     ortTf.setPlaceholder("Ort...");
+    binder.forField(ortTf).bind(SeminarFilter::getLocation, SeminarFilter::setLocation);
+
     Button filterBtn = new Button("Filter anwenden");
-    filterBtn.addClickListener(event -> setFilter());
+
+    // Click listeners for the buttons
+    filterBtn.addClickListener(event -> {
+      if (binder.writeBeanIfValid(seminarFilter)) {
+        setFilter(seminarFilter);
+      } else {
+        BinderValidationStatus<SeminarFilter> validate = binder.validate();
+        String errorText = validate.getFieldValidationStatuses()
+                .stream().filter(BindingValidationStatus::isError)
+                .map(BindingValidationStatus::getMessage)
+                .map(Optional::get).distinct()
+                .collect(Collectors.joining(", "));
+        filterLayout.add("There are errors: " + errorText);
+      }
+    });
+
     filterLayout.add(searchTf, fromDateDp, toDateDp, categoriesCb, ortTf,filterBtn);
     filterLayout.setResponsiveSteps(
             new FormLayout.ResponsiveStep("0", 1),
             new FormLayout.ResponsiveStep("21em", 2));
     SeminarFilterLayout.add(filterLayout);
   }
-  //TODO: Get the Values of for the filter and get a new list<seminar>
-  private void setFilter() {
-    Label test = new Label("test");
-    filterLayout.add(test);
+  //TODO: get a new list<seminar> with seminarFilter (Binder)
+  private void setFilter(SeminarFilter seminarFilter) {
+    filterLayout.add(seminarFilter.toString());
   }
 
   /*
@@ -104,8 +123,8 @@ public class SeminarViewImpl extends VerticalLayout {
     DateTimeFormatter formatter = DateTimeFormatter
             .ofPattern("dd.MM.yyyy");
     seminarGrid.addColumn(TemplateRenderer.<Seminar> of(
-            "<div style='padding:10px'><div style='font-weight:bold'>Seminar: [[item.title]]<br></div>"+
-                    "<div>Datum: [[item.date]] <div style='float:right'> Ort: [[item.location]]</div></div></div>")
+            "<div style='padding:10px'><div style='font-weight:bold'>[[item.title]]<br></div>"+
+                    "<div>[[item.date]] <div style='float:right'>[[item.location]]</div></div></div>")
             .withProperty("title", Seminar::getTitle)
             .withProperty("date",
                     seminar -> formatter.format(seminar.getDate()))
