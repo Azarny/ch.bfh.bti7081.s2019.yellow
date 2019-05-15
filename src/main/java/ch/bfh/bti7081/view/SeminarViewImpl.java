@@ -87,6 +87,15 @@ public class SeminarViewImpl extends VerticalLayout {
   }
 
   /*
+   * Used to fill the Combobox with Seminar Categories for using as a filter
+   *
+   * Author: oppls7
+   * */
+  public void setSeminarCategoryList(List<SeminarCategory> seminarCategoryList){
+    categoriesCb.setItems(seminarCategoryList);
+  }
+
+  /*
   * Generates the list of seminaries.
   *
   * Author: oppls7
@@ -152,12 +161,4 @@ public class SeminarViewImpl extends VerticalLayout {
     seminarGrid.setItems(seminaries);
   }
 
-  /*
-  * Used to fill the Combobox with Seminar Categories for using as a filter
-  *
-  * Author: oppls7
-  * */
-  public void setSeminarCategoryList(List<SeminarCategory> seminarCategoryList){
-    categoriesCb.setItems(seminarCategoryList);
-  }
 }
