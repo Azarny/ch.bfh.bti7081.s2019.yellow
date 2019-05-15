@@ -1,5 +1,6 @@
 package ch.bfh.bti7081.model.dto;
 
+import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 
 import java.time.LocalDate;
@@ -14,7 +15,7 @@ public class NewSeminarDTO {
     private String title;
     private LocalTime time;
     private LocalDate date;
-    private SeminarCategory category;
+    private String category;
     private String link;
     private String description;
 
@@ -66,11 +67,11 @@ public class NewSeminarDTO {
         this.date = date;
     }
 
-    public SeminarCategory getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(SeminarCategory category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 
