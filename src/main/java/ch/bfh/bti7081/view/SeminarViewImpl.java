@@ -102,7 +102,7 @@ public class SeminarViewImpl extends VerticalLayout {
   }
   //TODO: get a new list<seminar> with seminarFilter (Binder)
   private void setFilter(SeminarFilter seminarFilter) {
-    filterLayout.add(seminarFilter.toString());
+
   }
 
   /*
