@@ -16,8 +16,10 @@ public class MainViewContent extends VerticalLayout {
 
     public MainViewContent() {
         // title and welcometext
-        this.add(new H1("Herzlich Willkommen!"));
-        this.add(new Label(loremipsum));
+        H1 title = new H1("Herzlich Willkommen!");
+        Label welcomeText = new Label(loremipsum);
+        this.add(title);
+        this.add(welcomeText);
     }
 
     public void setFeatureView(List<String> seminaries) {
