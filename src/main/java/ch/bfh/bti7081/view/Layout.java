@@ -24,12 +24,12 @@ import java.util.stream.Collectors;
 public class Layout extends VerticalLayout implements RouterLayout {
 
     private FormLayout formLayout = new FormLayout();
-    private Dialog loginMask = new Dialog();
+    private Dialog loginForm = new Dialog();
     private TextField userName = new TextField();
     private TextField userPw = new TextField();
 
     private void ShowLogin(){
-        loginMask.open();
+        loginForm.open();
     }
 
     public Layout() {
@@ -44,11 +44,11 @@ public class Layout extends VerticalLayout implements RouterLayout {
         );
         menuBar.add(loginDialogBtn);
         GenerateLoginLayout();
-        this.add(menuBar, loginMask);
+        this.add(menuBar, loginForm);
     }
 
     /*
-     * Generates a Login Mask with Vaadin-Binder
+     * Generates a Login Form with Vaadin-Binder
      *
      * Author: oppls7
      * */
@@ -71,15 +71,19 @@ public class Layout extends VerticalLayout implements RouterLayout {
 
         Button loginBtn = new Button("Login");
         Label status = new Label();
-        loginMask.add(status);
+        loginForm.add(status);
+        //TODO Session Handling + besseres Feedback bei ButtonClick
         loginBtn.addClickListener(Event -> {
             status.setText("");
             if (binder.writeBeanIfValid(userToLogin)) {
                 if(CheckLogin(userToLogin)) {
-                    loginMask.removeAll();
-                    loginMask.add(new H2("Willkommen " + userToLogin.getUsername()));
+                    loginForm.removeAll();
+                    loginForm.add(new H2("Willkommen " + userToLogin.getUsername()));
                 }
-                else status.setText("Login fehlgeschlagen!");
+                else {
+                    status.setText("Falsches Passwort!");
+                    return;
+                }
                 BinderValidationStatus<User> validate = binder.validate();
                 String errorText = validate.getFieldValidationStatuses()
                         .stream().filter(BindingValidationStatus::isError)
@@ -91,7 +95,7 @@ public class Layout extends VerticalLayout implements RouterLayout {
             }
         });
         formLayout.add(userName,userPw,loginBtn);
-        loginMask.add(title,formLayout);
+        loginForm.add(title,formLayout);
     }
 
     /*
