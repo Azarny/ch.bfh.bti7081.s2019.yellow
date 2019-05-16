@@ -14,11 +14,11 @@ public class ForumManager {
         throw new IllegalArgumentException("Not implemented yet.");
     }
 
-    public ForumEntryDTO getForumEntry(Integer id)  {
+    public ForumEntryDTO getForumEntry(Integer id) {
         throw new IllegalArgumentException("Not implemented yet.");
     }
 
-    public ForumEntryDTO createForumEntry(ForumEntryDTO forumEntryDTO){
+    public ForumEntryDTO createForumEntry(ForumEntryDTO forumEntryDTO) {
         throw new IllegalArgumentException("Not implemented yet.");
     }
 

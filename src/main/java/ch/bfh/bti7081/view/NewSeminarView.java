@@ -12,9 +12,6 @@ public class NewSeminarView extends VerticalLayout {
         NewSeminarPresenter presenter = new NewSeminarPresenter(view);
         view.setPresenter(presenter);
 
-
         add(view);
     }
-
-
 }

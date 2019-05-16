@@ -1,6 +1,6 @@
 package ch.bfh.bti7081.view;
 
-import ch.bfh.bti7081.model.dto.NewSeminarDTO;
+import ch.bfh.bti7081.model.dto.SeminarDTO;
 import ch.bfh.bti7081.presenter.NewSeminarPresenter;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -56,11 +56,11 @@ public class NewSeminarViewImpl extends VerticalLayout {
 
     private HorizontalLayout formActions = new HorizontalLayout(save, cancel);
 
-    private Binder<NewSeminarDTO> binder = new Binder<>();
-    private NewSeminarDTO newSeminar = new NewSeminarDTO();
+    private Binder<SeminarDTO> binder = new Binder<>();
+    private SeminarDTO newSeminar = new SeminarDTO();
     private NewSeminarPresenter presenter;
 
-    NewSeminarViewImpl() {
+    public NewSeminarViewImpl() {
         addElementsToForm();
         setFieldSettings();
         addBindingToForm();
@@ -104,17 +104,17 @@ public class NewSeminarViewImpl extends VerticalLayout {
 
     private void addBindingToForm() {
         //Binder-Configuration
-        binder.bind(seminarTitle, NewSeminarDTO::getTitle, NewSeminarDTO::setTitle);
-        binder.bind(seminarDate, NewSeminarDTO::getDate, NewSeminarDTO::setDate);
-        binder.bind(seminarTime, NewSeminarDTO::getTime, NewSeminarDTO::setTime);
+        binder.bind(seminarTitle, SeminarDTO::getTitle, SeminarDTO::setTitle);
+        binder.bind(seminarDate, SeminarDTO::getDate, SeminarDTO::setDate);
+        binder.bind(seminarTime, SeminarDTO::getTime, SeminarDTO::setTime);
         binder.forField(seminarCategory).asRequired("Bitte eine Kategorie wählen.").
-                bind(NewSeminarDTO::getCategory, NewSeminarDTO::setCategory);
-        binder.bind(seminarStreet, NewSeminarDTO::getStreet, NewSeminarDTO::setStreet);
-        binder.bind(seminarStreetNbr, NewSeminarDTO::getHouseNumber, NewSeminarDTO::setHouseNumber);
-        binder.bind(seminarPlz, NewSeminarDTO::getPlz, NewSeminarDTO::setPlz);
-        binder.bind(seminarPlace, NewSeminarDTO::getLocation, NewSeminarDTO::setLocation);
-        binder.bind(seminarLink, NewSeminarDTO::getLink, NewSeminarDTO::setLink);
-        binder.bind(seminarDescription, NewSeminarDTO::getDescription, NewSeminarDTO::setDescription);
+                bind(SeminarDTO::getCategory, SeminarDTO::setCategory);
+        binder.bind(seminarStreet, SeminarDTO::getStreet, SeminarDTO::setStreet);
+        binder.bind(seminarStreetNbr, SeminarDTO::getHouseNumber, SeminarDTO::setHouseNumber);
+        binder.bind(seminarPlz, SeminarDTO::getPlz, SeminarDTO::setPlz);
+        binder.bind(seminarPlace, SeminarDTO::getLocation, SeminarDTO::setLocation);
+        binder.bind(seminarLink, SeminarDTO::getUrl, SeminarDTO::setUrl);
+        binder.bind(seminarDescription, SeminarDTO::getDescription, SeminarDTO::setDescription);
     }
 
     private void setFormActions() {
@@ -127,7 +127,7 @@ public class NewSeminarViewImpl extends VerticalLayout {
                     errorMessage.setText("Beim Speichern scheint ein Fehler aufgetreten zu sein" + e);
                 }
             } else {
-                BinderValidationStatus<NewSeminarDTO> validate = binder.validate();
+                BinderValidationStatus<SeminarDTO> validate = binder.validate();
                 String errorText = validate.getFieldValidationStatuses()
                         .stream().filter(BindingValidationStatus::isError)
                         .map(BindingValidationStatus::getMessage)

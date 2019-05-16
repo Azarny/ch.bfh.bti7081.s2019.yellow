@@ -1,13 +1,9 @@
 package ch.bfh.bti7081.model.dto;
 
-import ch.bfh.bti7081.model.seminar.Seminar;
-import ch.bfh.bti7081.model.seminar.SeminarCategory;
-
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class NewSeminarDTO {
+public class SeminarDTO {
     private String street;
     private String houseNumber;
     private Double plz;
@@ -16,7 +12,7 @@ public class NewSeminarDTO {
     private LocalTime time;
     private LocalDate date;
     private String category;
-    private String link;
+    private String url;
     private String description;
 
     public String getStreet() {
@@ -75,12 +71,12 @@ public class NewSeminarDTO {
         this.category = category;
     }
 
-    public String getLink() {
-        return link;
+    public String getUrl() {
+        return url;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getDescription() {

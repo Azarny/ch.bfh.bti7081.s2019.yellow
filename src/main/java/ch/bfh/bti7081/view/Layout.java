@@ -29,13 +29,9 @@ public class Layout extends VerticalLayout implements RouterLayout {
     private PasswordField userPw = new PasswordField();
     private Button loginDialogBtn = new Button("Login");
 
-    private void ShowLogin(){
-        loginForm.open();
-    }
-
     public Layout() {
-        loginDialogBtn.addClickListener(Event -> ShowLogin());
-        loginDialogBtn.getStyle().set("position","absolute").set("right","30px");
+        loginDialogBtn.addClickListener(Event -> showLogin());
+        loginDialogBtn.getStyle().set("position", "absolute").set("right", "30px");
         HorizontalLayout menuBar = new HorizontalLayout(
                 new RouterLink("Startseite", MainViewContainer.class),
                 new RouterLink("Seminare", SeminarView.class),
@@ -43,8 +39,12 @@ public class Layout extends VerticalLayout implements RouterLayout {
                 new RouterLink("Forum", ForumView.class)
         );
         menuBar.add(loginDialogBtn);
-        GenerateLoginLayout();
+        generateLoginLayout();
         this.add(menuBar, loginForm);
+    }
+
+    private void showLogin() {
+        loginForm.open();
     }
 
     /*
@@ -52,7 +52,7 @@ public class Layout extends VerticalLayout implements RouterLayout {
      *
      * Author: oppls7
      * */
-    private void GenerateLoginLayout(){
+    private void generateLoginLayout() {
         Binder<User> binder = new Binder<>();
         User userToLogin = new User();
         H2 title = new H2("Login");
@@ -79,13 +79,11 @@ public class Layout extends VerticalLayout implements RouterLayout {
                 if (UserManager.getUserByUsername(userToLogin.getUsername()) == null) {
                     status.setText("Benutzername unbekannt!");
                     return;
-                }
-                else if(CheckLogin(userToLogin)) {
+                } else if (checkLogin(userToLogin)) {
                     loginForm.removeAll();
                     loginForm.add(new H2("Willkommen " + userToLogin.getUsername()));
-                    loginDialogBtn.getStyle().set("display","none");
-                }
-                else {
+                    loginDialogBtn.getStyle().set("display", "none");
+                } else {
                     status.setText("Falsches Passwort!");
                     return;
                 }
@@ -95,12 +93,12 @@ public class Layout extends VerticalLayout implements RouterLayout {
                         .map(BindingValidationStatus::getMessage)
                         .map(Optional::get).distinct()
                         .collect(Collectors.joining(", "));
-                status.setText("Login fehlgeschlagen: "+errorText);
+                status.setText("Login fehlgeschlagen: " + errorText);
                 binder.readBean(null);
             }
         });
-        formLayout.add(userName,userPw,loginBtn);
-        loginForm.add(title,formLayout);
+        formLayout.add(userName, userPw, loginBtn);
+        loginForm.add(title, formLayout);
     }
 
     /*
@@ -108,10 +106,10 @@ public class Layout extends VerticalLayout implements RouterLayout {
      *
      * Author: oppls7
      * */
-    private boolean CheckLogin(User user) {
+    private boolean checkLogin(User user) {
         User userCheck = UserManager.getUserByUsername(user.getUsername());
-        if(userCheck!=null) {
-          return (userCheck.getPassword().equals(user.getPassword()));
+        if (userCheck != null) {
+            return (userCheck.getPassword().equals(user.getPassword()));
         }
         return false;
     }
