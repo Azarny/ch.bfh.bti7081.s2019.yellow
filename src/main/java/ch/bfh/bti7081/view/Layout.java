@@ -9,6 +9,7 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
@@ -26,7 +27,7 @@ public class Layout extends VerticalLayout implements RouterLayout {
     private FormLayout formLayout = new FormLayout();
     private Dialog loginForm = new Dialog();
     private TextField userName = new TextField();
-    private TextField userPw = new TextField();
+    private PasswordField userPw = new PasswordField();
 
     private void ShowLogin(){
         loginForm.open();
@@ -76,7 +77,11 @@ public class Layout extends VerticalLayout implements RouterLayout {
         loginBtn.addClickListener(Event -> {
             status.setText("");
             if (binder.writeBeanIfValid(userToLogin)) {
-                if(CheckLogin(userToLogin)) {
+                if (UserManager.getUserByUsername(userToLogin.getUsername()) == null) {
+                    status.setText("Benutzername unbekannt!");
+                    return;
+                }
+                else if(CheckLogin(userToLogin)) {
                     loginForm.removeAll();
                     loginForm.add(new H2("Willkommen " + userToLogin.getUsername()));
                 }
@@ -105,6 +110,9 @@ public class Layout extends VerticalLayout implements RouterLayout {
      * */
     private boolean CheckLogin(User user) {
         User userCheck = UserManager.getUserByUsername(user.getUsername());
-        return (userCheck.getPassword().equals(user.getPassword()));
+        if(userCheck!=null) {
+          return (userCheck.getPassword().equals(user.getPassword()));
+        }
+        return false;
     }
 }
