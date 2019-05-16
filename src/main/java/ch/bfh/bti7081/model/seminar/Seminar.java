@@ -42,8 +42,8 @@ public class Seminar {
     @JoinColumn(name = PREFIX + "CATEGORY")
     private SeminarCategory category;
 
-    @Column(name = PREFIX + "LINK", length = 255)
-    private String link;
+    @Column(name = PREFIX + "URL", length = 255)
+    private String url;
 
     @Column(name = PREFIX + "DESCRIPTION", length = 255)
     private String description;
@@ -104,12 +104,12 @@ public class Seminar {
         this.category = category;
     }
 
-    public String getLink() {
-        return link;
+    public String getUrl() {
+        return url;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getDescription() {
