@@ -19,13 +19,41 @@ public class SeminarManager {
     }
 
     public static List<Seminar> getFilteredSeminars(SeminarFilter filter) {
-        return getSeminaries().stream().
-                filter(seminar -> {
-                    if (filter.getCategory() != null)
-                        return seminar.getCategory().getName().equals(filter.getCategory().getName());
-                    else
-                        return true;
-                }).collect(Collectors.toList());
+        return getSeminaries().stream()
+                //filter category
+                .filter(seminar -> {
+                    if (filter.getCategory() == null) return true;
+                    else return seminar.getCategory().getName().toLowerCase().equals(filter.getCategory().getName().toLowerCase());
+                })
+                //filter location
+                .filter(seminar -> {
+                    if (filter.getLocation() == null) return true;
+                    else return seminar.getLocation().toLowerCase().contains(filter.getLocation().toLowerCase());
+                })
+                //filter date
+                .filter(seminar -> {
+                    if (filter.getToDate() == null) return true;
+                    else return seminar.getDate().isBefore(filter.getToDate().atStartOfDay().plusDays(1).minusSeconds(1));
+                })
+                .filter(seminar -> {
+                    if (filter.getFromDate() == null) return true;
+                    else return seminar.getDate().isAfter(filter.getFromDate().atStartOfDay());
+                })
+                .filter(seminar -> {
+                    if(filter.getKeyword() == null) return true;
+                    else {
+                        String[] keywords = filter.getKeyword().split(" ");
+                        for (String keyword : keywords){
+                            if (seminar.getTitle().toLowerCase().contains(keyword.toLowerCase())) return true;
+                            if (seminar.getDescription().toLowerCase().contains(keyword.toLowerCase())) return true;
+                            if (seminar.getStreet().toLowerCase().contains(keyword.toLowerCase())) return true;
+                            if (seminar.getLink().toLowerCase().contains(keyword.toLowerCase())) return true;
+                            if (seminar.getPlz().toString().contains(keyword)) return true;
+                        }
+                        return false;
+                    }
+                })
+                .collect(Collectors.toList());
 
     }
 
