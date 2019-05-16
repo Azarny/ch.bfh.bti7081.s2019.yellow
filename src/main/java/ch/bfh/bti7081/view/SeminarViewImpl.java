@@ -139,9 +139,7 @@ public class SeminarViewImpl extends VerticalLayout {
                         seminar -> formatter.format(seminar.getDate()))
                 .withProperty("location", Seminar::getLocation))
                 .setFlexGrow(6);
-        seminarGrid.asSingleSelect().addValueChangeListener(event -> {
-            showDetails(event.getValue());
-        });
+        seminarGrid.asSingleSelect().addValueChangeListener(event -> showDetails(event.getValue()));
         SeminarListLayout.add(seminarGrid);
     }
 
