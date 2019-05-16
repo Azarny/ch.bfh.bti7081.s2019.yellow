@@ -7,7 +7,7 @@ import com.vaadin.flow.router.RouterLink;
 
 public class Layout extends VerticalLayout implements RouterLayout {
     private final HorizontalLayout menuBar = new HorizontalLayout(
-            new RouterLink("Startseite", MainView.class),
+            new RouterLink("Startseite", MainViewContainer.class),
             new RouterLink("Seminare", SeminarView.class),
             new RouterLink("FaQ", FaqView.class),
             new RouterLink("Forum", ForumView.class)
