@@ -23,7 +23,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Layout extends VerticalLayout implements RouterLayout {
-
     private FormLayout formLayout = new FormLayout();
     private Dialog loginForm = new Dialog();
     private TextField userName = new TextField();
