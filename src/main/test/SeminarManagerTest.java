@@ -15,7 +15,7 @@ public class SeminarManagerTest {
     private int seminariesWithFilteredCategory = 0;
 
     @Test
-    public void CategoryFilter() {
+    public void categoryFilter() {
         int seminarCount = seminaries.size();
         SeminarCategory categoryToFilter = seminaries.get(1).getCategory();
         int seminariesWithFilteredCategory = 0;
@@ -28,7 +28,7 @@ public class SeminarManagerTest {
     }
 
     @Test
-    public void LocationFilter() {
+    public void locationFilter() {
         seminarFilter.setLocation(seminaries.get(1).getLocation());
         for (Seminar seminar : seminaries) {
             if (seminar.getLocation().contains(seminarFilter.getLocation())) seminariesWithFilteredCategory++;
@@ -38,7 +38,7 @@ public class SeminarManagerTest {
     }
 
     @Test
-    public void LocationFilterCaseInsensitive() {
+    public void locationFilterCaseInsensitive() {
         seminarFilter.setLocation(seminaries.get(1).getLocation());
         for (Seminar seminar : seminaries) {
             if (seminar.getLocation().toLowerCase().contains(seminarFilter.getLocation().toLowerCase()))
@@ -49,7 +49,7 @@ public class SeminarManagerTest {
     }
 
     @Test
-    public void DateFilterTo() {
+    public void dateFilterTo() {
 
         // test with min date
         seminarFilter.setToDate(seminaries.stream().map(Seminar::getDate).min(LocalDateTime::compareTo).get().toLocalDate());
@@ -72,7 +72,7 @@ public class SeminarManagerTest {
     }
 
     @Test
-    public void DateFilterFrom() {
+    public void dateFilterFrom() {
         //test with min date
         seminarFilter.setFromDate(seminaries.stream().map(Seminar::getDate).min(LocalDateTime::compareTo).get().toLocalDate());
         for (Seminar seminar : seminaries) {
@@ -94,7 +94,7 @@ public class SeminarManagerTest {
     }
 
     @Test
-    public void KeywordFilter() {
+    public void keywordFilter() {
         String keyword = seminaries.get(3).getTitle().split(" ")[0];
         //one keyword
         seminarFilter.setKeyword(keyword);
