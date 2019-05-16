@@ -139,9 +139,9 @@ public class SeminarViewImpl extends VerticalLayout {
                         seminar -> formatter.format(seminar.getDate()))
                 .withProperty("location", Seminar::getLocation))
                 .setFlexGrow(6);
-        seminarGrid.setSelectionMode(Grid.SelectionMode.NONE);
-        seminarGrid.addItemClickListener(
-                event -> showDetails(event.getItem()));
+        seminarGrid.asSingleSelect().addValueChangeListener(event -> {
+            showDetails(event.getValue());
+        });
         SeminarListLayout.add(seminarGrid);
     }
 
