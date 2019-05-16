@@ -21,10 +21,8 @@ public class Seminar {
         return street;
     }
 
-    public boolean setStreet(String street) {
-        if (street == null || street.trim().length() < SeminarManager.minStreetLength) return false;
+    public void setStreet(String street) {
         this.street = street;
-        return true;
     }
 
     public String getHouseNumber() {

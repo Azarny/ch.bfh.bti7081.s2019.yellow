@@ -37,6 +37,17 @@ public class SeminarManager {
         throw new IllegalArgumentException("Not implemented yet.");
     }
 
+    public String validateSeminar(Seminar seminar){
+        String returnString = "";
+
+        if (seminar.getStreet() == null || seminar.getStreet().trim().length() < SeminarManager.minStreetLength){
+
+        }
+
+
+        return returnString;
+    }
+
     private static List<Seminar> mockSeminaries(){
         //These is mock data, nothing here is productive code.
         List<Seminar> mockSeminaries = new ArrayList<>();
