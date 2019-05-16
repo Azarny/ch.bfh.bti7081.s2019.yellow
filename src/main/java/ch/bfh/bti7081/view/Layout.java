@@ -37,7 +37,7 @@ public class Layout extends VerticalLayout implements RouterLayout {
         loginDialogBtn.addClickListener(Event -> ShowLogin());
         loginDialogBtn.getStyle().set("position","absolute").set("right","30px");
         HorizontalLayout menuBar = new HorizontalLayout(
-                new RouterLink("Startseite", MainView.class),
+                new RouterLink("Startseite", MainViewContainer.class),
                 new RouterLink("Seminare", SeminarView.class),
                 new RouterLink("FaQ", FaqView.class),
                 new RouterLink("Forum", ForumView.class)
