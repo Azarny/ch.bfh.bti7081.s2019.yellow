@@ -13,6 +13,8 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -43,7 +45,12 @@ public class SeminarViewImpl extends VerticalLayout {
     HorizontalLayout contentLayout = new HorizontalLayout();
     VerticalLayout rightLayout = new VerticalLayout();
     contentLayout.add(leftLayout, rightLayout);
-    leftLayout.add(SeminarFilterLayout,SeminarListLayout, details);
+    Button newSeminar = new Button("Neues Seminar", new Icon(VaadinIcon.EDIT));
+      newSeminar.addClickListener(event -> {
+        newSeminar.getUI().ifPresent(ui -> ui.navigate("newSeminar"));
+      });
+
+    leftLayout.add(SeminarFilterLayout,newSeminar,SeminarListLayout, details);
     H1 title = new H1("Seminarfinder");
     this.add(title, contentLayout);
   }
