@@ -1,5 +1,6 @@
 package ch.bfh.bti7081.view;
 
+import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.model.seminar.SeminarFilter;
@@ -38,7 +39,7 @@ public class SeminarViewImpl extends VerticalLayout {
   private Grid<Seminar> seminarGrid = new Grid<>();
   private ComboBox<SeminarCategory> categoriesCb = new ComboBox<>();
 
-  public SeminarViewImpl(){
+  SeminarViewImpl(){
     generateFilterLayout();
     generateListLayout();
     VerticalLayout leftLayout = new VerticalLayout();
@@ -89,7 +90,7 @@ public class SeminarViewImpl extends VerticalLayout {
     // Click listeners for the buttons
     filterBtn.addClickListener(event -> {
       if (binder.writeBeanIfValid(seminarFilter)) {
-        setFilter(seminarFilter);
+        setSeminarList(SeminarManager.getFilteredSeminars(seminarFilter));
       } else {
         BinderValidationStatus<SeminarFilter> validate = binder.validate();
         String errorText = validate.getFieldValidationStatuses()
@@ -106,10 +107,6 @@ public class SeminarViewImpl extends VerticalLayout {
             new FormLayout.ResponsiveStep("0", 1),
             new FormLayout.ResponsiveStep("21em", 2));
     SeminarFilterLayout.add(filterLayout);
-  }
-  //TODO: get a new list<seminar> with seminarFilter (Binder)
-  private void setFilter(SeminarFilter seminarFilter) {
-
   }
 
   /*
@@ -169,7 +166,7 @@ public class SeminarViewImpl extends VerticalLayout {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
     String formatDateTime = localdate.format(formatter);
     Label date = new Label(formatDateTime);
-    Span link = new Span("Zum Veranstalter: "+seminar.getLink());
+    Span link = new Span("Zum Veranstalter: "+seminar.getUrl());
     link.getStyle().set("display","block");
     Span description = new Span("Beschreibung: " + seminar.getDescription());
     description.getStyle().set("display","block");

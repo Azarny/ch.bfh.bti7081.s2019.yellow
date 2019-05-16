@@ -10,7 +10,7 @@ public class Seminar {
     private String title;
     private LocalDateTime date;
     private SeminarCategory category;
-    private String link;
+    private String url;
     private String description;
 
     public String getStreet() {
@@ -69,12 +69,12 @@ public class Seminar {
         this.category = category;
     }
 
-    public String getLink() {
-        return link;
+    public String getUrl() {
+        return url;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getDescription() {
