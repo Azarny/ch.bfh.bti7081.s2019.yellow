@@ -1,5 +1,7 @@
 package ch.bfh.bti7081.model.seminar;
 
+import ch.bfh.bti7081.model.manager.SeminarManager;
+
 import java.time.LocalDateTime;
 
 public class Seminar {
@@ -13,15 +15,14 @@ public class Seminar {
     private String url;
     private String description;
 
-    // the user can only save events that are in the next x years
-    private int maxYearsInFuture = 5;
+
 
     public String getStreet() {
         return street;
     }
 
     public boolean setStreet(String street) {
-        if (street == null || street.trim().length() < 2) return false;
+        if (street == null || street.trim().length() < SeminarManager.minStreetLength) return false;
         this.street = street;
         return true;
     }
@@ -32,7 +33,7 @@ public class Seminar {
 
     public boolean setHouseNumber(String houseNumber){
         // a house number can only have one char after the digits
-        if (houseNumber == null || !houseNumber.matches("^\\d*\\w$")) return false;
+        if (houseNumber == null || !houseNumber.matches("^\\d*\\w$") || houseNumber.trim().length() < SeminarManager.minStreetNumberLength) return false;
         this.houseNumber = houseNumber;
         return true;
     }
@@ -53,7 +54,7 @@ public class Seminar {
     }
 
     public boolean setLocation(String location) {
-        if (location == null || location.trim().length() < 2) return false;
+        if (location == null || location.trim().length() < SeminarManager.minLocationLength) return false;
         this.location = location;
         return true;
     }
@@ -63,7 +64,7 @@ public class Seminar {
     }
 
     public boolean setTitle(String title) {
-        if ( title == null || title.trim().length() < 2) return false;
+        if ( title == null || title.trim().length() < SeminarManager.minTitleLength) return false;
         this.title = title;
         return true;
     }
@@ -73,7 +74,7 @@ public class Seminar {
     }
 
     public boolean setDate(LocalDateTime date) throws  IllegalArgumentException {
-        if (date == null || date.isBefore(LocalDateTime.now()) || date.isAfter(LocalDateTime.now().plusYears(maxYearsInFuture))) return false;
+        if (date == null || date.isBefore(LocalDateTime.now()) || date.isAfter(LocalDateTime.now().plusYears(SeminarManager.maxYearsInFuture))) return false;
         this.date = date;
         return true;
     }
@@ -107,7 +108,7 @@ public class Seminar {
     }
 
     public boolean setDescription(String description) {
-        if (description == null || description.trim().length() < 2) return false;
+        if (description == null || description.trim().length() < SeminarManager.minDescriptionLength) return false;
         this.description = description;
         return true;
     }

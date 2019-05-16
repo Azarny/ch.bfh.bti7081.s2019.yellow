@@ -12,6 +12,15 @@ public class SeminarManager {
     // manages the communication between backend and frontend
     // the list of methods isn't completed yet, just some sample methods for the class diagramm
 
+    // some variables for the validation, used in SeminarManager.java and Seminar.java
+    public static int maxYearsInFuture = 5;
+    public static int minTitleLength = 4;
+    public static int minDescriptionLength = 10;
+    public static int minStreetLength = 2;
+    public static int minStreetNumberLength = 1;
+    public static int minLocationLength = 2;
+
+
     public static List<Seminar> getSeminaries() {
         return mockSeminaries();
     }
