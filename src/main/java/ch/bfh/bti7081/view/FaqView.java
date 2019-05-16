@@ -7,7 +7,8 @@ import com.vaadin.flow.router.Route;
 @Route(value = "faq", layout = Layout.class)
 public class FaqView extends VerticalLayout {
     private H1 title = new H1("FaQ");
-    public FaqView(){
+
+    public FaqView() {
         this.add(title);
     }
 }

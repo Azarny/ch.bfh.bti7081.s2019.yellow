@@ -2,7 +2,6 @@ package ch.bfh.bti7081.model.manager;
 
 import ch.bfh.bti7081.model.User;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,15 +9,15 @@ import java.util.Optional;
 public class UserManager {
     public static User getUserByUsername(String name) {
         Optional<User> user = getMockUsers().stream().filter(u -> u.getUsername().equals(name)).findAny();
-        if(user.isPresent()){
+        if (user.isPresent()) {
             return user.get();
-        }else{
+        } else {
             return null;
         }
 
     }
 
-    private static List<User> getMockUsers(){
+    private static List<User> getMockUsers() {
         //These is mock data, nothing here is productive code.
         List<User> mockUsers = new ArrayList<>();
         User mockUser1 = new User();

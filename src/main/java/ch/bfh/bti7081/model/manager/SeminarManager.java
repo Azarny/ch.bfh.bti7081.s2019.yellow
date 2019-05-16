@@ -24,8 +24,7 @@ public class SeminarManager {
                 .filter(seminar -> {
                     if (filter.getCategory() == null) {
                         return true;
-                    }
-                    else {
+                    } else {
                         return seminar.getCategory().getName().toLowerCase().equals(filter.getCategory().getName().toLowerCase());
                     }
                 })
@@ -33,8 +32,7 @@ public class SeminarManager {
                 .filter(seminar -> {
                     if (filter.getLocation() == null) {
                         return true;
-                    }
-                    else {
+                    } else {
                         return seminar.getLocation().toLowerCase().contains(filter.getLocation().toLowerCase());
                     }
                 })
@@ -42,26 +40,23 @@ public class SeminarManager {
                 .filter(seminar -> {
                     if (filter.getToDate() == null) {
                         return true;
-                    }
-                    else {
+                    } else {
                         return seminar.getDate().isBefore(filter.getToDate().atStartOfDay().plusDays(1).minusSeconds(1));
                     }
                 })
                 .filter(seminar -> {
                     if (filter.getFromDate() == null) {
                         return true;
-                    }
-                    else {
+                    } else {
                         return seminar.getDate().isAfter(filter.getFromDate().atStartOfDay());
                     }
                 })
                 .filter(seminar -> {
-                    if(filter.getKeyword() == null) {
+                    if (filter.getKeyword() == null) {
                         return true;
-                    }
-                    else {
+                    } else {
                         String[] keywords = filter.getKeyword().split(" ");
-                        for (String keyword : keywords){
+                        for (String keyword : keywords) {
                             if (seminar.getTitle().toLowerCase().contains(keyword.toLowerCase())) {
                                 return true;
                             }
@@ -89,14 +84,10 @@ public class SeminarManager {
         throw new IllegalArgumentException("Not implemented yet.");
     }
 
-    public void deleteSeminar(Integer id) {
-        throw new IllegalArgumentException("Not implemented yet.");
-    }
-
-    private static List<Seminar> mockSeminaries(){
+    private static List<Seminar> mockSeminaries() {
         //These is mock data, nothing here is productive code.
         List<Seminar> mockSeminaries = new ArrayList<>();
-        Seminar seminarMock1=new Seminar();
+        Seminar seminarMock1 = new Seminar();
         seminarMock1.setCategory(SeminarCategoryManager.getSeminarCategories().get(2));
         seminarMock1.setDate(dateGenerator("2019-11-07 13:30"));
         seminarMock1.setDescription("Ärzte berichten von ihren Erlebnissen mit der Krankheit. " +
@@ -110,7 +101,7 @@ public class SeminarManager {
         seminarMock1.setPlz(3014);
         mockSeminaries.add(seminarMock1);
 
-        Seminar seminarMock2=new Seminar();
+        Seminar seminarMock2 = new Seminar();
         seminarMock2.setCategory(SeminarCategoryManager.getSeminarCategories().get(0));
         seminarMock2.setDate(dateGenerator("2019-08-07 10:30"));
         seminarMock2.setDescription("Betroffene erzählen von Ihren Problemen im Umgang mit der Krankheit " +
@@ -123,7 +114,7 @@ public class SeminarManager {
         seminarMock2.setPlz(3008);
         mockSeminaries.add(seminarMock2);
 
-        Seminar seminarMock3=new Seminar();
+        Seminar seminarMock3 = new Seminar();
         seminarMock3.setCategory(SeminarCategoryManager.getSeminarCategories().get(1));
         seminarMock3.setDate(dateGenerator("2019-09-09 20:00"));
         seminarMock3.setDescription("Wir haben zehn Angehörige von Personen mit Sozialphobie eingeladen, " +
@@ -137,7 +128,7 @@ public class SeminarManager {
         seminarMock3.setPlz(4852);
         mockSeminaries.add(seminarMock3);
 
-        Seminar seminarMock4=new Seminar();
+        Seminar seminarMock4 = new Seminar();
         seminarMock4.setCategory(SeminarCategoryManager.getSeminarCategories().get(0));
         seminarMock4.setDate(dateGenerator("2020-02-15 09:00"));
         seminarMock4.setDescription("Ein Treffen mit anderen Betroffenen. Hier können Sie sich entspannt " +
@@ -153,11 +144,14 @@ public class SeminarManager {
         return mockSeminaries;
     }
 
-    private static LocalDateTime dateGenerator(String timeToParse){
+    private static LocalDateTime dateGenerator(String timeToParse) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return LocalDateTime.parse(timeToParse, formatter);
     }
 
+    public void deleteSeminar(Integer id) {
+        throw new IllegalArgumentException("Not implemented yet.");
+    }
 
 
 }

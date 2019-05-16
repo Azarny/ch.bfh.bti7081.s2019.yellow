@@ -1,4 +1,9 @@
 package ch.bfh.bti7081.model.repositories;
 
-public interface ForumEntryCommentRepository {
+import ch.bfh.bti7081.model.forum.ForumEntryComment;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ForumEntryCommentRepository extends JpaRepository<ForumEntryComment, Long> {
 }
