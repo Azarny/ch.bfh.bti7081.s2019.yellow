@@ -20,88 +20,96 @@ public class Seminar {
         return street;
     }
 
-    public void setStreet(String street) throws IllegalArgumentException {
-        if (street.trim().length() < 2) throw new IllegalArgumentException("Street names have to be 2 chars at min.");
+    public boolean setStreet(String street) {
+        if (street == null || street.trim().length() < 2) return false;
         this.street = street;
+        return true;
     }
 
     public String getHouseNumber() {
         return houseNumber;
     }
 
-    public void setHouseNumber(String houseNumber) throws IllegalArgumentException{
+    public boolean setHouseNumber(String houseNumber){
         // a house number can only have one char after the digits
-        if (!houseNumber.matches("^\\d*\\w$")) throw new IllegalArgumentException("No valid house number.");
+        if (houseNumber == null || !houseNumber.matches("^\\d*\\w$")) return false;
         this.houseNumber = houseNumber;
+        return true;
     }
 
     public Integer getPlz() {
         return plz;
     }
 
-    public void setPlz(Integer plz) throws IllegalArgumentException{
+    public boolean setPlz(Integer plz) {
         // there are plz that have 6 digits
-        if(plz == null || !((plz > 999 && plz < 10000) || (plz > 99999 && plz < 1000000))) throw new IllegalArgumentException("No valid PLZ.");
+        if(plz == null || !((plz > 999 && plz < 10000) || (plz > 99999 && plz < 1000000))) return false;
         this.plz = plz;
+        return true;
     }
 
     public String getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
-        if (location.trim().length() < 2) throw new IllegalArgumentException("The location have to be 2 chars at min.");
+    public boolean setLocation(String location) {
+        if (location == null || location.trim().length() < 2) return false;
         this.location = location;
+        return true;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        if (title.trim().length() < 2) throw new IllegalArgumentException("The title have to be 2 chars at min.");
+    public boolean setTitle(String title) {
+        if ( title == null || title.trim().length() < 2) return false;
         this.title = title;
+        return true;
     }
 
     public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) throws  IllegalArgumentException {
-        if (date.isBefore(LocalDateTime.now())) throw new IllegalArgumentException("Date can't be in the past.");
-        if (date.isAfter(LocalDateTime.now().plusYears(maxYearsInFuture))) throw new IllegalArgumentException("Please do not enter events more than " + maxYearsInFuture + " years away.");
+    public boolean setDate(LocalDateTime date) throws  IllegalArgumentException {
+        if (date == null || date.isBefore(LocalDateTime.now()) || date.isAfter(LocalDateTime.now().plusYears(maxYearsInFuture))) return false;
         this.date = date;
+        return true;
     }
 
     public SeminarCategory getCategory(){
         return category;
     }
 
-    public void setCategory(SeminarCategory category) throws IllegalArgumentException {
-        if (category == null) throw new IllegalArgumentException("Category can't be empty");
+    public boolean setCategory(SeminarCategory category){
+        if (category == null) return false;
         this.category = category;
+        return true;
     }
 
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) throws IllegalArgumentException{
+    public boolean setUrl(String url) throws IllegalArgumentException{
         //regex pattern description:
         //^((https?|ftp)://)? --> allows http://, https:// and nothing
         // (\w+\.)+(\w{2}|\w{3}) --> allows url with one or more "parts" before the .topleveldomain. top level domains are made of 2 or 3 chars
         // (/\S+(\./\S+)*)?$ --> allows all the stuff after the last / but no whitespaces
-        if (!url.matches("^((https?)://)?(\\w+\\.)+(\\w{2}|\\w{3})(/\\S+(\\./\\S+)*)?$")) throw new IllegalArgumentException("No valid URL.");
+        if (url == null || !url.matches("^((https?)://)?(\\w+\\.)+(\\w{2}|\\w{3})(/\\S+(\\./\\S+)*)?$")) return false;
         this.url = url;
+        return true;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        if (description.trim().length() < 2) throw new IllegalArgumentException("The description have to be 2 chars at min.");
+    public boolean setDescription(String description) {
+        if (description == null || description.trim().length() < 2) return false;
         this.description = description;
+        return true;
     }
 
     // one query creation of seminar possible
