@@ -54,7 +54,7 @@ public class NewSeminarView extends VerticalLayout {
 
     private FormLayout seminarForm = new FormLayout();
 
-    private Label errorMessage = new Label("Hier könnte ihre Fehlermeldung stehen.");
+    private Label errorMessage = new Label("");
 
     private Button save = new Button("Save", new Icon(VaadinIcon.PLUS));
     private Button cancel = new Button("Cancel", new Icon(VaadinIcon.EXIT));
@@ -98,14 +98,14 @@ public class NewSeminarView extends VerticalLayout {
         seminarCategory.setEmptySelectionAllowed(false);
 
         //Binder-Configuration
-        binder.forField(seminarTitle).asRequired("Bitte Titel angeben.").
-                withValidator(title -> title.trim().length() >= SeminarManager.minTitleLength, "Titel muss aus mind. "+SeminarManager.minTitleLength + " Zeichen bestehen.").
+        binder.forField(seminarTitle).asRequired("Bitte Titel angeben").
+                withValidator(title -> title.trim().length() >= SeminarManager.minTitleLength, "Titel muss aus mind. "+SeminarManager.minTitleLength + " Zeichen bestehen").
                 bind(Seminar::getTitle, Seminar::setTitle);
 
         //DateTimeConvertation
         //withConverter(UI-Value to Model, Model-Value to UI, Error Message if not succesfull)
         //When Time or Date are saved, the other component is read to fill the datetime.
-        binder.forField(seminarDate).asRequired("Bitte Datum angeben.").
+        binder.forField(seminarDate).asRequired("Bitte Datum angeben").
                 withConverter(date->{
                     LocalTime time = seminarTime.getValue();
                     if(time==null){
@@ -113,11 +113,11 @@ public class NewSeminarView extends VerticalLayout {
                     }
                     return LocalDateTime.of(date, time);
                 }, LocalDateTime::toLocalDate)
-                .withValidator(seminarDate -> seminarDate.isAfter(LocalDateTime.now().minusDays(1)), "Datum ist in der Vergangenheit.")
-                .withValidator(seminarDate -> seminarDate.isBefore(LocalDateTime.now().plusYears(SeminarManager.maxYearsInFuture)), "Datum ist mehr als " + SeminarManager.maxYearsInFuture + " Jahre in der Zukunft.")
+                .withValidator(seminarDate -> seminarDate.isAfter(LocalDateTime.now().minusDays(1)), "Datum ist in der Vergangenheit")
+                .withValidator(seminarDate -> seminarDate.isBefore(LocalDateTime.now().plusYears(SeminarManager.maxYearsInFuture)), "Datum ist mehr als " + SeminarManager.maxYearsInFuture + " Jahre in der Zukunft")
                 .bind(Seminar::getDate,Seminar::setDate);
 
-        binder.forField(seminarTime).asRequired("Bitte Zeit angeben.").
+        binder.forField(seminarTime).asRequired("Bitte Zeit angeben").
                 withConverter(time->{
                     LocalDate date = seminarDate.getValue();
                     return LocalDateTime.of(date, time);
@@ -125,26 +125,26 @@ public class NewSeminarView extends VerticalLayout {
                 bind(Seminar::getDate,Seminar::setDate);
 
         binder.forField(seminarCategory).
-                asRequired("Bitte eine Kategorie wählen.").
+                asRequired("Bitte eine Kategorie wählen").
                 bind(Seminar::getCategory, Seminar::setCategory);
 
-        binder.forField(seminarStreet).asRequired("Bitte Strassennamen angeben.").
-                withValidator(street -> street.trim().length() >= SeminarManager.minStreetLength, "Strasse muss aus mind. " + SeminarManager.minStreetLength + " Zeichen bestehen.").
+        binder.forField(seminarStreet).asRequired("Bitte Strassennamen angeben").
+                withValidator(street -> street.trim().length() >= SeminarManager.minStreetLength, "Strasse muss aus mind. " + SeminarManager.minStreetLength + " Zeichen bestehen").
                 bind(Seminar::getStreet, Seminar::setStreet);
 
         binder.forField(seminarStreetNbr).
-                asRequired("Bitte Hausnummer angeben.").
-                withValidator(houseNumber -> houseNumber.matches("^\\d*\\w$"), "Hausnummer ungültig.").
-                withValidator(houseNumber -> houseNumber.trim().length() >= SeminarManager.minStreetNumberLength, "Hausnummer muss aus mind. " + SeminarManager.minStreetNumberLength + "bestehen.").
+                asRequired("Bitte Hausnummer angeben").
+                withValidator(houseNumber -> houseNumber.matches("^\\d*\\w$"), "Hausnummer ungültig").
+                withValidator(houseNumber -> houseNumber.trim().length() >= SeminarManager.minStreetNumberLength, "Hausnummer muss aus mind. " + SeminarManager.minStreetNumberLength + "bestehen").
                 bind(Seminar::getHouseNumber, Seminar::setHouseNumber);
 
         binder.forField(seminarPlz).
                 withConverter(Double::intValue, Integer::doubleValue,"Bitte eine PLZ eingeben").
-                withValidator(plz -> ((plz > 999 && plz < 10000) || (plz > 99999 && plz < 1000000)), "Ungültige PLZ.").
+                withValidator(plz -> ((plz > 999 && plz < 10000) || (plz > 99999 && plz < 1000000)), "Ungültige PLZ").
                 bind(Seminar::getPlz, Seminar::setPlz);
 
         binder.forField(seminarPlace).asRequired("Bitte Ort angeben.").
-                withValidator(location -> location.length() >= SeminarManager.minLocationLength, "Ort muss aus mind. " + SeminarManager.minLocationLength +" Zeichen bestehen.").
+                withValidator(location -> location.length() >= SeminarManager.minLocationLength, "Ort muss aus mind. " + SeminarManager.minLocationLength +" Zeichen bestehen").
                 bind(Seminar::getLocation, Seminar::setLocation);
 
         binder.forField(seminarLink).
@@ -154,7 +154,7 @@ public class NewSeminarView extends VerticalLayout {
 
         binder.forField(seminarDescription).
                 asRequired("Bitte Beschreibung angeben").
-                withValidator(description -> description.trim().length() >= SeminarManager.minDescriptionLength, "Beschreibung muss aus mind. " + SeminarManager.minDescriptionLength + " Zeichen bestehen.").
+                withValidator(description -> description.trim().length() >= SeminarManager.minDescriptionLength, "Beschreibung muss aus mind. " + SeminarManager.minDescriptionLength + " Zeichen bestehen").
                 bind(Seminar::getDescription, Seminar::setDescription);
 
         this.add(title);
@@ -173,7 +173,7 @@ public class NewSeminarView extends VerticalLayout {
                         .map(BindingValidationStatus::getMessage)
                         .map(Optional::get).distinct()
                         .collect(Collectors.joining(", "));
-                errorMessage.setText("There are errors: " + errorText);
+                errorMessage.setText("Folgende Fehler sind aufgetreten: " + errorText);
 
             }
         });

@@ -32,7 +32,7 @@ public class NewSeminarPresenter {
 
         modelObject.setTitle(frontendObject.getTitle());
         modelObject.setDescription(frontendObject.getDescription());
-        modelObject.setLink(frontendObject.getLink());
+        modelObject.setUrl(frontendObject.getLink());
         modelObject.setStreet(frontendObject.getStreet());
         modelObject.setHouseNumber(frontendObject.getHouseNumber());
         modelObject.setLocation(frontendObject.getLocation());
