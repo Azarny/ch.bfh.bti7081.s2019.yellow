@@ -2,12 +2,23 @@ package ch.bfh.bti7081.model.manager;
 
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 
+import javax.validation.constraints.Null;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class SeminarCategoryManager {
     public static List<SeminarCategory> getSeminarCategories(){
         return mockCategories();
+    }
+
+    public static SeminarCategory getSeminarByName(String name) throws Exception {
+        Optional<SeminarCategory> categories = getSeminarCategories().stream().filter(s -> s.getName().equals(name)).findFirst();
+        if(categories.isPresent()){
+            return categories.get();
+        }else{
+            throw new Exception("Category does not exist.");
+        }
     }
 
     private static List<SeminarCategory> mockCategories() {
