@@ -9,12 +9,11 @@ import com.vaadin.flow.router.Route;
 
 @Route(value = "seminar", layout = Layout.class)
 public class SeminarView extends VerticalLayout {
-
+  
   public SeminarView(){
     SeminarViewImpl view = new SeminarViewImpl();
     SeminarManager manager = new SeminarManager();
     new SeminarPresenter(manager,view);
     add(view);
   }
-
 }

@@ -13,7 +13,7 @@ public class UserManager {
         if(user.isPresent()){
             return user.get();
         }else{
-            throw new SecurityException("Benutzer nicht da.");
+            return null;
         }
 
     }
