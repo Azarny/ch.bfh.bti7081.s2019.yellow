@@ -1,12 +1,14 @@
 package ch.bfh.bti7081.model.manager;
 
 import ch.bfh.bti7081.model.seminar.Seminar;
+import ch.bfh.bti7081.model.seminar.SeminarFilter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SeminarManager {
     // manages the communication between backend and frontend
@@ -16,8 +18,15 @@ public class SeminarManager {
         return mockSeminaries();
     }
 
-    public List<Seminar> getFilteredSeminars(Map<String, String> filters) {
-        throw new IllegalArgumentException("Not implemented yet.");
+    public static List<Seminar> getFilteredSeminars(SeminarFilter filter) {
+        return getSeminaries().stream().
+                filter(seminar -> {
+                    if (filter.getCategory() != null)
+                        return seminar.getCategory().getName().equals(filter.getCategory().getName());
+                    else
+                        return true;
+                }).collect(Collectors.toList());
+
     }
 
     public Seminar createSeminar(Seminar seminar) {
@@ -90,8 +99,7 @@ public class SeminarManager {
 
     private static LocalDateTime dateGenerator(String timeToParse){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime formatDateTime = LocalDateTime.parse(timeToParse, formatter);
-        return formatDateTime;
+        return LocalDateTime.parse(timeToParse, formatter);
     }
 
 
