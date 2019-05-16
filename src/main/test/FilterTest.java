@@ -104,7 +104,7 @@ public class FilterTest {
 
         seminariesWithFilteredCategory = 0;
         //two keywords
-        keyword = keyword + " phobie";
+        keyword = keyword + " Phobie";
         seminarFilter.setKeyword(keyword);
         keyword = keyword.toLowerCase();
         filteredSeminaries = SeminarManager.getFilteredSeminars(seminarFilter);
