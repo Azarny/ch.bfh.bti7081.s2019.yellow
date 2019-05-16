@@ -159,7 +159,7 @@ public class SeminarViewImpl extends VerticalLayout {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
     String formatDateTime = localdate.format(formatter);
     Label date = new Label(formatDateTime);
-    Span link = new Span("Zum Veranstalter: "+seminar.getLink());
+    Span link = new Span("Zum Veranstalter: "+seminar.getUrl());
     link.getStyle().set("display","block");
     Span description = new Span("Beschreibung: " + seminar.getDescription());
     description.getStyle().set("display","block");
