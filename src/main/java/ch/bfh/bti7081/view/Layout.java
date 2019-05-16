@@ -28,13 +28,13 @@ public class Layout extends VerticalLayout implements RouterLayout {
     private Dialog loginForm = new Dialog();
     private TextField userName = new TextField();
     private PasswordField userPw = new PasswordField();
+    private Button loginDialogBtn = new Button("Login");
 
     private void ShowLogin(){
         loginForm.open();
     }
 
     public Layout() {
-        Button loginDialogBtn = new Button("Login");
         loginDialogBtn.addClickListener(Event -> ShowLogin());
         loginDialogBtn.getStyle().set("position","absolute").set("right","30px");
         HorizontalLayout menuBar = new HorizontalLayout(
@@ -84,6 +84,7 @@ public class Layout extends VerticalLayout implements RouterLayout {
                 else if(CheckLogin(userToLogin)) {
                     loginForm.removeAll();
                     loginForm.add(new H2("Willkommen " + userToLogin.getUsername()));
+                    loginDialogBtn.getStyle().set("display","none");
                 }
                 else {
                     status.setText("Falsches Passwort!");
