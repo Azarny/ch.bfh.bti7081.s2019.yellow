@@ -20,7 +20,7 @@ public class SeminarManager {
         throw new IllegalArgumentException("Not implemented yet.");
     }
 
-    public Seminar createSeminar(Seminar seminar) {
+    public static Seminar createSeminar(Seminar seminar) {
         throw new IllegalArgumentException("Not implemented yet.");
     }
 
