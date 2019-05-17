@@ -2,21 +2,54 @@ package ch.bfh.bti7081.model.forum;
 
 import ch.bfh.bti7081.model.User;
 
-import java.time.LocalDate;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.List;
 
+@Entity
+@Table(name = "forum_entry")
 public class ForumEntry {
-    private Integer id;
+    private static final String PREFIX = "F_ENTRY_";
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = PREFIX + "ID")
+    private Long id;
+
+    @Column(name = PREFIX + "TITLE", length = 50)
     private String title;
+
+    @Column(name = PREFIX + "TEXT", length = 255)
     private String text;
+
+    @ManyToOne
+    @JoinColumn(name = PREFIX + "AUTHOR")
     private User author;
-    private LocalDate creationDate;
+
+    @Column(name = PREFIX + "CREATION_DATE")
+    private LocalDateTime creationDate;
+
+    @ManyToOne
+    @JoinColumn(name = PREFIX + "CATEGORY")
     private ForumCategory category;
 
-    public Integer getId() {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "responseTo")
+    private List<ForumEntryComment> comments;
+
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -44,11 +77,11 @@ public class ForumEntry {
         this.author = author;
     }
 
-    public LocalDate getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(LocalDate creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
@@ -58,5 +91,13 @@ public class ForumEntry {
 
     public void setCategory(ForumCategory category) {
         this.category = category;
+    }
+
+    public List<ForumEntryComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<ForumEntryComment> comments) {
+        this.comments = comments;
     }
 }
