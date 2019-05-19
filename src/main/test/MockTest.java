@@ -16,7 +16,8 @@ public class MockTest {
 
     @Test
     public void SeminarCategoryTester(){
-        List<SeminarCategory> test = SeminarCategoryManager.getSeminarCategories();
+        SeminarCategoryManager seminarCategoryManager = new SeminarCategoryManager();
+        List<SeminarCategory> test = seminarCategoryManager.getSeminarCategories();
         Assert.assertEquals("Allgemeines",test.get(3).getName());
     }
 

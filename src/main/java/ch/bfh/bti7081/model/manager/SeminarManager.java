@@ -87,8 +87,10 @@ public class SeminarManager {
     private static List<Seminar> mockSeminaries() {
         //These is mock data, nothing here is productive code.
         List<Seminar> mockSeminaries = new ArrayList<>();
+        SeminarCategoryManager categoryManager = new SeminarCategoryManager();
+
         Seminar seminarMock1 = new Seminar();
-        seminarMock1.setCategory(SeminarCategoryManager.getSeminarCategories().get(2));
+        seminarMock1.setCategory(categoryManager.getSeminarCategories().get(2));
         seminarMock1.setDate(dateGenerator("2019-11-07 13:30"));
         seminarMock1.setDescription("Ärzte berichten von ihren Erlebnissen mit der Krankheit. " +
                 "Dr. Luis Alvador gibt Ihnen einen Überblick über die medizinischen Informationen, " +
@@ -102,7 +104,7 @@ public class SeminarManager {
         mockSeminaries.add(seminarMock1);
 
         Seminar seminarMock2 = new Seminar();
-        seminarMock2.setCategory(SeminarCategoryManager.getSeminarCategories().get(0));
+        seminarMock2.setCategory(categoryManager.getSeminarCategories().get(0));
         seminarMock2.setDate(dateGenerator("2019-08-07 10:30"));
         seminarMock2.setDescription("Betroffene erzählen von Ihren Problemen im Umgang mit der Krankheit " +
                 "und zeigen wie Sie diese tagtäglich überwinden.");
@@ -115,7 +117,7 @@ public class SeminarManager {
         mockSeminaries.add(seminarMock2);
 
         Seminar seminarMock3 = new Seminar();
-        seminarMock3.setCategory(SeminarCategoryManager.getSeminarCategories().get(1));
+        seminarMock3.setCategory(categoryManager.getSeminarCategories().get(1));
         seminarMock3.setDate(dateGenerator("2019-09-09 20:00"));
         seminarMock3.setDescription("Wir haben zehn Angehörige von Personen mit Sozialphobie eingeladen, " +
                 "die Ihnen von Ihren Erlebnissen erzählen. Treffen Sie uns zu einem Feierabendbier. " +
@@ -129,7 +131,7 @@ public class SeminarManager {
         mockSeminaries.add(seminarMock3);
 
         Seminar seminarMock4 = new Seminar();
-        seminarMock4.setCategory(SeminarCategoryManager.getSeminarCategories().get(0));
+        seminarMock4.setCategory(categoryManager.getSeminarCategories().get(0));
         seminarMock4.setDate(dateGenerator("2020-02-15 09:00"));
         seminarMock4.setDescription("Ein Treffen mit anderen Betroffenen. Hier können Sie sich entspannt " +
                 "fühlen, niemand wird sie verurteilen, da wir dasselbe tagtäglich auch durchmachen.");

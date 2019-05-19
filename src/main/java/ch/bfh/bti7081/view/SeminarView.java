@@ -13,7 +13,8 @@ public class SeminarView extends VerticalLayout {
   public SeminarView(){
     SeminarViewImpl view = new SeminarViewImpl();
     SeminarManager manager = new SeminarManager();
-    new SeminarPresenter(manager,view);
+    SeminarCategoryManager seminarCategoryManager = new SeminarCategoryManager();
+    new SeminarPresenter(manager, seminarCategoryManager, view);
     add(view);
   }
 }
