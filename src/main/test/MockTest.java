@@ -23,7 +23,8 @@ public class MockTest {
 
     @Test
     public void SeminarTester(){
-        Assert.assertEquals(4,SeminarManager.getSeminaries().size());
+        SeminarManager seminarManager = new SeminarManager();
+        Assert.assertEquals(4,seminarManager.getSeminaries().size());
     }
 
 }

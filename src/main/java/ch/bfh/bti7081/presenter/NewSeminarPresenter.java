@@ -28,7 +28,7 @@ public class NewSeminarPresenter {
 
     public void sendSeminarToBackend(SeminarDTO frontendObject) throws Exception {
         Seminar seminarToBeSaved = convertDTOtoModel(frontendObject);
-        SeminarManager.createSeminar(seminarToBeSaved);
+        seminarManager.createSeminar(seminarToBeSaved);
     }
 
     private Seminar convertDTOtoModel(SeminarDTO seminarDTO) throws Exception {

@@ -16,6 +16,6 @@ public class SeminarPresenter {
         this.view = view;
         this.view.setSeminarCategoryList(seminarCategoryManager.getSeminarCategories());
         //TODO setSeminarList with getFilteredSeminaries-method (Manager-Class)
-        this.view.setSeminarList(SeminarManager.getSeminaries());
+        this.view.setSeminarList(seminarManager.getSeminaries());
     }
 }

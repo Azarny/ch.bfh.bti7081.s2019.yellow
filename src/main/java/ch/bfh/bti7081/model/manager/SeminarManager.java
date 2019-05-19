@@ -14,11 +14,11 @@ public class SeminarManager {
     // manages the communication between backend and frontend
     // the list of methods isn't completed yet, just some sample methods for the class diagramm
 
-    public static List<Seminar> getSeminaries() {
+    public List<Seminar> getSeminaries() {
         return mockSeminaries();
     }
 
-    public static List<Seminar> getFilteredSeminars(SeminarFilter filter) {
+    public List<Seminar> getFilteredSeminars(SeminarFilter filter) {
         return getSeminaries().stream()
                 //filter category
                 .filter(seminar -> {
@@ -80,11 +80,11 @@ public class SeminarManager {
 
     }
 
-    public static Seminar createSeminar(Seminar seminar) {
+    public Seminar createSeminar(Seminar seminar) {
         throw new IllegalArgumentException("Not implemented yet.");
     }
 
-    private static List<Seminar> mockSeminaries() {
+    private List<Seminar> mockSeminaries() {
         //These is mock data, nothing here is productive code.
         List<Seminar> mockSeminaries = new ArrayList<>();
         SeminarCategoryManager categoryManager = new SeminarCategoryManager();
@@ -146,7 +146,7 @@ public class SeminarManager {
         return mockSeminaries;
     }
 
-    private static LocalDateTime dateGenerator(String timeToParse) {
+    private LocalDateTime dateGenerator(String timeToParse) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return LocalDateTime.parse(timeToParse, formatter);
     }

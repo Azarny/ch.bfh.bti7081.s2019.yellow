@@ -69,12 +69,11 @@ public class NewSeminarView extends VerticalLayout {
         setFieldSettings();
         addBindingToForm();
         buildPage();
-        //has to be last
-        setPresenter();
+        mvpBinding(new SeminarManager(),new SeminarCategoryManager());
     }
 
-    void setPresenter() {
-        presenter = new NewSeminarPresenter(this, new SeminarManager(), new SeminarCategoryManager());
+    private void mvpBinding(SeminarManager seminarManager, SeminarCategoryManager seminarCategoryManager) {
+        presenter = new NewSeminarPresenter(this, seminarManager, seminarCategoryManager);
         setFormActions();
     }
 
@@ -158,9 +157,5 @@ public class NewSeminarView extends VerticalLayout {
 
     public void setCategories(List<String> seminarCategories) {
         seminarCategory.setItems(seminarCategories);
-    }
-
-    public void backendError(String message) {
-        errorMessage.setText(message);
     }
 }

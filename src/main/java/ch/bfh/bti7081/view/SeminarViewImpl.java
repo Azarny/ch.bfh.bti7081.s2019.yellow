@@ -39,7 +39,10 @@ public class SeminarViewImpl extends VerticalLayout {
     private Grid<Seminar> seminarGrid = new Grid<>();
     private ComboBox<SeminarCategory> categoriesCb = new ComboBox<>();
 
+    private SeminarManager seminarManager;
+
     public SeminarViewImpl() {
+        seminarManager =  new SeminarManager();
         generateFilterLayout();
         generateListLayout();
         VerticalLayout leftLayout = new VerticalLayout();
@@ -90,7 +93,7 @@ public class SeminarViewImpl extends VerticalLayout {
         // Click listeners for the buttons
         filterBtn.addClickListener(event -> {
             if (binder.writeBeanIfValid(seminarFilter)) {
-                setSeminarList(SeminarManager.getFilteredSeminars(seminarFilter));
+                setSeminarList(seminarManager.getFilteredSeminars(seminarFilter));
             } else {
                 BinderValidationStatus<SeminarFilter> validate = binder.validate();
                 String errorText = validate.getFieldValidationStatuses()
