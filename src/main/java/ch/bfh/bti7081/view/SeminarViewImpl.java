@@ -48,7 +48,7 @@ public class SeminarViewImpl extends VerticalLayout {
         contentLayout.add(leftLayout, rightLayout);
         Button newSeminar = new Button("Neues Seminar", new Icon(VaadinIcon.EDIT));
         newSeminar.addClickListener(event -> {
-            newSeminar.getUI().ifPresent(ui -> ui.navigate("newSeminar"));
+            newSeminar.getUI().ifPresent(ui -> ui.navigate("seminar/new"));
         });
 
         leftLayout.add(SeminarFilterLayout, newSeminar, SeminarListLayout, details);
