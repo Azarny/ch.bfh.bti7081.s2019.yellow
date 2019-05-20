@@ -15,12 +15,12 @@ public class SeminarManager {
     // the list of methods isn't completed yet, just some sample methods for the class diagramm
 
     // some variables for the validation, used in SeminarManager.java and Seminar.java
-    public static int maxYearsInFuture = 5;
-    public static int minTitleLength = 4;
-    public static int minDescriptionLength = 10;
-    public static int minStreetLength = 2;
-    public static int minStreetNumberLength = 1;
-    public static int minLocationLength = 2;
+    public static int MAXYEARSINFUTURE = 5;
+    public static int MINTITLELENGTH = 4;
+    public static int MINDESCRIPTIONLENGTH = 10;
+    public static int MINSTREETLENGTH = 2;
+    public static int MINSTREETNUMBERLENGTH = 1;
+    public static int MINLOCATIONLENGTH = 2;
 
 
     public static List<Seminar> getSeminaries() {
@@ -93,18 +93,14 @@ public class SeminarManager {
         throw new IllegalArgumentException("Not implemented yet.");
     }
 
-    public void deleteSeminar(Integer id) {
-        throw new IllegalArgumentException("Not implemented yet.");
-    }
-
     public static String validateSeminar(Seminar seminar) {
         String returnString = "";
 
-        if (seminar.getStreet() == null || seminar.getStreet().trim().length() < SeminarManager.minStreetLength) {
+        if (seminar.getStreet() == null || seminar.getStreet().trim().length() < SeminarManager.MINSTREETLENGTH) {
             returnString += "no valid street name, ";
         }
 
-        if (seminar.getHouseNumber() == null || !seminar.getHouseNumber().matches("^\\d*\\w$") || seminar.getHouseNumber().trim().length() < SeminarManager.minStreetNumberLength) {
+        if (seminar.getHouseNumber() == null || !seminar.getHouseNumber().matches("^\\d*\\w$") || seminar.getHouseNumber().trim().length() < SeminarManager.MINSTREETNUMBERLENGTH) {
             returnString += "no valid house number, ";
         }
 
@@ -112,15 +108,15 @@ public class SeminarManager {
             returnString += "no valid PLZ, ";
         }
 
-        if (seminar.getLocation() == null || seminar.getLocation().trim().length() < SeminarManager.minLocationLength) {
+        if (seminar.getLocation() == null || seminar.getLocation().trim().length() < SeminarManager.MINLOCATIONLENGTH) {
             returnString += "no valid location, ";
         }
 
-        if (seminar.getTitle() == null || seminar.getTitle().trim().length() < SeminarManager.minTitleLength) {
+        if (seminar.getTitle() == null || seminar.getTitle().trim().length() < SeminarManager.MINTITLELENGTH) {
             returnString += "no valid title, ";
         }
 
-        if (seminar.getDate() == null || seminar.getDate().isBefore(LocalDateTime.now()) || seminar.getDate().isAfter(LocalDateTime.now().plusYears(SeminarManager.maxYearsInFuture))) {
+        if (seminar.getDate() == null || seminar.getDate().isBefore(LocalDateTime.now()) || seminar.getDate().isAfter(LocalDateTime.now().plusYears(SeminarManager.MAXYEARSINFUTURE))) {
             returnString += "no valid date, ";
         }
 
@@ -136,7 +132,7 @@ public class SeminarManager {
             returnString += "no valid URL, ";
         }
 
-        if (seminar.getDescription() == null || seminar.getDescription().trim().length() < SeminarManager.minDescriptionLength) {
+        if (seminar.getDescription() == null || seminar.getDescription().trim().length() < SeminarManager.MINDESCRIPTIONLENGTH) {
             returnString += "no valid description, ";
         }
 

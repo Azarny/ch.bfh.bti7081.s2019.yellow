@@ -9,6 +9,7 @@ import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.view.NewSeminarViewImpl;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,4 +46,14 @@ public class NewSeminarPresenter {
         return modelObject;
     }
 
+    public HashMap<String, Integer> getValidationConstants(){
+        HashMap<String, Integer> validationConstants = new HashMap<>();
+        validationConstants.put("streetNumber", SeminarManager.MINSTREETNUMBERLENGTH);
+        validationConstants.put("streetName", SeminarManager.MINSTREETLENGTH);
+        validationConstants.put("title", SeminarManager.MINTITLELENGTH);
+        validationConstants.put("description", SeminarManager.MINDESCRIPTIONLENGTH);
+        validationConstants.put("location", SeminarManager.MINLOCATIONLENGTH);
+        validationConstants.put("maxYearsInFuture", SeminarManager.MAXYEARSINFUTURE);
+        return validationConstants;
+    }
 }

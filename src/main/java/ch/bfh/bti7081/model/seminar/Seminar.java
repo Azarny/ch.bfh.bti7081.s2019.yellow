@@ -41,12 +41,11 @@ public class Seminar {
     @ManyToOne
     @JoinColumn(name = PREFIX + "CATEGORY")
     private SeminarCategory category;
+
+    @Column(name = PREFIX + "URL")
     private String url;
 
-    @Column(name = PREFIX + "URL", length = 255)
-    private String url;
-
-    @Column(name = PREFIX + "DESCRIPTION", length = 255)
+    @Column(name = PREFIX + "DESCRIPTION")
     private String description;
 
     public String getStreet() {

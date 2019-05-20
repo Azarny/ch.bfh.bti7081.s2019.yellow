@@ -8,6 +8,18 @@ import org.junit.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Null;
+import java.time.LocalDateTime;
+import java.time.LocalDateTime;
+
+import static org.junit.Assert.fail;
+
 public class SeminarManagerTest {
     private List<Seminar> seminaries = SeminarManager.getSeminaries();
     private SeminarFilter seminarFilter = new SeminarFilter();
@@ -127,19 +139,7 @@ public class SeminarManagerTest {
         Assert.assertEquals(seminariesWithFilteredCategory, filteredSeminaries.size());
     }
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Null;
-import java.time.LocalDateTime;
-import java.time.LocalDateTime;
-
-import static org.junit.Assert.fail;
-
-public class SeminarManagerTest {
     private Seminar testSeminar= new Seminar();
     @Before
     public void setup(){
