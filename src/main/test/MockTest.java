@@ -16,13 +16,15 @@ public class MockTest {
 
     @Test
     public void SeminarCategoryTester(){
-        List<SeminarCategory> test = SeminarCategoryManager.getSeminarCategories();
+        SeminarCategoryManager seminarCategoryManager = new SeminarCategoryManager();
+        List<SeminarCategory> test = seminarCategoryManager.getSeminarCategories();
         Assert.assertEquals("Allgemeines",test.get(3).getName());
     }
 
     @Test
     public void SeminarTester(){
-        Assert.assertEquals(4,SeminarManager.getSeminaries().size());
+        SeminarManager seminarManager = new SeminarManager();
+        Assert.assertEquals(4,seminarManager.getSeminaries().size());
     }
 
 }

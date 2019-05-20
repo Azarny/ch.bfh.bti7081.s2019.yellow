@@ -1,3 +1,4 @@
+import ch.bfh.bti7081.model.manager.SeminarCategoryManager;
 import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
@@ -9,7 +10,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class SeminarManagerTest {
-    private List<Seminar> seminaries = SeminarManager.getSeminaries();
+    private SeminarManager seminarManager = new SeminarManager();
+    private SeminarCategoryManager seminarCategoryManager = new SeminarCategoryManager();
+
+    private List<Seminar> seminaries = seminarManager.getSeminaries();
     private SeminarFilter seminarFilter = new SeminarFilter();
     private int seminarCount = seminaries.size();
     private int seminariesWithFilteredCategory = 0;
@@ -23,7 +27,7 @@ public class SeminarManagerTest {
         for (Seminar seminar : seminaries) {
             if (seminar.getCategory().getName().equals(categoryToFilter.getName())) seminariesWithFilteredCategory++;
         }
-        List<Seminar> filteredSeminaries = SeminarManager.getFilteredSeminars(seminarFilter);
+        List<Seminar> filteredSeminaries = seminarManager.getFilteredSeminars(seminarFilter);
         Assert.assertEquals(seminarCount - seminariesWithFilteredCategory, filteredSeminaries.size());
     }
 
@@ -33,7 +37,7 @@ public class SeminarManagerTest {
         for (Seminar seminar : seminaries) {
             if (seminar.getLocation().contains(seminarFilter.getLocation())) seminariesWithFilteredCategory++;
         }
-        List<Seminar> filteredSeminaries = SeminarManager.getFilteredSeminars(seminarFilter);
+        List<Seminar> filteredSeminaries = seminarManager.getFilteredSeminars(seminarFilter);
         Assert.assertEquals(seminarCount - seminariesWithFilteredCategory, filteredSeminaries.size());
     }
 
@@ -44,7 +48,7 @@ public class SeminarManagerTest {
             if (seminar.getLocation().toLowerCase().contains(seminarFilter.getLocation().toLowerCase()))
                 seminariesWithFilteredCategory++;
         }
-        List<Seminar> filteredSeminaries = SeminarManager.getFilteredSeminars(seminarFilter);
+        List<Seminar> filteredSeminaries = seminarManager.getFilteredSeminars(seminarFilter);
         Assert.assertEquals(seminarCount - seminariesWithFilteredCategory, filteredSeminaries.size());
     }
 
@@ -57,7 +61,7 @@ public class SeminarManagerTest {
             if (seminar.getDate().isAfter(seminarFilter.getToDate().atStartOfDay().plusDays(1).minusSeconds(1)))
                 seminariesWithFilteredCategory++;
         }
-        List<Seminar> filteredSeminaries = SeminarManager.getFilteredSeminars(seminarFilter);
+        List<Seminar> filteredSeminaries = seminarManager.getFilteredSeminars(seminarFilter);
         Assert.assertEquals(seminarCount - seminariesWithFilteredCategory, filteredSeminaries.size());
 
         seminariesWithFilteredCategory = 0;
@@ -67,7 +71,7 @@ public class SeminarManagerTest {
             if (seminar.getDate().isAfter(seminarFilter.getToDate().atStartOfDay().plusDays(1).minusSeconds(1)))
                 seminariesWithFilteredCategory++;
         }
-        filteredSeminaries = SeminarManager.getFilteredSeminars(seminarFilter);
+        filteredSeminaries = seminarManager.getFilteredSeminars(seminarFilter);
         Assert.assertEquals(seminarCount - seminariesWithFilteredCategory, filteredSeminaries.size());
     }
 
@@ -79,7 +83,7 @@ public class SeminarManagerTest {
             if (seminar.getDate().isBefore(seminarFilter.getFromDate().atStartOfDay()))
                 seminariesWithFilteredCategory++;
         }
-        List<Seminar> filteredSeminaries = SeminarManager.getFilteredSeminars(seminarFilter);
+        List<Seminar> filteredSeminaries = seminarManager.getFilteredSeminars(seminarFilter);
         Assert.assertEquals(seminarCount - seminariesWithFilteredCategory, filteredSeminaries.size());
 
         seminariesWithFilteredCategory = 0;
@@ -89,7 +93,7 @@ public class SeminarManagerTest {
             if (seminar.getDate().isBefore(seminarFilter.getFromDate().atStartOfDay()))
                 seminariesWithFilteredCategory++;
         }
-        filteredSeminaries = SeminarManager.getFilteredSeminars(seminarFilter);
+        filteredSeminaries = seminarManager.getFilteredSeminars(seminarFilter);
         Assert.assertEquals(seminarCount - seminariesWithFilteredCategory, filteredSeminaries.size());
     }
 
@@ -99,7 +103,7 @@ public class SeminarManagerTest {
         //one keyword
         seminarFilter.setKeyword(keyword);
         keyword = keyword.toLowerCase();
-        List<Seminar> filteredSeminaries = SeminarManager.getFilteredSeminars(seminarFilter);
+        List<Seminar> filteredSeminaries = seminarManager.getFilteredSeminars(seminarFilter);
         for (Seminar seminar : seminaries) {
             if (seminar.getTitle().toLowerCase().contains(keyword) || seminar.getLocation().toLowerCase().contains(keyword) || seminar.getDescription().toLowerCase().contains(keyword)) {
                 seminariesWithFilteredCategory++;
@@ -112,7 +116,7 @@ public class SeminarManagerTest {
         keyword = keyword + " Phobie";
         seminarFilter.setKeyword(keyword);
         keyword = keyword.toLowerCase();
-        filteredSeminaries = SeminarManager.getFilteredSeminars(seminarFilter);
+        filteredSeminaries = seminarManager.getFilteredSeminars(seminarFilter);
         String[] keywords = keyword.split(" ");
         for (Seminar seminar : seminaries) {
             if (seminar.getTitle().toLowerCase().contains(keywords[0]) ||
