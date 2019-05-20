@@ -1,6 +1,6 @@
 package ch.bfh.bti7081.view;
 
-import ch.bfh.bti7081.model.dto.NewSeminarDTO;
+import ch.bfh.bti7081.model.dto.SeminarDTO;
 import ch.bfh.bti7081.presenter.NewSeminarPresenter;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -20,7 +20,6 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,17 +35,17 @@ public class NewSeminarViewImpl extends VerticalLayout {
 
     private TimePicker seminarTime = new TimePicker("Zeit");
     private DatePicker seminarDate = new DatePicker("Datum");
-    private FormLayout dateComposite = new FormLayout(seminarDate,seminarTime);
+    private FormLayout dateComposite = new FormLayout(seminarDate, seminarTime);
 
     private TextArea seminarDescription = new TextArea("Beschreibung");
     private TextField seminarLink = new TextField("Externer Link");
 
     private TextField seminarStreet = new TextField("Strasse");
     private TextField seminarStreetNbr = new TextField("Nr.");
-    private FormLayout streetComposite = new FormLayout(seminarStreet,seminarStreetNbr);
+    private FormLayout streetComposite = new FormLayout(seminarStreet, seminarStreetNbr);
 
     private NumberField seminarPlz = new NumberField("PLZ");
-    private TextField seminarPlace = new TextField ("Ort");
+    private TextField seminarPlace = new TextField("Ort");
     private FormLayout placeComposite = new FormLayout(seminarPlz, seminarPlace);
 
 
@@ -55,25 +54,25 @@ public class NewSeminarViewImpl extends VerticalLayout {
     private Button save = new Button("Save", new Icon(VaadinIcon.PLUS));
     private Button cancel = new Button("Cancel", new Icon(VaadinIcon.EXIT));
 
-    private HorizontalLayout formActions = new HorizontalLayout(save,cancel);
+    private HorizontalLayout formActions = new HorizontalLayout(save, cancel);
 
-    private Binder<NewSeminarDTO> binder = new Binder<>();
-    private NewSeminarDTO newSeminar = new NewSeminarDTO();
+    private Binder<SeminarDTO> binder = new Binder<>();
+    private SeminarDTO newSeminar = new SeminarDTO();
     private NewSeminarPresenter presenter;
 
-    NewSeminarViewImpl(){
+    public NewSeminarViewImpl() {
         addElementsToForm();
         setFieldSettings();
         addBindingToForm();
         buildPage();
     }
 
-    void setPresenter(NewSeminarPresenter presenter){
+    void setPresenter(NewSeminarPresenter presenter) {
         this.presenter = presenter;
         setFormActions();
     }
 
-    private void addElementsToForm(){
+    private void addElementsToForm() {
         seminarForm.add(seminarTitle);
         seminarForm.add(seminarCategory);
         seminarForm.add(dateComposite);
@@ -83,7 +82,7 @@ public class NewSeminarViewImpl extends VerticalLayout {
         seminarForm.add(seminarDescription);
     }
 
-    private void setFieldSettings(){
+    private void setFieldSettings() {
         seminarTitle.setRequiredIndicatorVisible(true);
         seminarCategory.setRequiredIndicatorVisible(true);
         //dateTimeComposite
@@ -102,22 +101,23 @@ public class NewSeminarViewImpl extends VerticalLayout {
         seminarCategory.setLabel("Kategorie");
         seminarCategory.setEmptySelectionAllowed(false);
     }
-    private void addBindingToForm(){
+
+    private void addBindingToForm() {
         //Binder-Configuration
-        binder.bind(seminarTitle, NewSeminarDTO::getTitle, NewSeminarDTO::setTitle);
-        binder.bind(seminarDate, NewSeminarDTO::getDate,NewSeminarDTO::setDate);
-        binder.bind(seminarTime, NewSeminarDTO::getTime,NewSeminarDTO::setTime);
+        binder.bind(seminarTitle, SeminarDTO::getTitle, SeminarDTO::setTitle);
+        binder.bind(seminarDate, SeminarDTO::getDate, SeminarDTO::setDate);
+        binder.bind(seminarTime, SeminarDTO::getTime, SeminarDTO::setTime);
         binder.forField(seminarCategory).asRequired("Bitte eine Kategorie wählen.").
-                bind(NewSeminarDTO::getCategory, NewSeminarDTO::setCategory);
-        binder.bind(seminarStreet, NewSeminarDTO::getStreet, NewSeminarDTO::setStreet);
-        binder.bind(seminarStreetNbr, NewSeminarDTO::getHouseNumber, NewSeminarDTO::setHouseNumber);
-        binder.bind(seminarPlz,NewSeminarDTO::getPlz,NewSeminarDTO::setPlz);
-        binder.bind(seminarPlace, NewSeminarDTO::getLocation, NewSeminarDTO::setLocation);
-        binder.bind(seminarLink, NewSeminarDTO::getLink, NewSeminarDTO::setLink);
-        binder.bind(seminarDescription, NewSeminarDTO::getDescription, NewSeminarDTO::setDescription);
+                bind(SeminarDTO::getCategory, SeminarDTO::setCategory);
+        binder.bind(seminarStreet, SeminarDTO::getStreet, SeminarDTO::setStreet);
+        binder.bind(seminarStreetNbr, SeminarDTO::getHouseNumber, SeminarDTO::setHouseNumber);
+        binder.bind(seminarPlz, SeminarDTO::getPlz, SeminarDTO::setPlz);
+        binder.bind(seminarPlace, SeminarDTO::getLocation, SeminarDTO::setLocation);
+        binder.bind(seminarLink, SeminarDTO::getUrl, SeminarDTO::setUrl);
+        binder.bind(seminarDescription, SeminarDTO::getDescription, SeminarDTO::setDescription);
     }
 
-    private void setFormActions(){
+    private void setFormActions() {
         save.addClickListener(event -> {
             if (binder.writeBeanIfValid(newSeminar)) {
                 try {
@@ -127,7 +127,7 @@ public class NewSeminarViewImpl extends VerticalLayout {
                     errorMessage.setText("Beim Speichern scheint ein Fehler aufgetreten zu sein" + e);
                 }
             } else {
-                BinderValidationStatus<NewSeminarDTO> validate = binder.validate();
+                BinderValidationStatus<SeminarDTO> validate = binder.validate();
                 String errorText = validate.getFieldValidationStatuses()
                         .stream().filter(BindingValidationStatus::isError)
                         .map(BindingValidationStatus::getMessage)
@@ -143,18 +143,18 @@ public class NewSeminarViewImpl extends VerticalLayout {
         });
     }
 
-    private void buildPage(){
+    private void buildPage() {
         this.add(title);
         this.add(seminarForm);
         this.add(errorMessage);
         this.add(formActions);
     }
 
-    public void setCategories(List<String> seminarCategories){
+    public void setCategories(List<String> seminarCategories) {
         seminarCategory.setItems(seminarCategories);
     }
 
-    public void backendError(String message){
+    public void backendError(String message) {
         errorMessage.setText(message);
     }
 }

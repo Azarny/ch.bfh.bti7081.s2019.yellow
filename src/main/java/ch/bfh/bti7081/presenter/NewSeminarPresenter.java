@@ -1,7 +1,7 @@
 package ch.bfh.bti7081.presenter;
 
 
-import ch.bfh.bti7081.model.dto.NewSeminarDTO;
+import ch.bfh.bti7081.model.dto.SeminarDTO;
 import ch.bfh.bti7081.model.manager.SeminarCategoryManager;
 import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
@@ -22,26 +22,26 @@ public class NewSeminarPresenter {
         view.setCategories(categories);
     }
 
-    public void sendSeminarToBackend(NewSeminarDTO frontendObject) throws Exception {
+    public void sendSeminarToBackend(SeminarDTO frontendObject) throws Exception {
         Seminar seminarToBeSaved = convertDTOtoModel(frontendObject);
         SeminarManager.createSeminar(seminarToBeSaved);
     }
 
-    private Seminar convertDTOtoModel(NewSeminarDTO frontendObject) throws Exception {
+    private Seminar convertDTOtoModel(SeminarDTO seminarDTO) throws Exception {
         Seminar modelObject = new Seminar();
 
-        modelObject.setTitle(frontendObject.getTitle());
-        modelObject.setDescription(frontendObject.getDescription());
-        modelObject.setUrl(frontendObject.getLink());
-        modelObject.setStreet(frontendObject.getStreet());
-        modelObject.setHouseNumber(frontendObject.getHouseNumber());
-        modelObject.setLocation(frontendObject.getLocation());
+        modelObject.setTitle(seminarDTO.getTitle());
+        modelObject.setDescription(seminarDTO.getDescription());
+        modelObject.setUrl(seminarDTO.getUrl());
+        modelObject.setStreet(seminarDTO.getStreet());
+        modelObject.setHouseNumber(seminarDTO.getHouseNumber());
+        modelObject.setLocation(seminarDTO.getLocation());
 
         //Here the conversion happens.
-        modelObject.setPlz(frontendObject.getPlz().intValue());
-        modelObject.setDate(LocalDateTime.of(frontendObject.getDate(), frontendObject.getTime()));
+        modelObject.setPlz(seminarDTO.getPlz().intValue());
+        modelObject.setDate(LocalDateTime.of(seminarDTO.getDate(), seminarDTO.getTime()));
 
-        modelObject.setCategory(SeminarCategoryManager.getSeminarByName(frontendObject.getCategory()));
+        modelObject.setCategory(SeminarCategoryManager.getSeminarByName(seminarDTO.getCategory()));
         return modelObject;
     }
 

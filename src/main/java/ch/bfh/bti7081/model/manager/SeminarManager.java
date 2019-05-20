@@ -1,12 +1,14 @@
 package ch.bfh.bti7081.model.manager;
 
 import ch.bfh.bti7081.model.seminar.Seminar;
+import ch.bfh.bti7081.model.seminar.SeminarFilter;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
+
 
 public class SeminarManager {
     // manages the communication between backend and frontend
@@ -25,8 +27,66 @@ public class SeminarManager {
         return mockSeminaries();
     }
 
-    public List<Seminar> getFilteredSeminars(Map<String, String> filters) {
-        throw new IllegalArgumentException("Not implemented yet.");
+    public static List<Seminar> getFilteredSeminars(SeminarFilter filter) {
+        return getSeminaries().stream()
+                //filter category
+                .filter(seminar -> {
+                    if (filter.getCategory() == null) {
+                        return true;
+                    } else {
+                        return seminar.getCategory().getName().toLowerCase().equals(filter.getCategory().getName().toLowerCase());
+                    }
+                })
+                //filter location
+                .filter(seminar -> {
+                    if (filter.getLocation() == null) {
+                        return true;
+                    } else {
+                        return seminar.getLocation().toLowerCase().contains(filter.getLocation().toLowerCase());
+                    }
+                })
+                //filter date
+                .filter(seminar -> {
+                    if (filter.getToDate() == null) {
+                        return true;
+                    } else {
+                        return seminar.getDate().isBefore(filter.getToDate().atStartOfDay().plusDays(1).minusSeconds(1));
+                    }
+                })
+                .filter(seminar -> {
+                    if (filter.getFromDate() == null) {
+                        return true;
+                    } else {
+                        return seminar.getDate().isAfter(filter.getFromDate().atStartOfDay());
+                    }
+                })
+                .filter(seminar -> {
+                    if (filter.getKeyword() == null) {
+                        return true;
+                    } else {
+                        String[] keywords = filter.getKeyword().split(" ");
+                        for (String keyword : keywords) {
+                            if (seminar.getTitle().toLowerCase().contains(keyword.toLowerCase())) {
+                                return true;
+                            }
+                            if (seminar.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
+                                return true;
+                            }
+                            if (seminar.getStreet().toLowerCase().contains(keyword.toLowerCase())) {
+                                return true;
+                            }
+                            if (seminar.getUrl().toLowerCase().contains(keyword.toLowerCase())) {
+                                return true;
+                            }
+                            if (seminar.getPlz().toString().contains(keyword)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    }
+                })
+                .collect(Collectors.toList());
+
     }
 
     public static Seminar createSeminar(Seminar seminar) {
@@ -146,6 +206,10 @@ public class SeminarManager {
     private static LocalDateTime dateGenerator(String timeToParse) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return LocalDateTime.parse(timeToParse, formatter);
+    }
+
+    public void deleteSeminar(Integer id) {
+        throw new IllegalArgumentException("Not implemented yet.");
     }
 
 
