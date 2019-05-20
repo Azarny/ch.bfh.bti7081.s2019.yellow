@@ -6,26 +6,37 @@ import ch.bfh.bti7081.model.manager.SeminarCategoryManager;
 import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
-import ch.bfh.bti7081.view.NewSeminarViewImpl;
+import ch.bfh.bti7081.view.NewSeminarView;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class NewSeminarPresenter {
-    private NewSeminarViewImpl view;
+    private NewSeminarView view;
+    @Autowired
+    private SeminarManager seminarManager;
+    @Autowired
+    private SeminarCategoryManager seminarCategoryManager;
 
-    public NewSeminarPresenter(NewSeminarViewImpl view) {
+    public NewSeminarPresenter(NewSeminarView view) {
         this.view = view;
+    }
 
-        List<String> categories = SeminarCategoryManager.getSeminarCategories().stream().map(SeminarCategory::getName).collect(Collectors.toList());
+    @PostConstruct
+    public void init(){
+        List<String> categories = seminarCategoryManager.getSeminarCategories().stream()
+                .map(SeminarCategory::getName)
+                .collect(Collectors.toList());
         view.setCategories(categories);
     }
 
     public void sendSeminarToBackend(SeminarDTO frontendObject) throws Exception {
         Seminar seminarToBeSaved = convertDTOtoModel(frontendObject);
-        SeminarManager.createSeminar(seminarToBeSaved);
+        seminarManager.createSeminar(seminarToBeSaved);
     }
 
     private Seminar convertDTOtoModel(SeminarDTO seminarDTO) throws Exception {
@@ -42,7 +53,7 @@ public class NewSeminarPresenter {
         modelObject.setPlz(seminarDTO.getPlz().intValue());
         modelObject.setDate(LocalDateTime.of(seminarDTO.getDate(), seminarDTO.getTime()));
 
-        modelObject.setCategory(SeminarCategoryManager.getSeminarByName(seminarDTO.getCategory()));
+        modelObject.setCategory(seminarCategoryManager.getSeminarByName(seminarDTO.getCategory()));
         return modelObject;
     }
 

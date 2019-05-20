@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Optional;
 
 public class SeminarCategoryManager {
-    public static List<SeminarCategory> getSeminarCategories() {
+    public List<SeminarCategory> getSeminarCategories() {
         return mockCategories();
     }
 
-    public static SeminarCategory getSeminarByName(String name) throws Exception {
+    public SeminarCategory getSeminarByName(String name) throws Exception {
         Optional<SeminarCategory> categories = getSeminarCategories().stream().filter(s -> s.getName().equals(name)).findFirst();
         if (categories.isPresent()) {
             return categories.get();
@@ -20,7 +20,7 @@ public class SeminarCategoryManager {
         }
     }
 
-    private static List<SeminarCategory> mockCategories() {
+    private List<SeminarCategory> mockCategories() {
         //These is mock data, nothing here is productive code.
         List<SeminarCategory> mockSeminaryCategories = new ArrayList<>();
         mockSeminaryCategories.add(new SeminarCategory("Betroffene helfen Betroffenen"));

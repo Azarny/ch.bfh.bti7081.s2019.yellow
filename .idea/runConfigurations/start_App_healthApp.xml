@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="start App_healthApp" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="healthApp" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="ch.bfh.bti7081.App" />
+    <option name="ALTERNATIVE_JRE_PATH" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

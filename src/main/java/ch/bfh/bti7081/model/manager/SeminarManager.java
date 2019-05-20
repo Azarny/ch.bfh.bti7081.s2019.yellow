@@ -23,11 +23,12 @@ public class SeminarManager {
     public static int MINLOCATIONLENGTH = 2;
 
 
-    public static List<Seminar> getSeminaries() {
+
+    public List<Seminar> getSeminaries() {
         return mockSeminaries();
     }
 
-    public static List<Seminar> getFilteredSeminars(SeminarFilter filter) {
+    public List<Seminar> getFilteredSeminars(SeminarFilter filter) {
         return getSeminaries().stream()
                 //filter category
                 .filter(seminar -> {
@@ -89,61 +90,63 @@ public class SeminarManager {
 
     }
 
-    public static Seminar createSeminar(Seminar seminar) {
+    public Seminar createSeminar(Seminar seminar) {
         throw new IllegalArgumentException("Not implemented yet.");
     }
 
-    public static String validateSeminar(Seminar seminar) {
-        String returnString = "";
+        public static String validateSeminar(Seminar seminar) {
+            String returnString = "";
 
-        if (seminar.getStreet() == null || seminar.getStreet().trim().length() < SeminarManager.MINSTREETLENGTH) {
-            returnString += "no valid street name, ";
+            if (seminar.getStreet() == null || seminar.getStreet().trim().length() < SeminarManager.MINSTREETLENGTH) {
+                returnString += "no valid street name, ";
+            }
+
+            if (seminar.getHouseNumber() == null || !seminar.getHouseNumber().matches("^\\d*\\w$") || seminar.getHouseNumber().trim().length() < SeminarManager.MINSTREETNUMBERLENGTH) {
+                returnString += "no valid house number, ";
+            }
+
+            if (seminar.getPlz() == null || !((seminar.getPlz() > 999 && seminar.getPlz() < 10000) || (seminar.getPlz() > 99999 && seminar.getPlz() < 1000000))) {
+                returnString += "no valid PLZ, ";
+            }
+
+            if (seminar.getLocation() == null || seminar.getLocation().trim().length() < SeminarManager.MINLOCATIONLENGTH) {
+                returnString += "no valid location, ";
+            }
+
+            if (seminar.getTitle() == null || seminar.getTitle().trim().length() < SeminarManager.MINTITLELENGTH) {
+                returnString += "no valid title, ";
+            }
+
+            if (seminar.getDate() == null || seminar.getDate().isBefore(LocalDateTime.now()) || seminar.getDate().isAfter(LocalDateTime.now().plusYears(SeminarManager.MAXYEARSINFUTURE))) {
+                returnString += "no valid date, ";
+            }
+
+            if (seminar.getCategory() == null) {
+                returnString += "no valid category, ";
+            }
+
+            //regex pattern description:
+            //^((https?|ftp)://)? --> allows http://, https:// and nothing
+            // (\w+\.)+(\w{2}|\w{3}) --> allows url with one or more "parts" before the .topleveldomain. top level domains are made of 2 or 3 chars
+            // (/\S+(\./\S+)*)?$ --> allows all the stuff after the last / but no whitespaces
+            if (seminar.getUrl() == null || !seminar.getUrl().matches("^((https?)://)?(\\w+\\.)+(\\w{2}|\\w{3})(/\\S+(\\./\\S+)*)?$")) {
+                returnString += "no valid URL, ";
+            }
+
+            if (seminar.getDescription() == null || seminar.getDescription().trim().length() < SeminarManager.MINDESCRIPTIONLENGTH) {
+                returnString += "no valid description, ";
+            }
+
+            return returnString;
         }
 
-        if (seminar.getHouseNumber() == null || !seminar.getHouseNumber().matches("^\\d*\\w$") || seminar.getHouseNumber().trim().length() < SeminarManager.MINSTREETNUMBERLENGTH) {
-            returnString += "no valid house number, ";
-        }
-
-        if (seminar.getPlz() == null || !((seminar.getPlz() > 999 && seminar.getPlz() < 10000) || (seminar.getPlz() > 99999 && seminar.getPlz() < 1000000))) {
-            returnString += "no valid PLZ, ";
-        }
-
-        if (seminar.getLocation() == null || seminar.getLocation().trim().length() < SeminarManager.MINLOCATIONLENGTH) {
-            returnString += "no valid location, ";
-        }
-
-        if (seminar.getTitle() == null || seminar.getTitle().trim().length() < SeminarManager.MINTITLELENGTH) {
-            returnString += "no valid title, ";
-        }
-
-        if (seminar.getDate() == null || seminar.getDate().isBefore(LocalDateTime.now()) || seminar.getDate().isAfter(LocalDateTime.now().plusYears(SeminarManager.MAXYEARSINFUTURE))) {
-            returnString += "no valid date, ";
-        }
-
-        if (seminar.getCategory() == null) {
-            returnString += "no valid category, ";
-        }
-
-        //regex pattern description:
-        //^((https?|ftp)://)? --> allows http://, https:// and nothing
-        // (\w+\.)+(\w{2}|\w{3}) --> allows url with one or more "parts" before the .topleveldomain. top level domains are made of 2 or 3 chars
-        // (/\S+(\./\S+)*)?$ --> allows all the stuff after the last / but no whitespaces
-        if (seminar.getUrl() == null || !seminar.getUrl().matches("^((https?)://)?(\\w+\\.)+(\\w{2}|\\w{3})(/\\S+(\\./\\S+)*)?$")) {
-            returnString += "no valid URL, ";
-        }
-
-        if (seminar.getDescription() == null || seminar.getDescription().trim().length() < SeminarManager.MINDESCRIPTIONLENGTH) {
-            returnString += "no valid description, ";
-        }
-
-        return returnString;
-    }
-
-    private static List<Seminar> mockSeminaries() {
+    private List<Seminar> mockSeminaries() {
         //These is mock data, nothing here is productive code.
         List<Seminar> mockSeminaries = new ArrayList<>();
+        SeminarCategoryManager categoryManager = new SeminarCategoryManager();
+
         Seminar seminarMock1 = new Seminar();
-        seminarMock1.setCategory(SeminarCategoryManager.getSeminarCategories().get(2));
+        seminarMock1.setCategory(categoryManager.getSeminarCategories().get(2));
         seminarMock1.setDate(dateGenerator("2019-11-07 13:30"));
         seminarMock1.setDescription("Ärzte berichten von ihren Erlebnissen mit der Krankheit. " +
                 "Dr. Luis Alvador gibt Ihnen einen Überblick über die medizinischen Informationen, " +
@@ -157,7 +160,7 @@ public class SeminarManager {
         mockSeminaries.add(seminarMock1);
 
         Seminar seminarMock2 = new Seminar();
-        seminarMock2.setCategory(SeminarCategoryManager.getSeminarCategories().get(0));
+        seminarMock2.setCategory(categoryManager.getSeminarCategories().get(0));
         seminarMock2.setDate(dateGenerator("2019-08-07 10:30"));
         seminarMock2.setDescription("Betroffene erzählen von Ihren Problemen im Umgang mit der Krankheit " +
                 "und zeigen wie Sie diese tagtäglich überwinden.");
@@ -170,7 +173,7 @@ public class SeminarManager {
         mockSeminaries.add(seminarMock2);
 
         Seminar seminarMock3 = new Seminar();
-        seminarMock3.setCategory(SeminarCategoryManager.getSeminarCategories().get(1));
+        seminarMock3.setCategory(categoryManager.getSeminarCategories().get(1));
         seminarMock3.setDate(dateGenerator("2019-09-09 20:00"));
         seminarMock3.setDescription("Wir haben zehn Angehörige von Personen mit Sozialphobie eingeladen, " +
                 "die Ihnen von Ihren Erlebnissen erzählen. Treffen Sie uns zu einem Feierabendbier. " +
@@ -184,7 +187,7 @@ public class SeminarManager {
         mockSeminaries.add(seminarMock3);
 
         Seminar seminarMock4 = new Seminar();
-        seminarMock4.setCategory(SeminarCategoryManager.getSeminarCategories().get(0));
+        seminarMock4.setCategory(categoryManager.getSeminarCategories().get(0));
         seminarMock4.setDate(dateGenerator("2020-02-15 09:00"));
         seminarMock4.setDescription("Ein Treffen mit anderen Betroffenen. Hier können Sie sich entspannt " +
                 "fühlen, niemand wird sie verurteilen, da wir dasselbe tagtäglich auch durchmachen.");
@@ -199,7 +202,7 @@ public class SeminarManager {
         return mockSeminaries;
     }
 
-    private static LocalDateTime dateGenerator(String timeToParse) {
+    private LocalDateTime dateGenerator(String timeToParse) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return LocalDateTime.parse(timeToParse, formatter);
     }

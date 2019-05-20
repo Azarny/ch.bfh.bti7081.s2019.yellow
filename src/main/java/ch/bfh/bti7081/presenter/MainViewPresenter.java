@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MainViewPresenter {
-    public MainViewPresenter(MainViewContent view) {
+    SeminarManager seminarManager;
+    public MainViewPresenter(MainViewContent view, SeminarManager seminarManager) {
+        this.seminarManager=seminarManager;
         // generate next seminars on startup
         view.setFeatureView(getNextSeminaries());
     }
@@ -22,9 +24,9 @@ public class MainViewPresenter {
      *
      * @return VerticalLayout to add to view
      */
-    private static List<String> getNextSeminaries() {
+    private List<String> getNextSeminaries() {
         List<String> nextSeminars = new ArrayList<>();
-        List<Seminar> seminaries = SeminarManager.getSeminaries();
+        List<Seminar> seminaries = seminarManager.getSeminaries();
         seminaries.sort(Comparator.comparing(Seminar::getDate));
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.YYYY");
