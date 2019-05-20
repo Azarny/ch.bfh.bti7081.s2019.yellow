@@ -4,22 +4,11 @@ import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.model.seminar.SeminarFilter;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Null;
-import java.time.LocalDateTime;
-import java.time.LocalDateTime;
-
-import static org.junit.Assert.fail;
 
 public class SeminarManagerTest {
     private SeminarManager seminarManager = new SeminarManager();

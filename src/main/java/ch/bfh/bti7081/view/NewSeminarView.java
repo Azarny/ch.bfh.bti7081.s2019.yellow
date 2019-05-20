@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Route(value = "newSeminar", layout = Layout.class)
+@Route(value = "seminar/new", layout = Layout.class)
 public class NewSeminarView extends VerticalLayout {
 
     private H1 title = new H1("Seminar erstellen");
@@ -109,7 +109,9 @@ public class NewSeminarView extends VerticalLayout {
 
     private void addBindingToForm() {
         //Binder-Configuration
-        binder.bind(seminarTitle, SeminarDTO::getTitle, SeminarDTO::setTitle);
+        binder.forField(seminarTitle).asRequired("Bitte Titel angeben").
+                withValidator(title -> title.trim().length() >= SeminarManager.MINTITLELENGTH, "Titel muss aus mind. "+SeminarManager.MINTITLELENGTH + " Zeichen bestehen").
+                bind(SeminarDTO::getTitle, SeminarDTO::setTitle);
         binder.bind(seminarDate, SeminarDTO::getDate, SeminarDTO::setDate);
         binder.bind(seminarTime, SeminarDTO::getTime, SeminarDTO::setTime);
         binder.forField(seminarCategory).asRequired("Bitte eine Kategorie wählen.").

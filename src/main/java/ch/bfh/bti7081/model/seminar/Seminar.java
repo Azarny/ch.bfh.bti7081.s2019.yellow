@@ -119,22 +119,4 @@ public class Seminar {
     public void setDescription(String description) {
         this.description = description;
     }
-
-    // one query creation of seminar possible
-    public Seminar(String street, String houseNumber, Integer plz, String location, String title, LocalDateTime date, SeminarCategory category, String url, String description){
-            setStreet(street);
-            setHouseNumber(houseNumber);
-            setPlz(plz);
-            setLocation(location);
-            setTitle(title);
-            setDate(date);
-            setCategory(category);
-            setUrl(url);
-            setDescription(description);
-    }
-
-    // default constructor needed because of overload
-    public Seminar(){}
-
-
 }
