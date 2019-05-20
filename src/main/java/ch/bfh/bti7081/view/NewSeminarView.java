@@ -73,7 +73,7 @@ public class NewSeminarView extends VerticalLayout {
     }
 
     private void mvpBinding(SeminarManager seminarManager, SeminarCategoryManager seminarCategoryManager) {
-        presenter = new NewSeminarPresenter(this, seminarManager, seminarCategoryManager);
+        presenter = new NewSeminarPresenter(this);
         setFormActions();
     }
 

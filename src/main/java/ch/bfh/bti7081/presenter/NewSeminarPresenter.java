@@ -7,22 +7,29 @@ import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.view.NewSeminarView;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class NewSeminarPresenter {
     private NewSeminarView view;
+    @Autowired
     private SeminarManager seminarManager;
-    private final SeminarCategoryManager seminarCategoryManager;
+    @Autowired
+    private SeminarCategoryManager seminarCategoryManager;
 
-    public NewSeminarPresenter(NewSeminarView view, SeminarManager seminarManager, SeminarCategoryManager seminarCategoryManager) {
+    public NewSeminarPresenter(NewSeminarView view) {
         this.view = view;
-        this.seminarManager = seminarManager;
-        this.seminarCategoryManager = seminarCategoryManager;
+    }
 
-        List<String> categories = seminarCategoryManager.getSeminarCategories().stream().map(SeminarCategory::getName).collect(Collectors.toList());
+    @PostConstruct
+    public void init(){
+        List<String> categories = seminarCategoryManager.getSeminarCategories().stream()
+                .map(SeminarCategory::getName)
+                .collect(Collectors.toList());
         view.setCategories(categories);
     }
 
