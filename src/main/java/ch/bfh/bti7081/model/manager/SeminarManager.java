@@ -51,19 +51,21 @@ public class SeminarManager {
                         return seminar.getDate().isAfter(filter.getFromDate().atStartOfDay());
                     }
                 })
+                // filter keyword
                 .filter(seminar -> {
                     if (filter.getKeyword() == null) {
                         return true;
                     } else {
                         String[] keywords = filter.getKeyword().split(" ");
-                        int count = 0;
+                        int matchedKeywordsCount = 0;
                         for (String keyword : keywords) {
                             if (seminar.getTitle().toLowerCase().contains(keyword.toLowerCase())
                                             || seminar.getDescription().toLowerCase().contains(keyword.toLowerCase())){
-                                count++;
+                                matchedKeywordsCount++;
                             }
                         }
-                        return count == keywords.length;
+                        // compare matched keywords with total keywords
+                        return matchedKeywordsCount == keywords.length;
                     }
                 })
                 .collect(Collectors.toList());
