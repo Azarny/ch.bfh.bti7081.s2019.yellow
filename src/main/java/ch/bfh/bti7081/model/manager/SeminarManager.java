@@ -2,7 +2,7 @@ package ch.bfh.bti7081.model.manager;
 
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarFilter;
-import ch.bfh.bti7081.model.validationConstants;
+import ch.bfh.bti7081.model.ValidationConstants;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -88,11 +88,11 @@ public class SeminarManager {
         public String validateSeminar(Seminar seminar) {
             String returnString = "";
 
-            if (seminar.getStreet() == null || seminar.getStreet().trim().length() < validationConstants.MIN_STREET_LENGTH.value) {
+            if (seminar.getStreet() == null || seminar.getStreet().trim().length() < ValidationConstants.MIN_STREET_LENGTH.value) {
                 returnString += "no valid street name, ";
             }
 
-            if (seminar.getHouseNumber() == null || !seminar.getHouseNumber().matches("^\\d*\\w$") || seminar.getHouseNumber().trim().length() < validationConstants.MIN_STREETNUMBER_LENGTH.value) {
+            if (seminar.getHouseNumber() == null || !seminar.getHouseNumber().matches("^\\d*\\w$") || seminar.getHouseNumber().trim().length() < ValidationConstants.MIN_STREETNUMBER_LENGTH.value) {
                 returnString += "no valid house number, ";
             }
 
@@ -100,15 +100,15 @@ public class SeminarManager {
                 returnString += "no valid PLZ, ";
             }
 
-            if (seminar.getLocation() == null || seminar.getLocation().trim().length() < validationConstants.MIN_LOCATION_LENGTH.value) {
+            if (seminar.getLocation() == null || seminar.getLocation().trim().length() < ValidationConstants.MIN_LOCATION_LENGTH.value) {
                 returnString += "no valid location, ";
             }
 
-            if (seminar.getTitle() == null || seminar.getTitle().trim().length() < validationConstants.MIN_TITLE_LENGTH.value) {
+            if (seminar.getTitle() == null || seminar.getTitle().trim().length() < ValidationConstants.MIN_TITLE_LENGTH.value) {
                 returnString += "no valid title, ";
             }
 
-            if (seminar.getDate() == null || seminar.getDate().isBefore(LocalDateTime.now()) || seminar.getDate().isAfter(LocalDateTime.now().plusYears(validationConstants.MAX_YEARS_IN_FUTURE.value))) {
+            if (seminar.getDate() == null || seminar.getDate().isBefore(LocalDateTime.now()) || seminar.getDate().isAfter(LocalDateTime.now().plusYears(ValidationConstants.MAX_YEARS_IN_FUTURE.value))) {
                 returnString += "no valid date, ";
             }
 
@@ -124,7 +124,7 @@ public class SeminarManager {
                 returnString += "no valid URL, ";
             }
 
-            if (seminar.getDescription() == null || seminar.getDescription().trim().length() < validationConstants.MIN_DESCRIPTION_LENGTH.value) {
+            if (seminar.getDescription() == null || seminar.getDescription().trim().length() < ValidationConstants.MIN_DESCRIPTION_LENGTH.value) {
                 returnString += "no valid description, ";
             }
 

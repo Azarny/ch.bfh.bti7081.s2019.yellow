@@ -1,6 +1,6 @@
 package ch.bfh.bti7081.model;
 
-public enum validationConstants {
+public enum ValidationConstants {
     MAX_YEARS_IN_FUTURE(5),
     MIN_TITLE_LENGTH(4),
     MIN_DESCRIPTION_LENGTH(10),
@@ -10,7 +10,7 @@ public enum validationConstants {
 
     public final int value;
 
-    validationConstants(int value) {
+    ValidationConstants(int value) {
         this.value = value;
     }
 }

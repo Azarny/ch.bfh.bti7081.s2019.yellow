@@ -6,13 +6,12 @@ import ch.bfh.bti7081.model.manager.SeminarCategoryManager;
 import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
-import ch.bfh.bti7081.model.validationConstants;
+import ch.bfh.bti7081.model.ValidationConstants;
 import ch.bfh.bti7081.view.NewSeminarView;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,25 +58,25 @@ public class NewSeminarPresenter {
     }
 
     public int getMinStreetNumberLength() {
-        return validationConstants.MIN_STREETNUMBER_LENGTH.value;
+        return ValidationConstants.MIN_STREETNUMBER_LENGTH.value;
     }
 
     public int getMinStreetLength() {
-        return validationConstants.MIN_STREET_LENGTH.value;
+        return ValidationConstants.MIN_STREET_LENGTH.value;
     }
 
     public int getMinDescriptionLength() {
-        return validationConstants.MIN_DESCRIPTION_LENGTH.value;
+        return ValidationConstants.MIN_DESCRIPTION_LENGTH.value;
     }
 
     public int getMinTitleLength() {
-        return validationConstants.MIN_TITLE_LENGTH.value;
+        return ValidationConstants.MIN_TITLE_LENGTH.value;
     }
     public int getMinLocationLength() {
-        return validationConstants.MIN_LOCATION_LENGTH.value;
+        return ValidationConstants.MIN_LOCATION_LENGTH.value;
     }
     public int getMaxYearsInFuture() {
-        return validationConstants.MAX_YEARS_IN_FUTURE.value;
+        return ValidationConstants.MAX_YEARS_IN_FUTURE.value;
     }
 
 }
