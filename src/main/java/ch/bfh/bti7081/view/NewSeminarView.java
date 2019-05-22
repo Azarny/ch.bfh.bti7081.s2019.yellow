@@ -76,7 +76,7 @@ public class NewSeminarView extends VerticalLayout {
         addBindingToForm();
         buildPage();
         mvpBinding();
-        setCategories();
+        fillCategoryField();
     }
 
     private void mvpBinding() {
@@ -179,7 +179,7 @@ public class NewSeminarView extends VerticalLayout {
         this.add(formActions);
     }
 
-    public void setCategories() {
+    public void fillCategoryField() {
         List<String> seminarCategories = presenter.getSeminarCategories();
         seminarCategory.setItems(seminarCategories);
     }
