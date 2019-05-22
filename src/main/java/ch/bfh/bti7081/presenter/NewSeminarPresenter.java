@@ -8,12 +8,13 @@ import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.view.NewSeminarView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class NewSeminarPresenter {
     private NewSeminarView view;
     @Autowired
@@ -21,16 +22,16 @@ public class NewSeminarPresenter {
     @Autowired
     private SeminarCategoryManager seminarCategoryManager;
 
-    public NewSeminarPresenter(NewSeminarView view) {
+    public void setView(NewSeminarView view) {
         this.view = view;
     }
 
-    @PostConstruct
-    public void init(){
+    public List<String> getSeminarCategories() {
+        System.out.println(seminarCategoryManager);
         List<String> categories = seminarCategoryManager.getSeminarCategories().stream()
                 .map(SeminarCategory::getName)
                 .collect(Collectors.toList());
-        view.setCategories(categories);
+        return categories;
     }
 
     public void sendSeminarToBackend(SeminarDTO frontendObject) throws Exception {

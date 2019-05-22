@@ -1,12 +1,19 @@
 package ch.bfh.bti7081.model.manager;
 
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+
+@Controller
 public class SeminarCategoryManager {
+
     public List<SeminarCategory> getSeminarCategories() {
         return mockCategories();
     }

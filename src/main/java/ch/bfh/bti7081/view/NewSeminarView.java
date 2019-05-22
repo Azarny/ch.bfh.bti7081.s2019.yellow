@@ -1,8 +1,6 @@
 package ch.bfh.bti7081.view;
 
 import ch.bfh.bti7081.model.dto.SeminarDTO;
-import ch.bfh.bti7081.model.manager.SeminarCategoryManager;
-import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.presenter.NewSeminarPresenter;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -22,13 +20,21 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.spring.annotation.UIScope;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@UIScope
+@Component
 @Route(value = "seminar/new", layout = Layout.class)
 public class NewSeminarView extends VerticalLayout {
+    @Autowired
+    private NewSeminarPresenter presenter;
 
     private H1 title = new H1("Seminar erstellen");
     private FormLayout seminarForm = new FormLayout();
@@ -51,7 +57,6 @@ public class NewSeminarView extends VerticalLayout {
     private TextField seminarPlace = new TextField("Ort");
     private FormLayout placeComposite = new FormLayout(seminarPlz, seminarPlace);
 
-
     private Label errorMessage = new Label("Hier könnte ihre Fehlermeldung stehen.");
 
     private Button save = new Button("Save", new Icon(VaadinIcon.PLUS));
@@ -61,19 +66,19 @@ public class NewSeminarView extends VerticalLayout {
 
     private Binder<SeminarDTO> binder = new Binder<>();
     private SeminarDTO newSeminar = new SeminarDTO();
-    private NewSeminarPresenter presenter;
 
-    public NewSeminarView() {
-
+    @PostConstruct
+    public void init() {
         addElementsToForm();
         setFieldSettings();
         addBindingToForm();
         buildPage();
-        mvpBinding(new SeminarManager(),new SeminarCategoryManager());
+        mvpBinding();
+        setCategories();
     }
 
-    private void mvpBinding(SeminarManager seminarManager, SeminarCategoryManager seminarCategoryManager) {
-        presenter = new NewSeminarPresenter(this);
+    private void mvpBinding() {
+        presenter.setView(this);
         setFormActions();
     }
 
@@ -101,7 +106,6 @@ public class NewSeminarView extends VerticalLayout {
         seminarPlace.setRequiredIndicatorVisible(true);
         seminarLink.setRequiredIndicatorVisible(true);
         seminarDescription.setRequiredIndicatorVisible(true);
-
         //Category-Settings
         seminarCategory.setLabel("Kategorie");
         seminarCategory.setEmptySelectionAllowed(false);
@@ -155,7 +159,8 @@ public class NewSeminarView extends VerticalLayout {
         this.add(formActions);
     }
 
-    public void setCategories(List<String> seminarCategories) {
+    public void setCategories() {
+        List<String> seminarCategories = presenter.getSeminarCategories();
         seminarCategory.setItems(seminarCategories);
     }
 }

@@ -2,6 +2,7 @@ package ch.bfh.bti7081.model.manager;
 
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarFilter;
+import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@Controller
 public class SeminarManager {
     // manages the communication between backend and frontend
     // the list of methods isn't completed yet, just some sample methods for the class diagramm
