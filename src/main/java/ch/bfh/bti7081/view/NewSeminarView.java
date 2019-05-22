@@ -9,6 +9,7 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -84,6 +85,13 @@ public class NewSeminarView extends VerticalLayout {
         setFormActions();
     }
 
+    private void buildPage() {
+        this.add(title);
+        this.add(seminarForm);
+        this.add(errorMessage);
+        this.add(formActions);
+    }
+
     private void addElementsToForm() {
         seminarForm.add(seminarTitle);
         seminarForm.add(seminarCategory);
@@ -153,7 +161,8 @@ public class NewSeminarView extends VerticalLayout {
                     presenter.sendSeminarToBackend(newSeminar);
                     save.getUI().ifPresent(ui -> ui.navigate("seminar"));
                 } catch (Exception e) {
-                    errorMessage.setText("Beim Speichern scheint ein Fehler aufgetreten zu sein" + e);
+                    errorNotification("Beim Speichern scheint ein Fehler aufgetreten zu sein" + e);
+                    //errorMessage.setText("Beim Speichern scheint ein Fehler aufgetreten zu sein" + e);
                 }
             } else {
                 BinderValidationStatus<SeminarDTO> validate = binder.validate();
@@ -162,7 +171,8 @@ public class NewSeminarView extends VerticalLayout {
                         .map(BindingValidationStatus::getMessage)
                         .map(Optional::get).distinct()
                         .collect(Collectors.joining(", "));
-                errorMessage.setText("There are errors: " + errorText);
+                //errorMessage.setText("There are errors: " + errorText);
+                errorNotification("There are errors: " + errorText);
 
             }
         });
@@ -172,15 +182,18 @@ public class NewSeminarView extends VerticalLayout {
         });
     }
 
-    private void buildPage() {
-        this.add(title);
-        this.add(seminarForm);
-        this.add(errorMessage);
-        this.add(formActions);
-    }
-
     public void fillCategoryField() {
         List<String> seminarCategories = presenter.getSeminarCategories();
         seminarCategory.setItems(seminarCategories);
+    }
+
+    private void errorNotification(String message){
+        Notification notification = new Notification();
+        notification.setText(message);
+        notification.setDuration(30000);
+        notification.setPosition(Notification.Position.TOP_END);
+        this.add(notification);
+        notification.open();
+
     }
 }
