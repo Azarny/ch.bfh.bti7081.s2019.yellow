@@ -1,0 +1,8 @@
+.error-notification {
+  color: red;
++}
+
+#vaadin-notification-card{
+    border-style: dashed;
+    border-color: red;
+}

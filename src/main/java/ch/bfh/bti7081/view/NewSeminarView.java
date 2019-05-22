@@ -4,7 +4,9 @@ import ch.bfh.bti7081.model.dto.SeminarDTO;
 import ch.bfh.bti7081.presenter.NewSeminarPresenter;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
@@ -21,6 +23,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.CustomizedSystemMessages;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,7 +33,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+@StyleSheet("styles/style.css")
 @UIScope
 @Component
 @Route(value = "seminar/new", layout = Layout.class)
@@ -154,7 +157,7 @@ public class NewSeminarView extends VerticalLayout {
                 .bind(SeminarDTO::getDescription, SeminarDTO::setDescription);
     }
 
-    private void setFormActions() {
+    private void setFormActions()  {
         save.addClickListener(event -> {
             if (binder.writeBeanIfValid(newSeminar)) {
                 try {
@@ -188,12 +191,16 @@ public class NewSeminarView extends VerticalLayout {
     }
 
     private void errorNotification(String message){
+        Div content = new Div();
+        content.addClassName("error-notification");
+        content.setText(message);
+
         Notification notification = new Notification();
-        notification.setText(message);
+        notification.add(content);
         notification.setDuration(30000);
         notification.setPosition(Notification.Position.TOP_END);
+
         this.add(notification);
         notification.open();
-
     }
 }
