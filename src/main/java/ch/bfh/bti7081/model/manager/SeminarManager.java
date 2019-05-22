@@ -56,13 +56,14 @@ public class SeminarManager {
                         return true;
                     } else {
                         String[] keywords = filter.getKeyword().split(" ");
+                        int count = 0;
                         for (String keyword : keywords) {
                             if (seminar.getTitle().toLowerCase().contains(keyword.toLowerCase())
-                                            && seminar.getDescription().toLowerCase().contains(keyword.toLowerCase())){
-                                return true;
+                                            || seminar.getDescription().toLowerCase().contains(keyword.toLowerCase())){
+                                count++;
                             }
                         }
-                        return false;
+                        return count == keywords.length;
                     }
                 })
                 .collect(Collectors.toList());
