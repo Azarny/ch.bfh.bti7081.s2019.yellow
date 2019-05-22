@@ -6,6 +6,7 @@ import ch.bfh.bti7081.model.manager.SeminarCategoryManager;
 import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
+import ch.bfh.bti7081.model.validationConstants;
 import ch.bfh.bti7081.view.NewSeminarView;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -57,14 +58,26 @@ public class NewSeminarPresenter {
         return modelObject;
     }
 
-    public HashMap<String, Integer> getValidationConstants(){
-        HashMap<String, Integer> validationConstants = new HashMap<>();
-        validationConstants.put("streetNumber", SeminarManager.MINSTREETNUMBERLENGTH);
-        validationConstants.put("streetName", SeminarManager.MINSTREETLENGTH);
-        validationConstants.put("title", SeminarManager.MINTITLELENGTH);
-        validationConstants.put("description", SeminarManager.MINDESCRIPTIONLENGTH);
-        validationConstants.put("location", SeminarManager.MINLOCATIONLENGTH);
-        validationConstants.put("maxYearsInFuture", SeminarManager.MAXYEARSINFUTURE);
-        return validationConstants;
+    public int getMinStreetNumberLength() {
+        return validationConstants.MIN_STREETNUMBER_LENGTH.value;
     }
+
+    public int getMinStreetLength() {
+        return validationConstants.MIN_STREET_LENGTH.value;
+    }
+
+    public int getMinDescriptionLength() {
+        return validationConstants.MIN_DESCRIPTION_LENGTH.value;
+    }
+
+    public int getMinTitleLength() {
+        return validationConstants.MIN_TITLE_LENGTH.value;
+    }
+    public int getMinLocationLength() {
+        return validationConstants.MIN_LOCATION_LENGTH.value;
+    }
+    public int getMaxYearsInFuture() {
+        return validationConstants.MAX_YEARS_IN_FUTURE.value;
+    }
+
 }

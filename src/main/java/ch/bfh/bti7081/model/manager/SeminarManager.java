@@ -2,6 +2,7 @@ package ch.bfh.bti7081.model.manager;
 
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarFilter;
+import ch.bfh.bti7081.model.validationConstants;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -13,16 +14,6 @@ import java.util.stream.Collectors;
 public class SeminarManager {
     // manages the communication between backend and frontend
     // the list of methods isn't completed yet, just some sample methods for the class diagramm
-
-    // some variables for the validation, used in SeminarManager.java and Seminar.java
-    public static int MAXYEARSINFUTURE = 5;
-    public static int MINTITLELENGTH = 4;
-    public static int MINDESCRIPTIONLENGTH = 10;
-    public static int MINSTREETLENGTH = 2;
-    public static int MINSTREETNUMBERLENGTH = 1;
-    public static int MINLOCATIONLENGTH = 2;
-
-
 
     public List<Seminar> getSeminaries() {
         return mockSeminaries();
@@ -94,14 +85,14 @@ public class SeminarManager {
         throw new IllegalArgumentException("Not implemented yet.");
     }
 
-        public static String validateSeminar(Seminar seminar) {
+        public String validateSeminar(Seminar seminar) {
             String returnString = "";
 
-            if (seminar.getStreet() == null || seminar.getStreet().trim().length() < SeminarManager.MINSTREETLENGTH) {
+            if (seminar.getStreet() == null || seminar.getStreet().trim().length() < validationConstants.MIN_STREET_LENGTH.value) {
                 returnString += "no valid street name, ";
             }
 
-            if (seminar.getHouseNumber() == null || !seminar.getHouseNumber().matches("^\\d*\\w$") || seminar.getHouseNumber().trim().length() < SeminarManager.MINSTREETNUMBERLENGTH) {
+            if (seminar.getHouseNumber() == null || !seminar.getHouseNumber().matches("^\\d*\\w$") || seminar.getHouseNumber().trim().length() < validationConstants.MIN_STREETNUMBER_LENGTH.value) {
                 returnString += "no valid house number, ";
             }
 
@@ -109,15 +100,15 @@ public class SeminarManager {
                 returnString += "no valid PLZ, ";
             }
 
-            if (seminar.getLocation() == null || seminar.getLocation().trim().length() < SeminarManager.MINLOCATIONLENGTH) {
+            if (seminar.getLocation() == null || seminar.getLocation().trim().length() < validationConstants.MIN_LOCATION_LENGTH.value) {
                 returnString += "no valid location, ";
             }
 
-            if (seminar.getTitle() == null || seminar.getTitle().trim().length() < SeminarManager.MINTITLELENGTH) {
+            if (seminar.getTitle() == null || seminar.getTitle().trim().length() < validationConstants.MIN_TITLE_LENGTH.value) {
                 returnString += "no valid title, ";
             }
 
-            if (seminar.getDate() == null || seminar.getDate().isBefore(LocalDateTime.now()) || seminar.getDate().isAfter(LocalDateTime.now().plusYears(SeminarManager.MAXYEARSINFUTURE))) {
+            if (seminar.getDate() == null || seminar.getDate().isBefore(LocalDateTime.now()) || seminar.getDate().isAfter(LocalDateTime.now().plusYears(validationConstants.MAX_YEARS_IN_FUTURE.value))) {
                 returnString += "no valid date, ";
             }
 
@@ -133,7 +124,7 @@ public class SeminarManager {
                 returnString += "no valid URL, ";
             }
 
-            if (seminar.getDescription() == null || seminar.getDescription().trim().length() < SeminarManager.MINDESCRIPTIONLENGTH) {
+            if (seminar.getDescription() == null || seminar.getDescription().trim().length() < validationConstants.MIN_DESCRIPTION_LENGTH.value) {
                 returnString += "no valid description, ";
             }
 

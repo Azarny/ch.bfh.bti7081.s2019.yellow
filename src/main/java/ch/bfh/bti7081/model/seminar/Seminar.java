@@ -42,10 +42,10 @@ public class Seminar {
     @JoinColumn(name = PREFIX + "CATEGORY")
     private SeminarCategory category;
 
-    @Column(name = PREFIX + "URL")
+    @Column(name = PREFIX + "URL", length = 255)
     private String url;
 
-    @Column(name = PREFIX + "DESCRIPTION")
+    @Column(name = PREFIX + "DESCRIPTION", length = 255)
     private String description;
 
     public String getStreet() {
