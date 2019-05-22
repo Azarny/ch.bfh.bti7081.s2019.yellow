@@ -15,20 +15,9 @@ import java.util.List;
 public class SeminarPresenter {
     @Autowired
     private SeminarCategoryManager seminarCategoryManager;
+    //private SeminarViewImpl view;
     @Autowired
     private SeminarManager seminarManager;
-
-    public List<SeminarCategory> getSeminarCategories() {
-        return seminarCategoryManager.getSeminarCategories();
-    }
-
-    public List<Seminar> getSeminaries() {
-        return seminarManager.getSeminaries();
-    }
-
-    public List<Seminar> getFilteredSeminaries(SeminarFilter seminarFilter) {
-        return seminarManager.getFilteredSeminars(seminarFilter);
-    }
 
     public SeminarPresenter() {
         //this.manager = seminarManager;
@@ -37,5 +26,17 @@ public class SeminarPresenter {
         //this.view.setSeminarCategoryList(seminarCategoryManager.getSeminarCategories());
         //TODO setSeminarList with getFilteredSeminaries-method (Manager-Class)
         //this.view.setSeminarList(seminarManager.getSeminaries());
+    }
+
+    public List<SeminarCategory> getSeminarCategories(){
+        return seminarCategoryManager.getSeminarCategories();
+    }
+
+    public List<Seminar> getSeminaries(){
+        return seminarManager.getSeminaries();
+    }
+
+    public List<Seminar> getFilteredSeminaries(SeminarFilter filter){
+        return seminarManager.getFilteredSeminars(filter);
     }
 }

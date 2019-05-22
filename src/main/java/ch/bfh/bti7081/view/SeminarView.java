@@ -38,50 +38,72 @@ public class SeminarView extends VerticalLayout {
     @Autowired
     private SeminarPresenter seminarPresenter;
 
-    private SeminarFilter seminarFilter = new SeminarFilter();
-
-    // title
-    private H1 title = new H1("Seminarfinder");
-    private VerticalLayout titleLayout = new VerticalLayout(title);
-
-    // filter
-    private Binder<SeminarFilter> binder = new Binder<>();
-    private TextField searchTf = new TextField("Suchbegriff:");
-    private DatePicker fromDateDp = new DatePicker("Datum von:");
-    //private DatePicker toDateDp = new DatePicker("Datum bis:");
-    private ComboBox<SeminarCategory> categoriesCb = new ComboBox<>("Kategorien:");
-    private TextField ortTf = new TextField("Ort:");
-    private Button filterBtn = new Button("Filter anwenden");
-    private FormLayout filterLayout = new FormLayout(searchTf, /*fromDateDp, toDateDp,*/ categoriesCb, ortTf, filterBtn);
-
-    // map
-    private H2 mapTitle = new H2("Karte");
-    private VerticalLayout mapLayout = new VerticalLayout(mapTitle);
-
-    // list
+    private VerticalLayout SeminarFilterLayout = new VerticalLayout();
+    private VerticalLayout SeminarListLayout = new VerticalLayout();
+    private Dialog details = new Dialog();
+    private FormLayout filterLayout = new FormLayout();
     private Grid<Seminar> seminarGrid = new Grid<>();
-    private VerticalLayout listLayout = new VerticalLayout(seminarGrid);
+    private ComboBox<SeminarCategory> categoriesCb = new ComboBox<>();
 
-    // private
-    private HorizontalLayout componentLayout = new HorizontalLayout(filterLayout, mapLayout);
+
+
+    public SeminarView() {
+
+    }
 
     @PostConstruct
-    public void init() {
-        this.add(titleLayout);
-
-        // get information from presenter
-        categoriesCb.setItems(seminarPresenter.getSeminarCategories());
+    public void init(){
+        //seminarManager = new SeminarManager();
         seminarGrid.setItems(seminarPresenter.getSeminaries());
+        categoriesCb.setItems(seminarPresenter.getSeminarCategories());
+        generateFilterLayout();
+        generateListLayout();
+        VerticalLayout leftLayout = new VerticalLayout();
+        HorizontalLayout contentLayout = new HorizontalLayout();
+        VerticalLayout rightLayout = new VerticalLayout();
+        contentLayout.add(leftLayout, rightLayout);
+        Button newSeminar = new Button("Neues Seminar", new Icon(VaadinIcon.EDIT));
+        newSeminar.addClickListener(event -> {
+            newSeminar.getUI().ifPresent(ui -> ui.navigate("seminar/new"));
+        });
 
-        // filterlayout binder
+        leftLayout.add(SeminarFilterLayout, newSeminar, SeminarListLayout, details);
+        H1 title = new H1("Seminarfinder");
+        this.add(title, contentLayout);
+    }
+
+    /*
+     * Generates the filter-layout with Binder
+     *
+     * Author: oppls7
+     * */
+    private void generateFilterLayout() {
+        Binder<SeminarFilter> binder = new Binder<>();
+        SeminarFilter seminarFilter = new SeminarFilter();
+        TextField searchTf = new TextField();
+        searchTf.setLabel("Suchebegriff:");
         binder.forField(searchTf).bind(SeminarFilter::getKeyword, SeminarFilter::setKeyword);
-        //binder.forField(fromDateDp).bind(SeminarFilter::getFromDate, SeminarFilter::setFromDate);
-        //binder.forField(toDateDp).bind(SeminarFilter::getToDate, SeminarFilter::setToDate);
+
+        DatePicker fromDateDp = new DatePicker();
+        fromDateDp.setLabel("Datum von:");
+        binder.forField(fromDateDp).bind(SeminarFilter::getFromDate, SeminarFilter::setFromDate);
+
+        DatePicker toDateDp = new DatePicker();
+        toDateDp.setLabel("Datum bis:");
+        binder.forField(toDateDp).bind(SeminarFilter::getToDate, SeminarFilter::setToDate);
+
+        categoriesCb.setLabel("Kategorien:");
         categoriesCb.setItemLabelGenerator(SeminarCategory::getName);
         binder.forField(categoriesCb).bind(SeminarFilter::getCategory, SeminarFilter::setCategory);
+
+        TextField ortTf = new TextField();
+        ortTf.setLabel("Ort:");
         ortTf.setPlaceholder("Ort...");
         binder.forField(ortTf).bind(SeminarFilter::getLocation, SeminarFilter::setLocation);
-        // Click listener for the filter-button
+
+        Button filterBtn = new Button("Filter anwenden");
+
+        // Click listeners for the buttons
         filterBtn.addClickListener(event -> {
             if (binder.writeBeanIfValid(seminarFilter)) {
                 seminarGrid.setItems(seminarPresenter.getFilteredSeminaries(seminarFilter));
@@ -96,18 +118,66 @@ public class SeminarView extends VerticalLayout {
 //                filterLayout.add("There are errors: " + errorText);
             }
         });
-        // display fields in filter in two rows
+
+        filterLayout.add(searchTf, fromDateDp, toDateDp, categoriesCb, ortTf, filterBtn);
         filterLayout.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("0", 1),
-                new FormLayout.ResponsiveStep("21em", 2)
-        );
-
-
-        this.add(componentLayout);
-        this.add(listLayout);
+                new FormLayout.ResponsiveStep("21em", 2));
+        SeminarFilterLayout.add(filterLayout);
     }
 
-    public SeminarView() {
+    /*
+     * Generates the list of seminaries.
+     *
+     * Author: oppls7
+     * */
+    private void generateListLayout() {
+        DateTimeFormatter formatter = DateTimeFormatter
+                .ofPattern("dd.MM.yyyy");
+        seminarGrid.addColumn(TemplateRenderer.<Seminar>of(
+                "<div style='padding:10px'><div style='font-weight:bold'>[[item.title]]<br></div>" +
+                        "<div>[[item.date]] <div style='float:right'>[[item.location]]</div></div></div>")
+                .withProperty("title", Seminar::getTitle)
+                .withProperty("date",
+                        seminar -> formatter.format(seminar.getDate()))
+                .withProperty("location", Seminar::getLocation))
+                .setFlexGrow(6);
+        seminarGrid.asSingleSelect().addValueChangeListener(event -> showDetails(event.getValue()));
+        SeminarListLayout.add(seminarGrid);
+    }
 
+    /*
+     * Used for the ListItemClickEvent. It opens the dialog with seminary-details.
+     *
+     * Author: oppls7
+     * */
+    private void showDetails(Seminar seminar) {
+        details.removeAll();
+        generateDialog(seminar);
+        details.open();
+    }
+
+    /*
+     * Generates a dialog, which shows the details from the clicked seminary
+     *
+     * Author: oppls7
+     * */
+    private void generateDialog(Seminar seminar) {
+        H3 title = new H3(seminar.getTitle());
+        Span locationAndPlz = new Span("Veranstaltungsort: " + seminar.getStreet() + " " + seminar.getHouseNumber() + ", " + seminar.getPlz() + " " + seminar.getLocation());
+        locationAndPlz.getStyle().set("display", "block");
+        Span category = new Span("Kategorie: " + seminar.getCategory().getName());
+        category.getStyle().set("display", "block");
+        LocalDateTime localdate = seminar.getDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        String formatDateTime = localdate.format(formatter);
+        Label date = new Label(formatDateTime);
+        Span link = new Span("Zum Veranstalter: " + seminar.getUrl());
+        link.getStyle().set("display", "block");
+        Span description = new Span("Beschreibung: " + seminar.getDescription());
+        description.getStyle().set("display", "block");
+        details.add(title, date, category, locationAndPlz, link, description);
+        details.setWidth("500px");
+        details.setHeight("500px");
     }
 }
