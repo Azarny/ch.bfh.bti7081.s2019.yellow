@@ -23,12 +23,7 @@ public class NewSeminarPresenter {
     @Autowired
     private SeminarCategoryManager seminarCategoryManager;
 
-    public void setView(NewSeminarView view) {
-        this.view = view;
-    }
-
     public List<String> getSeminarCategories() {
-        System.out.println(seminarCategoryManager);
         List<String> categories = seminarCategoryManager.getSeminarCategories().stream()
                 .map(SeminarCategory::getName)
                 .collect(Collectors.toList());
@@ -80,6 +75,10 @@ public class NewSeminarPresenter {
 
     public int getMaxYearsInFuture() {
         return ValidationConstants.MAX_YEARS_IN_FUTURE.value;
+    }
+
+    public void setView(NewSeminarView view) {
+        this.view = view;
     }
 
 }
