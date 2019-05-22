@@ -67,6 +67,5 @@ public class MainView extends VerticalLayout {
     }
 
     public MainView() {
-
     }
 }
