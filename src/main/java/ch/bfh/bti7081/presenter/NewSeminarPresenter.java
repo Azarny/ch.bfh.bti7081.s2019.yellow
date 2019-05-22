@@ -1,12 +1,12 @@
 package ch.bfh.bti7081.presenter;
 
 
+import ch.bfh.bti7081.model.ValidationConstants;
 import ch.bfh.bti7081.model.dto.SeminarDTO;
 import ch.bfh.bti7081.model.manager.SeminarCategoryManager;
 import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
-import ch.bfh.bti7081.model.ValidationConstants;
 import ch.bfh.bti7081.view.NewSeminarView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -73,9 +73,11 @@ public class NewSeminarPresenter {
     public int getMinTitleLength() {
         return ValidationConstants.MIN_TITLE_LENGTH.value;
     }
+
     public int getMinLocationLength() {
         return ValidationConstants.MIN_LOCATION_LENGTH.value;
     }
+
     public int getMaxYearsInFuture() {
         return ValidationConstants.MAX_YEARS_IN_FUTURE.value;
     }

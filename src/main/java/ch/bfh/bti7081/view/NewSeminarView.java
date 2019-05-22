@@ -24,8 +24,8 @@ import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -116,7 +116,7 @@ public class NewSeminarView extends VerticalLayout {
     private void addBindingToForm() {
         //Binder-Configuration
         binder.forField(seminarTitle).asRequired("Bitte Titel angeben")
-                .withValidator(title -> title.trim().length() >= presenter.getMinTitleLength(), "Titel muss aus mind. "+ presenter.getMinTitleLength() + " Zeichen bestehen")
+                .withValidator(title -> title.trim().length() >= presenter.getMinTitleLength(), "Titel muss aus mind. " + presenter.getMinTitleLength() + " Zeichen bestehen")
                 .bind(SeminarDTO::getTitle, SeminarDTO::setTitle);
         binder.forField(seminarDate).asRequired("Bitte Datum angeben")
                 .withValidator(seminarDate -> seminarDate.isAfter(LocalDateTime.now().minusDays(1).toLocalDate()), "Datum ist in der Vergangenheit.")
@@ -136,10 +136,10 @@ public class NewSeminarView extends VerticalLayout {
                 .withValidator(plz -> ((plz > 999 && plz < 10000) || (plz > 99999 && plz < 1000000)), "Ungültige PLZ.")
                 .bind(SeminarDTO::getPlz, SeminarDTO::setPlz);
         binder.forField(seminarPlace).asRequired("Bitte Ort angeben")
-                .withValidator(location -> location.length() >= presenter.getMinLocationLength(), "Ort muss aus mind. " + presenter.getMinLocationLength() +" Zeichen bestehen.")
+                .withValidator(location -> location.length() >= presenter.getMinLocationLength(), "Ort muss aus mind. " + presenter.getMinLocationLength() + " Zeichen bestehen.")
                 .bind(SeminarDTO::getLocation, SeminarDTO::setLocation);
         binder.forField(seminarUrl).asRequired("Bitte URL angeben")
-                .withValidator(url -> url.matches("^((https?)://)?(\\w+\\.)+(\\w{2}|\\w{3})(/\\S+(\\./\\S+)*)?$"),"Ungültiger Link")
+                .withValidator(url -> url.matches("^((https?)://)?(\\w+\\.)+(\\w{2}|\\w{3})(/\\S+(\\./\\S+)*)?$"), "Ungültiger Link")
                 .bind(SeminarDTO::getUrl, SeminarDTO::setUrl);
         binder.forField(seminarDescription).asRequired("Bitte Beschreibung angeben")
                 .withValidator(description -> description.trim().length() >= presenter.getMinDescriptionLength(), "Beschreibung muss aus mind. " + presenter.getMinDescriptionLength() + " Zeichen bestehen.")
