@@ -57,19 +57,8 @@ public class SeminarManager {
                     } else {
                         String[] keywords = filter.getKeyword().split(" ");
                         for (String keyword : keywords) {
-                            if (seminar.getTitle().toLowerCase().contains(keyword.toLowerCase())) {
-                                return true;
-                            }
-                            if (seminar.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
-                                return true;
-                            }
-                            if (seminar.getStreet().toLowerCase().contains(keyword.toLowerCase())) {
-                                return true;
-                            }
-                            if (seminar.getUrl().toLowerCase().contains(keyword.toLowerCase())) {
-                                return true;
-                            }
-                            if (seminar.getPlz().toString().contains(keyword)) {
+                            if (seminar.getTitle().toLowerCase().contains(keyword.toLowerCase())
+                                            && seminar.getDescription().toLowerCase().contains(keyword.toLowerCase())){
                                 return true;
                             }
                         }
