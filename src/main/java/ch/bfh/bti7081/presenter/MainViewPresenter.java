@@ -2,7 +2,8 @@ package ch.bfh.bti7081.presenter;
 
 import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
-import ch.bfh.bti7081.view.MainViewContent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,20 +12,17 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class MainViewPresenter {
-    SeminarManager seminarManager;
-    public MainViewPresenter(MainViewContent view, SeminarManager seminarManager) {
-        this.seminarManager=seminarManager;
-        // generate next seminars on startup
-        view.setFeatureView(getNextSeminaries());
-    }
+    @Autowired
+    private SeminarManager seminarManager;
 
     /**
-     * creates a VerticalLayout with a title and the next few seminaries to display on the homepage
+     * creates a List with the next few seminaries to display on the homepage
      *
-     * @return VerticalLayout to add to view
+     * @return List containing details of next seminaries
      */
-    private List<String> getNextSeminaries() {
+    public List<String> getNextSeminaries() {
         List<String> nextSeminars = new ArrayList<>();
         List<Seminar> seminaries = seminarManager.getSeminaries();
         seminaries.sort(Comparator.comparing(Seminar::getDate));
@@ -47,5 +45,8 @@ public class MainViewPresenter {
         }
 
         return nextSeminars;
+    }
+
+    public MainViewPresenter() {
     }
 }
