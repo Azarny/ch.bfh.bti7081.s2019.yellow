@@ -6,6 +6,7 @@ import ch.bfh.bti7081.model.manager.SeminarCategoryManager;
 import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
+import ch.bfh.bti7081.model.ValidationConstants;
 import ch.bfh.bti7081.view.NewSeminarView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -55,6 +56,28 @@ public class NewSeminarPresenter {
 
         modelObject.setCategory(seminarCategoryManager.getSeminarByName(seminarDTO.getCategory()));
         return modelObject;
+    }
+
+    public int getMinStreetNumberLength() {
+        return ValidationConstants.MIN_STREETNUMBER_LENGTH.value;
+    }
+
+    public int getMinStreetLength() {
+        return ValidationConstants.MIN_STREET_LENGTH.value;
+    }
+
+    public int getMinDescriptionLength() {
+        return ValidationConstants.MIN_DESCRIPTION_LENGTH.value;
+    }
+
+    public int getMinTitleLength() {
+        return ValidationConstants.MIN_TITLE_LENGTH.value;
+    }
+    public int getMinLocationLength() {
+        return ValidationConstants.MIN_LOCATION_LENGTH.value;
+    }
+    public int getMaxYearsInFuture() {
+        return ValidationConstants.MAX_YEARS_IN_FUTURE.value;
     }
 
 }
