@@ -27,8 +27,8 @@ public class SeminarManager {
                     if (filter.getCategory() == null) {
                         return true;
                     } else {
-                        return seminar.getCategory().getName().toLowerCase().equals(filter.getCategory().
-                                getName().toLowerCase());
+                        return seminar.getCategory().getName().toLowerCase().equals(filter.getCategory()
+                                .getName().toLowerCase());
                     }
                 })
                 //filter location
@@ -44,7 +44,8 @@ public class SeminarManager {
                     if (filter.getToDate() == null) {
                         return true;
                     } else {
-                        return seminar.getDate().isBefore(filter.getToDate().atStartOfDay().plusDays(1).minusSeconds(1));
+                        return seminar.getDate().isBefore(filter.getToDate().atStartOfDay().plusDays(1)
+                                .minusSeconds(1));
                     }
                 })
                 .filter(seminar -> {
@@ -127,7 +128,8 @@ public class SeminarManager {
 
         //regex pattern description:
         //^((https?|ftp)://)? --> allows http://, https:// and nothing
-        // (\w+\.)+(\w{2}|\w{3}) --> allows url with one or more "parts" before the .topleveldomain. top level domains are made of 2 or 3 chars
+        // (\w+\.)+(\w{2}|\w{3}) --> allows url with one or more "parts" before the .topleveldomain.
+        // top level domains are made of 2 or 3 chars
         // (/\S+(\./\S+)*)?$ --> allows all the stuff after the last / but no whitespaces
         if (seminar.getUrl() == null || !seminar.getUrl().
                 matches("^((https?)://)?(\\w+\\.)+(\\w{2}|\\w{3})(/\\S+(\\./\\S+)*)?$")) {
