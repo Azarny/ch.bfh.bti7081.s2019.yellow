@@ -1,23 +1,18 @@
 package ch.bfh.bti7081.view;
 
 import ch.bfh.bti7081.presenter.MainViewPresenter;
-import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Route(value = "", layout = Layout.class)
-//@UIScope
-//@Tag("home-view")
 public class MainView extends VerticalLayout {
     @Autowired
     private MainViewPresenter mainViewPresenter;

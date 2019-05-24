@@ -5,7 +5,6 @@ import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.model.seminar.SeminarFilter;
-import ch.bfh.bti7081.view.SeminarView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,17 +14,10 @@ import java.util.List;
 public class SeminarPresenter {
     @Autowired
     private SeminarCategoryManager seminarCategoryManager;
-    //private SeminarViewImpl view;
     @Autowired
     private SeminarManager seminarManager;
 
     public SeminarPresenter() {
-        //this.manager = seminarManager;
-        //this.seminarCategoryManager = seminarCategoryManager;
-        //this.view = view;
-        //this.view.setSeminarCategoryList(seminarCategoryManager.getSeminarCategories());
-        //TODO setSeminarList with getFilteredSeminaries-method (Manager-Class)
-        //this.view.setSeminarList(seminarManager.getSeminaries());
     }
 
     public List<SeminarCategory> getSeminarCategories(){
