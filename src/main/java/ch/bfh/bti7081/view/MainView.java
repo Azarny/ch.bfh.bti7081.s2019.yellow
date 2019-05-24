@@ -43,6 +43,10 @@ public class MainView extends VerticalLayout {
     // container for the feature views
     private HorizontalLayout siteFeatures = new HorizontalLayout();
 
+    public MainView() {
+
+    }
+
     @PostConstruct
     public void init() {
         // mainViewPresenter = new MainViewPresenter();
@@ -58,8 +62,5 @@ public class MainView extends VerticalLayout {
         siteFeatures.add(hotTopicsLayout);
         siteFeatures.add(seminariesLayout);
         this.add(siteFeatures);
-    }
-
-    public MainView() {
     }
 }

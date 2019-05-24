@@ -17,6 +17,9 @@ public class MainViewPresenter {
     @Autowired
     private SeminarManager seminarManager;
 
+    public MainViewPresenter() {
+    }
+
     /**
      * creates a List with the next few seminaries to display on the homepage
      *
@@ -45,8 +48,5 @@ public class MainViewPresenter {
         }
 
         return nextSeminars;
-    }
-
-    public MainViewPresenter() {
     }
 }

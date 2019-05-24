@@ -41,8 +41,6 @@ public class SeminarView extends VerticalLayout {
     private Grid<Seminar> seminarGrid = new Grid<>();
     private ComboBox<SeminarCategory> categoriesCb = new ComboBox<>();
 
-
-
     public SeminarView() {
 
     }
