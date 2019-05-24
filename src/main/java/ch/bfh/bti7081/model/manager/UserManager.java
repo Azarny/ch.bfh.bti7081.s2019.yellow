@@ -1,13 +1,15 @@
 package ch.bfh.bti7081.model.manager;
 
 import ch.bfh.bti7081.model.User;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class UserManager {
-    public static User getUserByUsername(String name) {
+    public User getUserByUsername(String name) {
         Optional<User> user = getMockUsers().stream().filter(u -> u.getUsername().equals(name)).findAny();
         if (user.isPresent()) {
             return user.get();
@@ -15,6 +17,10 @@ public class UserManager {
             return null;
         }
 
+    }
+
+    public String encryptPassword(String password){
+        return "Not implemented yet";
     }
 
     private static List<User> getMockUsers() {
