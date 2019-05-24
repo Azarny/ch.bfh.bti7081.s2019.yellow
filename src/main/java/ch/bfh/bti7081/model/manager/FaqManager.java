@@ -8,11 +8,11 @@ public class FaqManager {
     // manages the communication between backend and frontend
     // the list of methods isn't completed yet, just some sample methods for the class diagramm
 
-    public List<FaqEntry> getAllWikiEntries() {
+    public List<FaqEntry> getAllFaqEntries() {
         throw new IllegalArgumentException("Not implemented yet.");
     }
 
-    public List<FaqEntry> getFilteredWikiEntries(String titleFilter) {
+    public List<FaqEntry> getFilteredFaqEntries(String titleFilter) {
         throw new IllegalArgumentException("Not implemented yet.");
     }
 
