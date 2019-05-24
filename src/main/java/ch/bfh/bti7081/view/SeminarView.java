@@ -10,7 +10,10 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -42,12 +45,10 @@ public class SeminarView extends VerticalLayout {
     private ComboBox<SeminarCategory> categoriesCb = new ComboBox<>();
 
     public SeminarView() {
-
     }
 
     @PostConstruct
-    public void init(){
-        //seminarManager = new SeminarManager();
+    public void init() {
         seminarGrid.setItems(seminarPresenter.getSeminaries());
         categoriesCb.setItems(seminarPresenter.getSeminarCategories());
         generateFilterLayout();
@@ -109,7 +110,6 @@ public class SeminarView extends VerticalLayout {
                         .map(Optional::get).distinct()
                         .collect(Collectors.joining(", "));
                 ortTf.setErrorMessage("There are errors: " + errorText);
-//                filterLayout.add("There are errors: " + errorText);
             }
         });
 

@@ -44,13 +44,10 @@ public class MainView extends VerticalLayout {
     private HorizontalLayout siteFeatures = new HorizontalLayout();
 
     public MainView() {
-
     }
 
     @PostConstruct
     public void init() {
-        // mainViewPresenter = new MainViewPresenter();
-
         // title and welcometext
         this.add(welcomeLayout);
 

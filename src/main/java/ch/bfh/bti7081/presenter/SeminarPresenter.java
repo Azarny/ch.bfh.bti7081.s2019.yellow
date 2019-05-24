@@ -20,15 +20,15 @@ public class SeminarPresenter {
     public SeminarPresenter() {
     }
 
-    public List<SeminarCategory> getSeminarCategories(){
+    public List<SeminarCategory> getSeminarCategories() {
         return seminarCategoryManager.getSeminarCategories();
     }
 
-    public List<Seminar> getSeminaries(){
+    public List<Seminar> getSeminaries() {
         return seminarManager.getSeminaries();
     }
 
-    public List<Seminar> getFilteredSeminaries(SeminarFilter filter){
+    public List<Seminar> getFilteredSeminaries(SeminarFilter filter) {
         return seminarManager.getFilteredSeminars(filter);
     }
 }
