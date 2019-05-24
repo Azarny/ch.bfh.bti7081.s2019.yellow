@@ -10,6 +10,7 @@ public class ErrorNotification extends Notification {
     /**
      * This is a custom object to display errors to the user.
      * The constants can be used to create a consistent experience.
+     * Adds a css-class to the content, can be styled using CSS.
      * @param message
      */
     public ErrorNotification(String message) {
@@ -18,11 +19,9 @@ public class ErrorNotification extends Notification {
         Div content = new Div();
         content.addClassName(CLASSNAME);
         content.setText(message);
-
         add(content);
         setDuration(DURATION_IN_MS);
         setPosition(Notification.Position.TOP_END);
-
         open();
     }
 }

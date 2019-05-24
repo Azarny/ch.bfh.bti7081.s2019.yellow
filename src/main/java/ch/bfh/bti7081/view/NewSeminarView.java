@@ -158,7 +158,7 @@ public class NewSeminarView extends VerticalLayout {
                     presenter.sendSeminarToBackend(newSeminar);
                     save.getUI().ifPresent(ui -> ui.navigate("seminar"));
                 } catch (Exception e) {
-                    this.add(new ErrorNotification("Es ist ein Fehler aufgetreten. Bitte wenden Sie sich an die Administratoren."));
+                    this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
                 }
             } else {
                 BinderValidationStatus<SeminarDTO> validate = binder.validate();
