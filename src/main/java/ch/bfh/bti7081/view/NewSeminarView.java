@@ -2,7 +2,7 @@ package ch.bfh.bti7081.view;
 
 import ch.bfh.bti7081.model.dto.SeminarDTO;
 import ch.bfh.bti7081.presenter.NewSeminarPresenter;
-import ch.bfh.bti7081.view.customComponents.ErrorMessage;
+import ch.bfh.bti7081.view.customComponents.ErrorNotification;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.StyleSheet;
@@ -158,7 +158,7 @@ public class NewSeminarView extends VerticalLayout {
                     presenter.sendSeminarToBackend(newSeminar);
                     save.getUI().ifPresent(ui -> ui.navigate("seminar"));
                 } catch (Exception e) {
-                    this.add(new ErrorMessage("Es ist ein Fehler aufgetreten. Bitte wenden Sie sich an die Administratoren."));
+                    this.add(new ErrorNotification("Es ist ein Fehler aufgetreten. Bitte wenden Sie sich an die Administratoren."));
                 }
             } else {
                 BinderValidationStatus<SeminarDTO> validate = binder.validate();
@@ -167,7 +167,7 @@ public class NewSeminarView extends VerticalLayout {
                         .map(BindingValidationStatus::getMessage)
                         .map(Optional::get).distinct()
                         .collect(Collectors.joining(", "));
-                this.add(new ErrorMessage(errorText));
+                this.add(new ErrorNotification(errorText));
             }
         });
 
