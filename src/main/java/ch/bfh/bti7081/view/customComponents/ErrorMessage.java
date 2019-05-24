@@ -9,6 +9,7 @@ public class ErrorMessage extends Notification {
 
     /**
      * This is a custom object to display errors to the user.
+     * The constants can be used to create a consistent experience.
      * @param message
      */
     public ErrorMessage(String message) {
