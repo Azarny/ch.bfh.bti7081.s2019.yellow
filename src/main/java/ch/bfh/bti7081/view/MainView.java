@@ -16,9 +16,8 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Route(value = "", layout = Layout.class)
-@Component
-@UIScope
-@Tag("home-view")
+//@UIScope
+//@Tag("home-view")
 public class MainView extends VerticalLayout {
     @Autowired
     private MainViewPresenter mainViewPresenter;

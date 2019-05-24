@@ -33,7 +33,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Route(value = "seminar", layout = Layout.class)
-@Component
 public class SeminarView extends VerticalLayout {
     @Autowired
     private SeminarPresenter seminarPresenter;
