@@ -2,16 +2,14 @@ package ch.bfh.bti7081.view;
 
 import ch.bfh.bti7081.model.dto.SeminarDTO;
 import ch.bfh.bti7081.presenter.NewSeminarPresenter;
+import ch.bfh.bti7081.view.customComponents.ErrorMessage;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.formlayout.FormLayout;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -23,7 +21,6 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.CustomizedSystemMessages;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,6 +30,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 @StyleSheet("styles/style.css")
 @UIScope
 @Component
@@ -62,9 +60,6 @@ public class NewSeminarView extends VerticalLayout {
     private TextField seminarPlace = new TextField("Ort");
     private FormLayout placeComposite = new FormLayout(seminarPlz, seminarPlace);
 
-
-    private Label errorMessage = new Label("");
-
     private Button save = new Button("Save", new Icon(VaadinIcon.PLUS));
     private Button cancel = new Button("Cancel", new Icon(VaadinIcon.EXIT));
 
@@ -91,7 +86,6 @@ public class NewSeminarView extends VerticalLayout {
     private void buildPage() {
         this.add(title);
         this.add(seminarForm);
-        this.add(errorMessage);
         this.add(formActions);
     }
 
@@ -157,15 +151,14 @@ public class NewSeminarView extends VerticalLayout {
                 .bind(SeminarDTO::getDescription, SeminarDTO::setDescription);
     }
 
-    private void setFormActions()  {
+    private void setFormActions() {
         save.addClickListener(event -> {
             if (binder.writeBeanIfValid(newSeminar)) {
                 try {
                     presenter.sendSeminarToBackend(newSeminar);
                     save.getUI().ifPresent(ui -> ui.navigate("seminar"));
                 } catch (Exception e) {
-                    errorNotification("Beim Speichern scheint ein Fehler aufgetreten zu sein" + e);
-                    //errorMessage.setText("Beim Speichern scheint ein Fehler aufgetreten zu sein" + e);
+                    this.add(new ErrorMessage("Beim Speichern scheint ein Fehler aufgetreten zu sein" + e));
                 }
             } else {
                 BinderValidationStatus<SeminarDTO> validate = binder.validate();
@@ -174,9 +167,7 @@ public class NewSeminarView extends VerticalLayout {
                         .map(BindingValidationStatus::getMessage)
                         .map(Optional::get).distinct()
                         .collect(Collectors.joining(", "));
-                //errorMessage.setText("There are errors: " + errorText);
-                errorNotification("There are errors: " + errorText);
-
+                this.add(new ErrorMessage(errorText));
             }
         });
 
@@ -188,19 +179,5 @@ public class NewSeminarView extends VerticalLayout {
     public void fillCategoryField() {
         List<String> seminarCategories = presenter.getSeminarCategories();
         seminarCategory.setItems(seminarCategories);
-    }
-
-    private void errorNotification(String message){
-        Div content = new Div();
-        content.addClassName("error-notification");
-        content.setText(message);
-
-        Notification notification = new Notification();
-        notification.add(content);
-        notification.setDuration(30000);
-        notification.setPosition(Notification.Position.TOP_END);
-
-        this.add(notification);
-        notification.open();
     }
 }
