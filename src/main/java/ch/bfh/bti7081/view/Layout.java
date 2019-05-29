@@ -2,6 +2,7 @@ package ch.bfh.bti7081.view;
 
 import ch.bfh.bti7081.model.User;
 import ch.bfh.bti7081.model.manager.UserManager;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -18,33 +19,71 @@ import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.VaadinSession;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Layout extends VerticalLayout implements RouterLayout {
+    private HorizontalLayout menuBar = new HorizontalLayout();
+    private Label filler = new Label("");
+
+    // elements for login
+    private Button loginDialogBtn = new Button("Login");
+    private HorizontalLayout loginLayout = new HorizontalLayout(loginDialogBtn);
+
+    // elements for logged in user
+    private Label loggedInUser = new Label();
+    private Button logoutBtn = new Button("Logout");
+    private HorizontalLayout loggedInLayout = new HorizontalLayout(loggedInUser, logoutBtn);
+
+    // LoginForm
     private FormLayout formLayout = new FormLayout();
     private Dialog loginForm = new Dialog();
     private TextField userName = new TextField();
     private PasswordField userPw = new PasswordField();
-    private Button loginDialogBtn = new Button("Login");
 
     public Layout() {
-        loginDialogBtn.addClickListener(Event -> showLogin());
-        loginDialogBtn.getStyle().set("position", "absolute").set("right", "30px");
-        HorizontalLayout menuBar = new HorizontalLayout(
+        HorizontalLayout links = new HorizontalLayout(
                 new RouterLink("Startseite", MainView.class),
                 new RouterLink("Seminare", SeminarView.class),
                 new RouterLink("FaQ", FaqView.class),
                 new RouterLink("Forum", ForumView.class)
         );
-        menuBar.add(loginDialogBtn);
+        menuBar.add(links);
+
+        // dirty hack to align links and login/out on the borders
+        menuBar.setWidth("100%");
+        filler.setSizeFull();
+        menuBar.add(filler);
+
+        // check if user is logged in
+        User user = (User) VaadinSession.getCurrent().getAttribute("user");
+        if (user == null) {
+            // user not logged in
+            loginDialogBtn.addClickListener(Event -> showLogin());
+            menuBar.add(loginLayout);
+        } else {
+            loggedInUser.setText(user.getUsername());
+            logoutBtn.addClickListener(Event -> logout());
+            menuBar.add(loggedInLayout);
+        }
+
         generateLoginLayout();
         this.add(menuBar, loginForm);
     }
 
     private void showLogin() {
         loginForm.open();
+    }
+
+    private void logout() {
+        VaadinSession.getCurrent().setAttribute("user", null);
+        refreshSite();
+    }
+
+    private void refreshSite() {
+        UI.getCurrent().getPage().reload();
     }
 
     /*
@@ -72,7 +111,7 @@ public class Layout extends VerticalLayout implements RouterLayout {
         Button loginBtn = new Button("Login");
         Label status = new Label();
         loginForm.add(status);
-        //TODO Session Handling + besseres Feedback bei ButtonClick
+        //TODO besseres Feedback bei ButtonClick
         loginBtn.addClickListener(Event -> {
             status.setText("");
             if (binder.writeBeanIfValid(userToLogin)) {
@@ -81,8 +120,8 @@ public class Layout extends VerticalLayout implements RouterLayout {
                     return;
                 } else if (checkLogin(userToLogin)) {
                     loginForm.removeAll();
-                    loginForm.add(new H2("Willkommen " + userToLogin.getUsername()));
-                    loginDialogBtn.getStyle().set("display", "none");
+                    VaadinSession.getCurrent().setAttribute("user", userToLogin);
+                    refreshSite();
                 } else {
                     status.setText("Falsches Passwort!");
                     return;
