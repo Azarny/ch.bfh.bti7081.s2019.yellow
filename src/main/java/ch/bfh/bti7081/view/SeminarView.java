@@ -27,6 +27,7 @@ import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
@@ -46,6 +47,9 @@ public class SeminarView extends VerticalLayout {
     private FormLayout filterLayout = new FormLayout();
     private Grid<Seminar> seminarGrid = new Grid<>();
     private ComboBox<SeminarCategory> categoriesCb = new ComboBox<>();
+
+    @Value("${healthApp.googleApiKey:NOKEYFOUND}")
+    private String googleApiKey;
 
     public SeminarView() {
     }
@@ -182,7 +186,7 @@ public class SeminarView extends VerticalLayout {
     }
 
     private GoogleMap generateMap(List<Seminar> seminaries){
-        GoogleMap seminarMap = new GoogleMap("Here the API Key is entered.");
+        GoogleMap seminarMap = new GoogleMap(googleApiKey);
         seminarMap.setLatitude(47);
         seminarMap.setLongitude(7.5);
 
