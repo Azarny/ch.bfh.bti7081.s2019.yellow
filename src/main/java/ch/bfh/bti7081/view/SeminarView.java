@@ -4,6 +4,8 @@ import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.model.seminar.SeminarFilter;
 import ch.bfh.bti7081.presenter.SeminarPresenter;
+import ch.bfh.bti7081.view.customComponents.GoogleMap;
+import ch.bfh.bti7081.view.customComponents.GoogleMapMarker;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -29,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -64,6 +67,9 @@ public class SeminarView extends VerticalLayout {
 
         leftLayout.add(SeminarFilterLayout, newSeminar, SeminarListLayout, details);
         H1 title = new H1("Seminarfinder");
+
+        rightLayout.add(generateMap(seminarPresenter.getSeminaries()));
+
         this.add(title, contentLayout);
     }
 
@@ -173,5 +179,23 @@ public class SeminarView extends VerticalLayout {
         details.add(title, date, category, locationAndPlz, link, description);
         details.setWidth("500px");
         details.setHeight("500px");
+    }
+
+    private GoogleMap generateMap(List<Seminar> seminaries){
+        GoogleMap seminarMap = new GoogleMap("Here the API Key is entered.");
+        seminarMap.setLatitude(47);
+        seminarMap.setLongitude(7.5);
+
+        double i = 0;
+        for (Seminar seminar:seminaries) {
+            GoogleMapMarker seminarMarker = new GoogleMapMarker(47+i, 7.5+i);
+            i=i+1;
+            seminarMarker.setTitle(seminar.getTitle());
+            seminarMarker.setDraggable(false);
+            seminarMarker.addClickListener(event -> showDetails(seminar));
+            seminarMap.addMarker(seminarMarker);
+        }
+
+        return seminarMap;
     }
 }
