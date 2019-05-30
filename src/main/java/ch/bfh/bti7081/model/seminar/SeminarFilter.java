@@ -49,4 +49,12 @@ public class SeminarFilter {
     public void setLocation(String location) {
         this.location = location;
     }
+
+    public void reset(){
+        this.setCategory(null);
+        this.setKeyword("");
+        this.setFromDate(null);
+        this.setLocation("");
+        this.setToDate(null);
+    }
 }
