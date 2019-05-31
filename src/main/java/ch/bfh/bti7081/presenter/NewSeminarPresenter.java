@@ -8,8 +8,6 @@ import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.view.NewSeminarView;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
@@ -34,6 +32,11 @@ public class NewSeminarPresenter {
     @Value("${healthApp.googleApiKey:NOKEYFOUND}")
     private String googleApiKey;
 
+    /**
+     * Is accessed by view to get the categories for a seminar.
+     * Author: walty1
+     * @return stringlist of seminaries.
+     */
     public List<String> getSeminarCategories() {
         List<String> categories = seminarCategoryManager.getSeminarCategories().stream()
                 .map(SeminarCategory::getName)
@@ -41,13 +44,42 @@ public class NewSeminarPresenter {
         return categories;
     }
 
-    public void sendSeminarToBackend(SeminarDTO frontendObject)
-            throws NoSuchFieldException, InterruptedException, ApiException, IOException {
-        frontendObject = enrichWithCoordinates(frontendObject);
-        Seminar seminarToBeSaved = convertDTOtoModel(frontendObject);
-        seminarManager.createSeminar(seminarToBeSaved);
+    /**
+     * Manages the transformation from DTO to Seminar-Object and ensures saving.
+     * Author: walty1
+     * @param frontendObject
+     * @return true (object could be saved) false (object was not saved)
+     */
+    public boolean sendSeminarToBackend(SeminarDTO frontendObject){
+        try {
+            frontendObject = enrichWithCoordinates(frontendObject);
+            try {
+                Seminar seminarToBeSaved = convertDTOtoModel(frontendObject);
+                seminarManager.createSeminar(seminarToBeSaved);
+                return true;
+            } catch (Exception e) {
+                view.displayErrorMessage("Es ist ein technischer Fehler aufgetreten. " +
+                        "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support.");
+                return false;
+            }
+        } catch (ApiException e) {
+            view.displayErrorMessage("Die von Ihnen eingegebene Adresse konnte " +
+                    "nicht gefunden werden. Bitte prüfen Sie, ob die Eingaben korrekt sind.");
+            return false;
+        } catch (InterruptedException | IOException e) {
+            view.displayErrorMessage("Es ist ein technischer Fehler aufgetreten. " +
+                    "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support.");
+            return false;
+        }
     }
 
+    /**
+     * Converts a SeminarDTO to Seminar object. (Just value mapping.)
+     * Author: walty1
+     * @param seminarDTO
+     * @return Seminar
+     * @throws NoSuchFieldException Throws an exception if the category could not be set.
+     */
     private Seminar convertDTOtoModel(SeminarDTO seminarDTO) throws NoSuchFieldException {
         Seminar modelObject = new Seminar();
 
@@ -68,20 +100,32 @@ public class NewSeminarPresenter {
         return modelObject;
     }
 
-    public SeminarDTO enrichWithCoordinates(SeminarDTO seminar)
+    /**
+     * Enriches a SeminarDTO with coordinates corresponding to the address.
+     * Author: walty1
+     * @param seminar
+     * @return Filled out values location_lat and location_lng
+     * @throws ApiException
+     * @throws InterruptedException
+     * @throws IOException
+     */
+    private SeminarDTO enrichWithCoordinates(SeminarDTO seminar)
             throws ApiException, InterruptedException, IOException {
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey(googleApiKey)
                 .build();
-        String address = seminar.getStreet()+" "+seminar.getHouseNumber()+", "+
-                seminar.getPlz()+" "+seminar.getLocation();
-        GeocodingResult[] results =  GeocodingApi.geocode(context,
+        String address = seminar.getStreet() + " " + seminar.getHouseNumber() + ", " +
+                seminar.getPlz() + " " + seminar.getLocation();
+        //Throws errors in case of connection problems.
+        GeocodingResult[] results = GeocodingApi.geocode(context,
                 address).await();
-        if(results.length > 0){
+        //Multiple results could be found.
+        //Additional user query could be interesting if problems with recognition exist.
+        if (results.length > 0) {
             seminar.setLocation_lat(results[0].geometry.location.lat);
             seminar.setLocation_lng(results[0].geometry.location.lng);
             return seminar;
-        }else{
+        } else {
             throw new NotFoundException("No coordinates were available for this place.");
         }
     }

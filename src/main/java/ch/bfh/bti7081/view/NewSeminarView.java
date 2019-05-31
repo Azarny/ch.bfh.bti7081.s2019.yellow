@@ -26,7 +26,6 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.HttpClientErrorException;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -158,15 +157,9 @@ public class NewSeminarView extends VerticalLayout {
     private void setFormActions() {
         save.addClickListener(event -> {
             if (binder.writeBeanIfValid(newSeminar)) {
-                try {
-                    presenter.sendSeminarToBackend(newSeminar);
+                //If the seminar could be saved without any errors.
+                if(presenter.sendSeminarToBackend(newSeminar)){
                     save.getUI().ifPresent(ui -> ui.navigate("seminar"));
-                } catch(NotFoundException e){
-                    this.add(new ErrorNotification("Die von Ihnen eingegebene Adresse konnte in unserem System " +
-                            "nicht gefunden werden. Bitte prüfen Sie, ob die Eingaben korrekt sind."));
-                } catch (Exception e) {
-                    this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. " +
-                            "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
                 }
             } else {
                 BinderValidationStatus<SeminarDTO> validate = binder.validate();
@@ -175,7 +168,7 @@ public class NewSeminarView extends VerticalLayout {
                         .map(BindingValidationStatus::getMessage)
                         .map(Optional::get).distinct()
                         .collect(Collectors.joining(", "));
-                this.add(new ErrorNotification(errorText));
+                displayErrorMessage(errorText);
             }
         });
 
@@ -187,5 +180,9 @@ public class NewSeminarView extends VerticalLayout {
     public void fillCategoryField() {
         List<String> seminarCategories = presenter.getSeminarCategories();
         seminarCategory.setItems(seminarCategories);
+    }
+
+    public void displayErrorMessage(String message){
+        this.add(new ErrorNotification(message));
     }
 }

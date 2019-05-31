@@ -76,8 +76,8 @@ public class SeminarManager {
 
     }
 
-    public Seminar createSeminar(Seminar seminar) {
-        throw new IllegalArgumentException("Not implemented yet.");
+    public Seminar createSeminar(Seminar seminar) throws Exception {
+        throw new Exception("Not implemented yet.");
     }
 
     public String validateSeminar(Seminar seminar) {

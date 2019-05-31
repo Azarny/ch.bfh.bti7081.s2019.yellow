@@ -1,7 +1,6 @@
 package ch.bfh.bti7081.model.manager;
 
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
-import com.vaadin.flow.router.NotFoundException;
 import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
