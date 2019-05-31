@@ -1,6 +1,7 @@
 package ch.bfh.bti7081.model.manager;
 
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
+import com.vaadin.flow.router.NotFoundException;
 import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
@@ -14,13 +15,13 @@ public class SeminarCategoryManager {
         return mockCategories();
     }
 
-    public SeminarCategory getSeminarByName(String name) throws Exception {
+    public SeminarCategory getSeminarByName(String name) throws NoSuchFieldException {
         Optional<SeminarCategory> categories = getSeminarCategories().stream()
                 .filter(s -> s.getName().equals(name)).findFirst();
         if (categories.isPresent()) {
             return categories.get();
         } else {
-            throw new Exception("Category does not exist.");
+            throw new NoSuchFieldException("Category does not exist.");
         }
     }
 

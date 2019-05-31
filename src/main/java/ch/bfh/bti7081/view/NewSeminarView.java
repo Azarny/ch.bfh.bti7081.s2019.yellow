@@ -3,6 +3,8 @@ package ch.bfh.bti7081.view;
 import ch.bfh.bti7081.model.dto.SeminarDTO;
 import ch.bfh.bti7081.presenter.NewSeminarPresenter;
 import ch.bfh.bti7081.view.customComponents.ErrorNotification;
+import com.google.maps.errors.ApiException;
+import com.google.maps.errors.NotFoundException;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.StyleSheet;
@@ -24,8 +26,10 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -157,8 +161,12 @@ public class NewSeminarView extends VerticalLayout {
                 try {
                     presenter.sendSeminarToBackend(newSeminar);
                     save.getUI().ifPresent(ui -> ui.navigate("seminar"));
+                } catch(NotFoundException e){
+                    this.add(new ErrorNotification("Die von Ihnen eingegebene Adresse konnte in unserem System " +
+                            "nicht gefunden werden. Bitte prüfen Sie, ob die Eingaben korrekt sind."));
                 } catch (Exception e) {
-                    this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
+                    this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. " +
+                            "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
                 }
             } else {
                 BinderValidationStatus<SeminarDTO> validate = binder.validate();

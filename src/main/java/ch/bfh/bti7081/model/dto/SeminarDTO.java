@@ -14,6 +14,8 @@ public class SeminarDTO {
     private String category;
     private String url;
     private String description;
+    private double location_lat;
+    private double location_lng;
 
     public String getStreet() {
         return street;
@@ -93,5 +95,21 @@ public class SeminarDTO {
 
     public void setTime(LocalTime time) {
         this.time = time;
+    }
+
+    public double getLocation_lat() {
+        return location_lat;
+    }
+
+    public void setLocation_lat(double location_lat) {
+        this.location_lat = location_lat;
+    }
+
+    public double getLocation_lng() {
+        return location_lng;
+    }
+
+    public void setLocation_lng(double location_lng) {
+        this.location_lng = location_lng;
     }
 }
