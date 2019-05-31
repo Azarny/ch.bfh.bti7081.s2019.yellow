@@ -23,6 +23,8 @@ public class UserManager {
         return "Not implemented yet";
     }
 
+
+
     private static List<User> getMockUsers() {
         //These is mock data, nothing here is productive code.
         List<User> mockUsers = new ArrayList<>();

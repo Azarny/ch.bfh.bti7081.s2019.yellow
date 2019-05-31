@@ -1,12 +1,11 @@
 package ch.bfh.bti7081.model.manager;
 
 import ch.bfh.bti7081.model.ValidationConstants;
+import ch.bfh.bti7081.model.repositories.SeminarRepository;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarFilter;
-import org.springframework.stereotype.Controller;
-import ch.bfh.bti7081.model.ValidationConstants;
-import ch.bfh.bti7081.model.repositories.SeminarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
