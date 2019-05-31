@@ -64,6 +64,7 @@ public class Layout extends VerticalLayout implements RouterLayout {
         userPw.setLabel("Passwort: ");
         userName.setValueChangeMode(ValueChangeMode.EAGER);
         userPw.setValueChangeMode(ValueChangeMode.EAGER);
+        Label status = new Label();
         binder.forField(userName)
                 .withValidator(new StringLengthValidator(
                         "Bitte Benutzername eintragen", 1, null))
@@ -71,10 +72,16 @@ public class Layout extends VerticalLayout implements RouterLayout {
         binder.forField(userPw)
                 .withValidator(new StringLengthValidator(
                         "Bitte Passwort eintragen", 1, null))
-                .bind(UserDTO::getPassword, UserDTO::setPassword);
+                .bind(UserDTO::getPassword, (userDTO, password) -> {
+                    try{
+                    userDTO.setClearPassword(password);
+                    }
+                    catch(Exception e){
+                        status.setText("Could not save Password.");
+                    }});
 
         Button loginBtn = new Button("Login");
-        Label status = new Label();
+
         loginForm.add(status);
         //TODO Session Handling + besseres Feedback bei ButtonClick
         loginBtn.addClickListener(Event -> {

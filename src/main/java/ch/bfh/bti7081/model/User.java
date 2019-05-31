@@ -35,6 +35,9 @@ public class User {
     @Column(name = PREFIX + "PERMISSION")
     private Integer permission;
 
+    @Column(name = PREFIX + "SALT", length = 512)
+    private String salt;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "author")
     private List<ForumEntry> forumEntries;
 
@@ -88,5 +91,13 @@ public class User {
 
     public void setComments(List<ForumEntryComment> comments) {
         this.comments = comments;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }
