@@ -2,11 +2,12 @@ package ch.bfh.bti7081.view;
 
 import ch.bfh.bti7081.model.dto.SeminarDTO;
 import ch.bfh.bti7081.presenter.NewSeminarPresenter;
+import ch.bfh.bti7081.view.customComponents.ErrorNotification;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@StyleSheet("styles/style.css")
 @UIScope
 @Component
 @Route(value = "seminar/new", layout = Layout.class)
@@ -58,9 +60,6 @@ public class NewSeminarView extends VerticalLayout {
     private TextField seminarPlace = new TextField("Ort");
     private FormLayout placeComposite = new FormLayout(seminarPlz, seminarPlace);
 
-
-    private Label errorMessage = new Label("");
-
     private Button save = new Button("Save", new Icon(VaadinIcon.PLUS));
     private Button cancel = new Button("Cancel", new Icon(VaadinIcon.EXIT));
 
@@ -82,6 +81,12 @@ public class NewSeminarView extends VerticalLayout {
     private void mvpBinding() {
         presenter.setView(this);
         setFormActions();
+    }
+
+    private void buildPage() {
+        this.add(title);
+        this.add(seminarForm);
+        this.add(formActions);
     }
 
     private void addElementsToForm() {
@@ -153,7 +158,7 @@ public class NewSeminarView extends VerticalLayout {
                     presenter.sendSeminarToBackend(newSeminar);
                     save.getUI().ifPresent(ui -> ui.navigate("seminar"));
                 } catch (Exception e) {
-                    errorMessage.setText("Beim Speichern scheint ein Fehler aufgetreten zu sein" + e);
+                    this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
                 }
             } else {
                 BinderValidationStatus<SeminarDTO> validate = binder.validate();
@@ -162,21 +167,13 @@ public class NewSeminarView extends VerticalLayout {
                         .map(BindingValidationStatus::getMessage)
                         .map(Optional::get).distinct()
                         .collect(Collectors.joining(", "));
-                errorMessage.setText("There are errors: " + errorText);
-
+                this.add(new ErrorNotification(errorText));
             }
         });
 
         cancel.addClickListener(event -> {
             cancel.getUI().ifPresent(ui -> ui.navigate("seminar"));
         });
-    }
-
-    private void buildPage() {
-        this.add(title);
-        this.add(seminarForm);
-        this.add(errorMessage);
-        this.add(formActions);
     }
 
     public void fillCategoryField() {
