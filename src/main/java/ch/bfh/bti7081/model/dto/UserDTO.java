@@ -47,7 +47,7 @@ public class UserDTO {
     }
 
     public void setClearPassword(String password) throws Exception {
-        this.password = userPresenter.encryptPassword(this, password);
+        this.password = userPresenter.encryptPassword(getUsername(), password);
     }
 
     public void setEncryptedPassword(String password){

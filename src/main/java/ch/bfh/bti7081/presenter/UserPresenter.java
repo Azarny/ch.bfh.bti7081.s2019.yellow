@@ -15,6 +15,11 @@ public class UserPresenter {
     @Autowired
     UserManager manager;
 
+    /*
+     * converts a model to a data transfer object
+     *
+     * Author: luscm1
+     * */
     private UserDTO convertModeltoDTO(User user){
         if (user == null){
             return null;
@@ -26,6 +31,7 @@ public class UserPresenter {
         dtoObject.setEmail(user.getEmail());
         dtoObject.setForumEntries(user.getForumEntries());
         dtoObject.setPermission(user.getPermission());
+        dtoObject.setSalt(user.getSalt());
 
         return dtoObject;
     }
@@ -34,14 +40,19 @@ public class UserPresenter {
         return convertModeltoDTO(manager.getUserByUsername(username));
     }
 
-    public String encryptPassword(UserDTO user, String password) throws Exception {
+    /*
+     * encrypts a password
+     * only existing users are currently allowed
+     *
+     * Author: luscm1
+     * */
+    public String encryptPassword(String username, String password) throws Exception {
         // check if user exists in database
-        if (null != getUserByUsername(user.getUsername())){
+        UserDTO user = getUserByUsername(username);
+        if (null != user){
              return manager.generateHash(password, user.getSalt());
         }
 
-        String salt = UserManager.generateSalt(UserManager.KEY_LENGTH).toString();
-        user.setSalt(salt);
-        return manager.generateHash(password, salt);
+        throw new Exception("The user " + username + "does not exists.");
     }
 }

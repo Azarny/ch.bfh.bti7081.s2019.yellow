@@ -29,7 +29,7 @@ public class User {
     @Column(name = PREFIX + "EMAIL", length = 255)
     private String email;
 
-    @Column(name = PREFIX + "PASSWORD", length = 255)
+    @Column(name = PREFIX + "PASSWORD", length = 512)
     private String password;
 
     @Column(name = PREFIX + "PERMISSION")

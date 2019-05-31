@@ -74,7 +74,7 @@ public class Layout extends VerticalLayout implements RouterLayout {
                         "Bitte Passwort eintragen", 1, null))
                 .bind(UserDTO::getPassword, (userDTO, password) -> {
                     try{
-                    userDTO.setClearPassword(password);
+                    userDTO.setEncryptedPassword(presenter.encryptPassword(userName.getValue(),password));
                     }
                     catch(Exception e){
                         status.setText("Could not save Password.");

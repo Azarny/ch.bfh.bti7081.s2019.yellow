@@ -10,12 +10,10 @@ import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.KeySpec;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Optional;
 
-import static java.util.Arrays.*;
+import static java.util.Arrays.fill;
 
 @Component
 public class UserManager {
@@ -26,7 +24,7 @@ public class UserManager {
     // some variables and constants for the encryption
     private static final SecureRandom RAND = new SecureRandom();
     private static final int ITERATIONS = 65536;
-    public static final int KEY_LENGTH = 512;
+    private static final int KEY_LENGTH = 512;
     private static final String ALGORITHM = "PBKDF2WithHmacSHA512";
 
     public User getUserByUsername(String name) {
@@ -38,13 +36,14 @@ public class UserManager {
         userRepository.save(user);
     }
 
-    // this function is used from https://dev.to/awwsmm/how-to-encrypt-a-password-in-java-42dh
-    public static Optional<String> generateSalt (final int length) {
-
-        if (length < 1) {
-            System.err.println("error in generateSalt: length must be > 0");
-            return Optional.empty();
-        }
+    /*
+     * generates a random salt.
+     *this function is copied from https://dev.to/awwsmm/how-to-encrypt-a-password-in-java-42dh
+     *
+     * Author: Andrew (https://dev.to/awwsmm)
+     * */
+    public static Optional<String> generateSalt () {
+        int length = 128;
 
         byte[] salt = new byte[length];
         RAND.nextBytes(salt);
@@ -52,7 +51,12 @@ public class UserManager {
         return Optional.of(Base64.getEncoder().encodeToString(salt));
     }
 
-    // this function is used from https://dev.to/awwsmm/how-to-encrypt-a-password-in-java-42dh
+    /*
+     * creates a hash
+     *this function is copied from https://dev.to/awwsmm/how-to-encrypt-a-password-in-java-42dh
+     *
+     * Author: Andrew (https://dev.to/awwsmm)
+     * */
     public String generateHash (String password, String salt) throws Exception {
         char[] chars = password.toCharArray();
         byte[] bytes = salt.getBytes();
