@@ -187,8 +187,10 @@ public class SeminarView extends VerticalLayout {
 
     private GoogleMap generateMap(List<Seminar> seminaries){
         GoogleMap seminarMap = new GoogleMap(googleApiKey);
-        seminarMap.setLatitude(47);
-        seminarMap.setLongitude(7.5);
+        //Karte auf Mittelpunkt der Schweiz setzen
+        seminarMap.setLatitude(46.798);
+        seminarMap.setLongitude(8.231);
+        seminarMap.setZoomLevel(8);
 
         double i = 0;
         for (Seminar seminar:seminaries) {
