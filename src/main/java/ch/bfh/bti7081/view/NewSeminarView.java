@@ -1,13 +1,16 @@
 package ch.bfh.bti7081.view;
 
 import ch.bfh.bti7081.model.dto.SeminarDTO;
+import ch.bfh.bti7081.model.dto.UserDTO;
 import ch.bfh.bti7081.presenter.NewSeminarPresenter;
+import ch.bfh.bti7081.presenter.UserPresenter;
 import ch.bfh.bti7081.view.customComponents.ErrorNotification;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -21,6 +24,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,6 +42,8 @@ import java.util.stream.Collectors;
 public class NewSeminarView extends VerticalLayout {
     @Autowired
     private NewSeminarPresenter presenter;
+    @Autowired
+    private UserPresenter userPresenter;
 
     private H1 title = new H1("Seminar erstellen");
     private FormLayout seminarForm = new FormLayout();
@@ -70,12 +76,31 @@ public class NewSeminarView extends VerticalLayout {
 
     @PostConstruct
     public void init() {
-        addElementsToForm();
-        setFieldSettings();
-        addBindingToForm();
-        buildPage();
-        mvpBinding();
-        fillCategoryField();
+        // check if user is logged in
+        UserDTO sessionUser = (UserDTO) VaadinSession.getCurrent().getAttribute("user");
+        if (sessionUser != null) {
+            /* If the user saved in the session is directly used here, a NullPointerException due to timing problems
+             will be thrown (all properties except the username are null).
+             As a workaround, the user object will be loaded seperately
+             */
+            UserDTO user = userPresenter.getUserByUsername(sessionUser.getUsername());
+
+            // check if user is expert or moderator
+            if (user.getPermission() >= 2) {
+                addElementsToForm();
+                setFieldSettings();
+                addBindingToForm();
+                buildPage();
+                mvpBinding();
+                fillCategoryField();
+            } else {
+                Label notPermitted = new Label("Sie verfügen nicht über die benötigten Berechtigungen");
+                this.add(notPermitted);
+            }
+        } else {
+            Label notLoggedIn = new Label("bitte loggen Sie sich ein");
+            this.add(notLoggedIn);
+        }
     }
 
     private void mvpBinding() {
@@ -153,9 +178,11 @@ public class NewSeminarView extends VerticalLayout {
 
     private void setFormActions() {
         save.addClickListener(event -> {
+            UserDTO sessionUser = (UserDTO) VaadinSession.getCurrent().getAttribute("user");
+
             if (binder.writeBeanIfValid(newSeminar)) {
                 try {
-                    presenter.sendSeminarToBackend(newSeminar);
+                    presenter.sendSeminarToBackend(newSeminar, sessionUser);
                     save.getUI().ifPresent(ui -> ui.navigate("seminar"));
                 } catch (Exception e) {
                     this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));

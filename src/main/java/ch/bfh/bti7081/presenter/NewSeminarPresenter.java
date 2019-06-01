@@ -3,11 +3,16 @@ package ch.bfh.bti7081.presenter;
 
 import ch.bfh.bti7081.model.ValidationConstants;
 import ch.bfh.bti7081.model.dto.SeminarDTO;
+import ch.bfh.bti7081.model.dto.UserDTO;
 import ch.bfh.bti7081.model.manager.SeminarCategoryManager;
 import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.view.NewSeminarView;
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,6 +27,8 @@ public class NewSeminarPresenter {
     private SeminarManager seminarManager;
     @Autowired
     private SeminarCategoryManager seminarCategoryManager;
+    @Autowired
+    private UserPresenter userPresenter;
 
     public List<String> getSeminarCategories() {
         List<String> categories = seminarCategoryManager.getSeminarCategories().stream()
@@ -30,9 +37,23 @@ public class NewSeminarPresenter {
         return categories;
     }
 
-    public void sendSeminarToBackend(SeminarDTO frontendObject) throws Exception {
-        Seminar seminarToBeSaved = convertDTOtoModel(frontendObject);
-        seminarManager.createSeminar(seminarToBeSaved);
+    public void sendSeminarToBackend(SeminarDTO frontendObject, UserDTO userDTO) throws Exception {
+        // check if user is logged in
+        UserDTO sessionUser = (UserDTO) VaadinSession.getCurrent().getAttribute("user");
+        if (sessionUser != null) {
+            /* If the user saved in the session is used here, a NullPointerException due to timing problems
+             will be thrown (all properties except the username are null).
+             As a workaround, the user object will be loaded seperately
+             */
+            UserDTO user = userPresenter.getUserByUsername(sessionUser.getUsername());
+
+            // check if user is expert or moderator
+            if (user.getPermission() >= 2) {
+                Seminar seminarToBeSaved = convertDTOtoModel(frontendObject);
+                seminarManager.createSeminar(seminarToBeSaved);
+            }
+        }
+
     }
 
     private Seminar convertDTOtoModel(SeminarDTO seminarDTO) throws Exception {

@@ -1,10 +1,8 @@
 package ch.bfh.bti7081.view;
 
-import ch.bfh.bti7081.model.User;
-import ch.bfh.bti7081.model.manager.UserManager;
-import com.vaadin.flow.component.UI;
 import ch.bfh.bti7081.model.dto.UserDTO;
 import ch.bfh.bti7081.presenter.UserPresenter;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
@@ -27,6 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Author: heuzl1
+ */
 public class Layout extends VerticalLayout implements RouterLayout {
     private HorizontalLayout menuBar = new HorizontalLayout();
     private Label filler = new Label("");
@@ -45,7 +46,6 @@ public class Layout extends VerticalLayout implements RouterLayout {
     private Dialog loginForm = new Dialog();
     private TextField userName = new TextField();
     private PasswordField userPw = new PasswordField();
-    private Button loginDialogBtn = new Button("Login");
 
     @Autowired
     private UserPresenter presenter;
@@ -65,7 +65,7 @@ public class Layout extends VerticalLayout implements RouterLayout {
         menuBar.add(filler);
 
         // check if user is logged in
-        User user = (User) VaadinSession.getCurrent().getAttribute("user");
+        UserDTO user = (UserDTO) VaadinSession.getCurrent().getAttribute("user");
         if (user == null) {
             // user not logged in
             loginDialogBtn.addClickListener(Event -> showLogin());
@@ -84,11 +84,17 @@ public class Layout extends VerticalLayout implements RouterLayout {
         loginForm.open();
     }
 
+    /**
+     * Author: heuzl1
+     */
     private void logout() {
         VaadinSession.getCurrent().setAttribute("user", null);
         refreshSite();
     }
 
+    /**
+     * Author: heuzl1
+     */
     private void refreshSite() {
         UI.getCurrent().getPage().reload();
     }
@@ -135,6 +141,8 @@ public class Layout extends VerticalLayout implements RouterLayout {
                 } else if (checkLogin(userToLogin)) {
                     loginForm.removeAll();
                     VaadinSession.getCurrent().setAttribute("user", userToLogin);
+                    loginForm.add(new H2("Willkommen " + userToLogin.getUsername()));
+                    loginDialogBtn.getStyle().set("display", "none");
                     refreshSite();
                 } else {
                     status.setText("Falsches Passwort!");

@@ -1,9 +1,11 @@
 package ch.bfh.bti7081.view;
 
+import ch.bfh.bti7081.model.dto.UserDTO;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.model.seminar.SeminarFilter;
 import ch.bfh.bti7081.presenter.SeminarPresenter;
+import ch.bfh.bti7081.presenter.UserPresenter;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -24,6 +26,7 @@ import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -36,6 +39,8 @@ import java.util.stream.Collectors;
 public class SeminarView extends VerticalLayout {
     @Autowired
     private SeminarPresenter seminarPresenter;
+    @Autowired
+    private UserPresenter userPresenter;
 
     private VerticalLayout SeminarFilterLayout = new VerticalLayout();
     private VerticalLayout SeminarListLayout = new VerticalLayout();
@@ -57,12 +62,28 @@ public class SeminarView extends VerticalLayout {
         HorizontalLayout contentLayout = new HorizontalLayout();
         VerticalLayout rightLayout = new VerticalLayout();
         contentLayout.add(leftLayout, rightLayout);
-        Button newSeminar = new Button("Neues Seminar", new Icon(VaadinIcon.EDIT));
-        newSeminar.addClickListener(event -> {
-            newSeminar.getUI().ifPresent(ui -> ui.navigate("seminar/new"));
-        });
 
-        leftLayout.add(SeminarFilterLayout, newSeminar, SeminarListLayout, details);
+        // check if user is logged in
+        UserDTO sessionUser = (UserDTO) VaadinSession.getCurrent().getAttribute("user");
+        if (sessionUser != null) {
+            /* If the user saved in the session is directly used here, a NullPointerException due to timing problems
+             will be thrown (all properties except the username are null).
+             As a workaround, the user object will be loaded seperately
+             */
+            UserDTO user = userPresenter.getUserByUsername(sessionUser.getUsername());
+
+            // check if user is expert or moderator
+            if (user.getPermission() >= 2) {
+                Button newSeminar = new Button("Neues Seminar", new Icon(VaadinIcon.EDIT));
+                newSeminar.addClickListener(event -> {
+                    newSeminar.getUI().ifPresent(ui -> ui.navigate("seminar/new"));
+                });
+                leftLayout.add(newSeminar);
+            }
+        }
+
+
+        leftLayout.add(SeminarFilterLayout, SeminarListLayout, details);
         H1 title = new H1("Seminarfinder");
         this.add(title, contentLayout);
     }
