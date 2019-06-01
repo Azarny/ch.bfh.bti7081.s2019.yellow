@@ -1,39 +1,80 @@
 package ch.bfh.bti7081.model.manager;
 
 import ch.bfh.bti7081.model.User;
+import ch.bfh.bti7081.model.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.util.Base64;
 import java.util.Optional;
 
+import static java.util.Arrays.fill;
+
+@Component
 public class UserManager {
-    public static User getUserByUsername(String name) {
-        Optional<User> user = getMockUsers().stream().filter(u -> u.getUsername().equals(name)).findAny();
-        if (user.isPresent()) {
-            return user.get();
-        } else {
-            return null;
+
+    @Autowired
+    UserRepository userRepository;
+
+    // some variables and constants for the encryption
+    private static final SecureRandom RAND = new SecureRandom();
+    private static final int ITERATIONS = 65536;
+    private static final int KEY_LENGTH = 512;
+    private static final String ALGORITHM = "PBKDF2WithHmacSHA512";
+
+    public User getUserByUsername(String name) {
+        Optional<User> user = userRepository.findAll().stream().filter(u -> u.getUsername().equals(name)).findAny();
+        return user.orElse(null);
+    }
+
+    public void createUser(User user){
+        userRepository.save(user);
+    }
+
+    /*
+     * generates a random salt.
+     *this function is copied from https://dev.to/awwsmm/how-to-encrypt-a-password-in-java-42dh
+     *
+     * Author: Andrew (https://dev.to/awwsmm)
+     * */
+    public static Optional<String> generateSalt () {
+        int length = 128;
+
+        byte[] salt = new byte[length];
+        RAND.nextBytes(salt);
+
+        return Optional.of(Base64.getEncoder().encodeToString(salt));
+    }
+
+    /*
+     * creates a hash
+     *this function is copied from https://dev.to/awwsmm/how-to-encrypt-a-password-in-java-42dh
+     *
+     * Author: Andrew (https://dev.to/awwsmm)
+     * */
+    public String generateHash (String password, String salt) throws Exception {
+        char[] chars = password.toCharArray();
+        byte[] bytes = salt.getBytes();
+
+        PBEKeySpec spec = new PBEKeySpec(chars, bytes, ITERATIONS, KEY_LENGTH);
+
+        fill(chars, Character.MIN_VALUE);
+
+        try {
+            SecretKeyFactory fac = SecretKeyFactory.getInstance(ALGORITHM);
+            byte[] securePassword = fac.generateSecret(spec).getEncoded();
+            return Base64.getEncoder().encodeToString(securePassword);
+
+        } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
+            throw new Exception("Exception encountered in hashPassword()");
+        } finally {
+            spec.clearPassword();
         }
-
     }
-
-    private static List<User> getMockUsers() {
-        //These is mock data, nothing here is productive code.
-        List<User> mockUsers = new ArrayList<>();
-        User mockUser1 = new User();
-        mockUser1.setEmail("nomail@nomailhausen.com");
-        mockUser1.setPassword("12345");
-        mockUser1.setPermission(1);
-        mockUser1.setUsername("Lara");
-        mockUsers.add(mockUser1);
-        User mockUser2 = new User();
-        mockUser2.setEmail("nomail@nomailhausen.com");
-        mockUser2.setPassword("12345");
-        mockUser2.setPermission(4);
-        mockUser2.setUsername("Admin");
-        mockUsers.add(mockUser2);
-        return mockUsers;
-    }
-
 
 }

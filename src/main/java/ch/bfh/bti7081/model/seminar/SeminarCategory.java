@@ -22,7 +22,9 @@ public class SeminarCategory {
 
     public SeminarCategory(String name) {
         this.name = name;
-    }
+}
+
+    public SeminarCategory(){};
 
     public String getName() {
         return name;
