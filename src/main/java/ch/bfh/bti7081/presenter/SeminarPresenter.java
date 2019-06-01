@@ -19,10 +19,6 @@ public class SeminarPresenter {
     @Autowired
     private SeminarManager seminarManager;
 
-    public SeminarPresenter() {
-    }
-
-
     public List<SeminarCategory> getSeminarCategories() {
         return seminarCategoryManager.getSeminarCategories();
     }

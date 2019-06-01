@@ -33,6 +33,7 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -41,7 +42,6 @@ public class SeminarView extends VerticalLayout {
     @Autowired
     private SeminarPresenter seminarPresenter;
 
-    // title and welcometext
     private H1 title = new H1("Seminarfinder");
     private VerticalLayout welcomeLayout = new VerticalLayout(title);
     private VerticalLayout seminarFilterLayout = new VerticalLayout();
@@ -56,23 +56,15 @@ public class SeminarView extends VerticalLayout {
     }
 
     @PostConstruct
-    public void init() {
-        try {
-            seminarGrid.setItems(seminarPresenter.getSeminarDtos());
-        }catch(Exception ex){
-            this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
-        }
-        categoriesCb.setItems(seminarPresenter.getSeminarCategories());
+    public void init() throws Exception {
+        setViewContent(seminarPresenter.getSeminarDtos());
         generateFilterLayout();
         generateListLayout();
         VerticalLayout leftLayout = new VerticalLayout();
-        HorizontalLayout contentLayout = new HorizontalLayout();
         VerticalLayout rightLayout = new VerticalLayout();
+        HorizontalLayout contentLayout = new HorizontalLayout();
         contentLayout.add(leftLayout, rightLayout);
-        Button newSeminar = new Button("Neues Seminar", new Icon(VaadinIcon.EDIT));
-        newSeminar.addClickListener(event -> newSeminar.getUI().ifPresent(ui -> ui.navigate("seminar/new")));
-
-        leftLayout.add(seminarFilterLayout, newSeminar, seminarListLayout, details);
+        leftLayout.add(seminarFilterLayout, seminarListLayout, details);
         this.add(welcomeLayout,contentLayout);
     }
 
@@ -114,7 +106,8 @@ public class SeminarView extends VerticalLayout {
                 try {
                     seminarGrid.setItems(seminarPresenter.getFilteredSeminarDtos(seminarFilter));
                 } catch(Exception ex){
-                    this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
+                    this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. " +
+                            "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
                 }
             } else {
                 BinderValidationStatus<SeminarFilter> validate = binder.validate();
@@ -134,12 +127,13 @@ public class SeminarView extends VerticalLayout {
             binder.readBean(null);
             seminarFilter.reset();
             try {
-                seminarGrid.setItems(seminarPresenter.getFilteredSeminarDtos(seminarFilter));
-            }catch(Exception ex){
-                this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
+                setViewContent(seminarPresenter.getFilteredSeminarDtos(seminarFilter));
+            } catch (Exception e) {
+                this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. " +
+                        "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
             }
         });
-        filterFormLayout.add(searchTf, fromDateDp, toDateDp, categoriesCb, ortTf, errorLabel, filterBtn, resetFilterBtn);
+        filterFormLayout.add(searchTf, fromDateDp, toDateDp, categoriesCb, ortTf, errorLabel, resetFilterBtn, filterBtn);
         filterFormLayout.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("0", 1),
                 new FormLayout.ResponsiveStep("21em", 2));
@@ -152,13 +146,17 @@ public class SeminarView extends VerticalLayout {
      * Author: oppls7
      * */
     private void generateListLayout() {
+        Button newSeminar = new Button("Neues Seminar", new Icon(VaadinIcon.EDIT));
+        newSeminar.addClickListener(event -> newSeminar.getUI().ifPresent(ui -> ui.navigate("seminar/new")));
+
         DateTimeFormatter dateFormatter = DateTimeFormatter
                 .ofPattern("dd.MM.yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter
                 .ofPattern("kk:mm");
         seminarGrid.addColumn(TemplateRenderer.<SeminarDTO>of(
                 "<div style='padding:10px'><div style='font-weight:bold'>[[item.title]]<br></div>" +
-                        "<div>[[item.date]] [[item.time]]<div style='float:right'>[[item.location]]</div></div></div>")
+                        "<div>[[item.date]] [[item.time]]<div style='float:right'>[[item.location]]" +
+                        "</div></div></div>")
                 .withProperty("title", SeminarDTO::getTitle)
                 .withProperty("date",
                         SeminarDTO -> dateFormatter.format(SeminarDTO.getDate()))
@@ -169,7 +167,17 @@ public class SeminarView extends VerticalLayout {
         seminarGrid.addColumn(new ComponentRenderer<>(
                 () -> new Icon(VaadinIcon.INFO_CIRCLE))).setWidth("10px");
         seminarGrid.asSingleSelect().addValueChangeListener(event -> showDetails(event.getValue()));
-        seminarListLayout.add(seminarGrid);
+        seminarGrid.setHeightByRows(true);
+        seminarListLayout.add(newSeminar, seminarGrid);
+    }
+
+    private void setViewContent(List<SeminarDTO> seminaries){
+        try {
+            seminarGrid.setItems(seminaries);
+        }catch(Exception e){
+            this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. " +
+                    "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
+        }
     }
 
     /*
@@ -190,7 +198,8 @@ public class SeminarView extends VerticalLayout {
      * */
     private void generateDialog(SeminarDTO seminar) {
         H3 title = new H3(seminar.getTitle());
-        Span locationAndPlz = new Span("Veranstaltungsort: " + seminar.getStreet() + " " + seminar.getHouseNumber() + ", " + seminar.getPlz() + " " + seminar.getLocation());
+        Span locationAndPlz = new Span("Veranstaltungsort: " + seminar.getStreet() + " " + seminar.getHouseNumber() + ", "
+                + seminar.getPlz() + " " + seminar.getLocation());
         locationAndPlz.getStyle().set("display", "block");
         Span category = new Span("Kategorie: " + seminar.getCategory());
         category.getStyle().set("display", "block");
