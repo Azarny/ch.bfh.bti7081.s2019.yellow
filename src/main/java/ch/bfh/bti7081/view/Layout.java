@@ -3,6 +3,7 @@ package ch.bfh.bti7081.view;
 import ch.bfh.bti7081.model.User;
 import ch.bfh.bti7081.model.manager.UserManager;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
@@ -22,6 +23,7 @@ import com.vaadin.flow.router.RouterLink;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@StyleSheet("styles/style.css")
 public class Layout extends VerticalLayout implements RouterLayout {
     private FormLayout formLayout = new FormLayout();
     private Dialog loginForm = new Dialog();
@@ -31,13 +33,14 @@ public class Layout extends VerticalLayout implements RouterLayout {
 
     public Layout() {
         loginDialogBtn.addClickListener(Event -> showLogin());
-        loginDialogBtn.getStyle().set("position", "absolute").set("right", "30px");
+        loginDialogBtn.getClassNames().add("login");
         HorizontalLayout menuBar = new HorizontalLayout(
                 new RouterLink("Startseite", MainView.class),
                 new RouterLink("Seminare", SeminarView.class),
                 new RouterLink("FaQ", FaqView.class),
                 new RouterLink("Forum", ForumView.class)
         );
+        menuBar.getClassNames().add("mainnav");
         menuBar.add(loginDialogBtn);
         generateLoginLayout();
         this.add(menuBar, loginForm);
