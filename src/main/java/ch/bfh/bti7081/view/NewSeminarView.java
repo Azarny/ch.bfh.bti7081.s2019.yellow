@@ -3,7 +3,6 @@ package ch.bfh.bti7081.view;
 import ch.bfh.bti7081.model.dto.SeminarDTO;
 import ch.bfh.bti7081.presenter.NewSeminarPresenter;
 import ch.bfh.bti7081.view.customComponents.ErrorNotification;
-import com.google.maps.errors.ApiException;
 import com.google.maps.errors.NotFoundException;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -28,7 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -157,14 +155,13 @@ public class NewSeminarView extends VerticalLayout {
     private void setFormActions() {
         save.addClickListener(event -> {
             if (binder.writeBeanIfValid(newSeminar)) {
-                //If the seminar could be saved without any errors.
-                if(presenter.sendSeminarToBackend(newSeminar)){
+                try {
+                    presenter.sendSeminarToBackend(newSeminar);
                     save.getUI().ifPresent(ui -> ui.navigate("seminar"));
-                } catch (IllegalArgumentException e){
-                    this.add(new ErrorNotification(e.getMessage()));
-                }
-                catch (Exception e) {
-                    this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
+                } catch (IllegalArgumentException | NotFoundException e) {
+                    displayErrorMessage(e.getMessage());
+                } catch (Exception e) {
+                    displayErrorMessage("Es ist ein technischer Fehler aufgetreten. Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support.");
                 }
             } else {
                 BinderValidationStatus<SeminarDTO> validate = binder.validate();
@@ -180,12 +177,12 @@ public class NewSeminarView extends VerticalLayout {
         cancel.addClickListener(event -> cancel.getUI().ifPresent(ui -> ui.navigate("seminar")));
     }
 
-    public void fillCategoryField() {
+    private void fillCategoryField() {
         List<String> seminarCategories = presenter.getSeminarCategories();
         seminarCategory.setItems(seminarCategories);
     }
 
-    public void displayErrorMessage(String message){
+    private void displayErrorMessage(String message) {
         this.add(new ErrorNotification(message));
     }
 }

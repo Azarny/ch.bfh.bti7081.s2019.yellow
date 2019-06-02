@@ -44,33 +44,10 @@ public class NewSeminarPresenter {
         return categories;
     }
 
-    /**
-     * Manages the transformation from DTO to Seminar-Object and ensures saving.
-     * Author: walty1
-     * @param frontendObject
-     * @return true (object could be saved) false (object was not saved)
-     */
-    public boolean sendSeminarToBackend(SeminarDTO frontendObject){
-        try {
-            frontendObject = enrichWithCoordinates(frontendObject);
-            try {
-                Seminar seminarToBeSaved = convertDTOtoModel(frontendObject);
-                seminarManager.createSeminar(seminarToBeSaved);
-                return true;
-            } catch (Exception e) {
-                view.displayErrorMessage("Es ist ein technischer Fehler aufgetreten. " +
-                        "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support.");
-                return false;
-            }
-        } catch (ApiException e) {
-            view.displayErrorMessage("Die von Ihnen eingegebene Adresse konnte " +
-                    "nicht gefunden werden. Bitte prüfen Sie, ob die Eingaben korrekt sind.");
-            return false;
-        } catch (InterruptedException | IOException e) {
-            view.displayErrorMessage("Es ist ein technischer Fehler aufgetreten. " +
-                    "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support.");
-            return false;
-        }
+    public void sendSeminarToBackend(SeminarDTO frontendObject) throws Exception {
+        enrichWithCoordinates(frontendObject);
+        Seminar seminarToBeSaved = convertDTOtoModel(frontendObject);
+        seminarManager.createSeminar(seminarToBeSaved);
     }
 
     /**
@@ -104,12 +81,11 @@ public class NewSeminarPresenter {
      * Enriches a SeminarDTO with coordinates corresponding to the address.
      * Author: walty1
      * @param seminar
-     * @return Filled out values location_lat and location_lng
      * @throws ApiException
      * @throws InterruptedException
      * @throws IOException
      */
-    private SeminarDTO enrichWithCoordinates(SeminarDTO seminar)
+    private void enrichWithCoordinates(SeminarDTO seminar)
             throws ApiException, InterruptedException, IOException {
         GeoApiContext context = new GeoApiContext.Builder()
                 .apiKey(googleApiKey)
@@ -124,9 +100,9 @@ public class NewSeminarPresenter {
         if (results.length > 0) {
             seminar.setLocation_lat(results[0].geometry.location.lat);
             seminar.setLocation_lng(results[0].geometry.location.lng);
-            return seminar;
         } else {
-            throw new NotFoundException("No coordinates were available for this place.");
+            throw new NotFoundException("Die angegebene Adresse konnte nicht gefunden werden. " +
+                    "Bitte prüfen Sie ihre Eingaben.");
         }
     }
 
