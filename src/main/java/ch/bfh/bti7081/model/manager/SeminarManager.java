@@ -85,9 +85,14 @@ public class SeminarManager {
 
     }
 
-
-    public void createSeminar(Seminar seminar) {
-        seminarRepository.save(seminar);
+    public void createSeminar(Seminar seminar) throws IllegalArgumentException {
+        String validationResult = validateSeminar(seminar);
+        if ("".equals(validationResult)){
+            seminarRepository.save(seminar);
+        }
+        else{
+            throw new IllegalArgumentException("Following errors occured: "+ validationResult);
+        }
     }
 
     /*
