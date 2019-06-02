@@ -61,25 +61,21 @@ public class Layout extends VerticalLayout implements RouterLayout {
         );
         menuBar.add(links);
 
-        // dirty hack to align links and login/out on the borders
-        menuBar.setWidth("100%");
-        filler.setSizeFull();
-        menuBar.add(filler);
-
         // check if user is logged in
         UserDTO user = (UserDTO) VaadinSession.getCurrent().getAttribute("user");
         if (user == null) {
             // user not logged in
             loginDialogBtn.addClickListener(Event -> showLogin());
+            loginLayout.getClassNames().add("login");
             menuBar.add(loginLayout);
         } else {
             loggedInUser.setText(user.getUsername());
             logoutBtn.addClickListener(Event -> logout());
+            loggedInLayout.getClassNames().add("login");
             menuBar.add(loggedInLayout);
         }
 
         menuBar.getClassNames().add("mainnav");
-        menuBar.add(loginDialogBtn);
         generateLoginLayout();
         this.add(menuBar, loginForm);
     }
