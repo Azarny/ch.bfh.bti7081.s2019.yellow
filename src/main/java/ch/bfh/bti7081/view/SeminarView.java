@@ -12,6 +12,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
@@ -205,7 +206,9 @@ public class SeminarView extends VerticalLayout {
     Span category = new Span("Kategorie: " + seminar.getCategory());
     Span date = new Span("Datum: "+formatDate);
     Span time = new Span("Uhrzeit: "+formatTime);
-    Span link = new Span("Zum Veranstalter: " + seminar.getUrl());
+    Anchor link = new Anchor(seminar.getUrl(), "Weitere Informationen (Externer Link)");
+    // opens in a new tab
+      link.setTarget("_blank");
     Span description = new Span("Beschreibung: " + seminar.getDescription());
 
     locationAndPlz.getStyle().set("display", "block");
