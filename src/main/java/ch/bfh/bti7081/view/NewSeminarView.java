@@ -184,7 +184,10 @@ public class NewSeminarView extends VerticalLayout {
                 try {
                     presenter.sendSeminarToBackend(newSeminar, sessionUser);
                     save.getUI().ifPresent(ui -> ui.navigate("seminar"));
-                } catch (Exception e) {
+                } catch (IllegalArgumentException e){
+                    this.add(new ErrorNotification(e.getMessage()));
+                }
+                catch (Exception e) {
                     this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
                 }
             } else {
@@ -198,12 +201,10 @@ public class NewSeminarView extends VerticalLayout {
             }
         });
 
-        cancel.addClickListener(event -> {
-            cancel.getUI().ifPresent(ui -> ui.navigate("seminar"));
-        });
+        cancel.addClickListener(event -> cancel.getUI().ifPresent(ui -> ui.navigate("seminar")));
     }
 
-    public void fillCategoryField() {
+    private void fillCategoryField() {
         List<String> seminarCategories = presenter.getSeminarCategories();
         seminarCategory.setItems(seminarCategories);
     }

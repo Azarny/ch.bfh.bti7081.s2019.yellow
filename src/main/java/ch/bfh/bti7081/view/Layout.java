@@ -4,6 +4,7 @@ import ch.bfh.bti7081.model.dto.UserDTO;
 import ch.bfh.bti7081.presenter.UserPresenter;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H2;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 /**
  * Author: heuzl1
  */
+@StyleSheet("styles/style.css")
 public class Layout extends VerticalLayout implements RouterLayout {
     private HorizontalLayout menuBar = new HorizontalLayout();
     private Label filler = new Label("");
@@ -76,6 +78,8 @@ public class Layout extends VerticalLayout implements RouterLayout {
             menuBar.add(loggedInLayout);
         }
 
+        menuBar.getClassNames().add("mainnav");
+        menuBar.add(loginDialogBtn);
         generateLoginLayout();
         this.add(menuBar, loginForm);
     }
