@@ -74,6 +74,9 @@ public class NewSeminarView extends VerticalLayout {
     private Binder<SeminarDTO> binder = new Binder<>();
     private SeminarDTO newSeminar = new SeminarDTO();
 
+    private Label notPermitted = new Label("Sie verfügen nicht über die benötigten Berechtigungen");
+    private Label notLoggedIn = new Label("bitte loggen Sie sich ein");
+
     @PostConstruct
     public void init() {
         // check if user is logged in
@@ -90,11 +93,9 @@ public class NewSeminarView extends VerticalLayout {
                 mvpBinding();
                 fillCategoryField();
             } else {
-                Label notPermitted = new Label("Sie verfügen nicht über die benötigten Berechtigungen");
                 this.add(notPermitted);
             }
         } else {
-            Label notLoggedIn = new Label("bitte loggen Sie sich ein");
             this.add(notLoggedIn);
         }
     }
