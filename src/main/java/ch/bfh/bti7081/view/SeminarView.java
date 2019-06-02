@@ -1,7 +1,6 @@
 package ch.bfh.bti7081.view;
 
 import ch.bfh.bti7081.model.dto.UserDTO;
-import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.dto.SeminarDTO;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.model.seminar.SeminarFilter;
