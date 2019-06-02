@@ -10,7 +10,6 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -40,6 +39,9 @@ import java.util.stream.Collectors;
 @Component
 @Route(value = "seminar/new", layout = Layout.class)
 public class NewSeminarView extends VerticalLayout {
+    private static final String NOT_PERMITTED = "Sie verfügen nicht über die benötigten Berechtigungen.";
+    private static final String NOT_LOGGED_IN = "Bitte melden Sie sich an.";
+
     @Autowired
     private NewSeminarPresenter presenter;
     @Autowired
@@ -47,35 +49,24 @@ public class NewSeminarView extends VerticalLayout {
 
     private H1 title = new H1("Seminar erstellen");
     private FormLayout seminarForm = new FormLayout();
-
     private TextField seminarTitle = new TextField("Seminar-Titel");
     private Select<String> seminarCategory = new Select<>();
-
     private TimePicker seminarTime = new TimePicker("Zeit");
     private DatePicker seminarDate = new DatePicker("Datum");
     private FormLayout dateComposite = new FormLayout(seminarDate, seminarTime);
-
     private TextArea seminarDescription = new TextArea("Beschreibung");
     private TextField seminarUrl = new TextField("Externer Link");
-
     private TextField seminarStreet = new TextField("Strasse");
     private TextField seminarStreetNbr = new TextField("Nr.");
     private FormLayout streetComposite = new FormLayout(seminarStreet, seminarStreetNbr);
-
     private NumberField seminarPlz = new NumberField("PLZ");
     private TextField seminarPlace = new TextField("Ort");
     private FormLayout placeComposite = new FormLayout(seminarPlz, seminarPlace);
-
     private Button save = new Button("Save", new Icon(VaadinIcon.PLUS));
     private Button cancel = new Button("Cancel", new Icon(VaadinIcon.EXIT));
-
     private HorizontalLayout formActions = new HorizontalLayout(save, cancel);
-
     private Binder<SeminarDTO> binder = new Binder<>();
     private SeminarDTO newSeminar = new SeminarDTO();
-
-    private Label notPermitted = new Label("Sie verfügen nicht über die benötigten Berechtigungen");
-    private Label notLoggedIn = new Label("bitte loggen Sie sich ein");
 
     @PostConstruct
     public void init() {
@@ -93,11 +84,22 @@ public class NewSeminarView extends VerticalLayout {
                 mvpBinding();
                 fillCategoryField();
             } else {
-                this.add(notPermitted);
+                addErrorNotificationWithRedirect(NOT_PERMITTED);
             }
         } else {
-            this.add(notLoggedIn);
+            addErrorNotificationWithRedirect(NOT_LOGGED_IN);
         }
+    }
+
+    /**
+     * Shows error notification and redirects the user to the homepage.
+     *
+     * @param text Text to be displayed to the user
+     */
+    private void addErrorNotificationWithRedirect(String text) {
+        ErrorNotification errorNotification = new ErrorNotification(text);
+        errorNotification.addDetachListener(event -> errorNotification.getUI().ifPresent(ui -> ui.navigate("")));
+        this.add(errorNotification);
     }
 
     private void mvpBinding() {
@@ -179,10 +181,9 @@ public class NewSeminarView extends VerticalLayout {
                 try {
                     presenter.sendSeminarToBackend(newSeminar);
                     save.getUI().ifPresent(ui -> ui.navigate("seminar"));
-                } catch (IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     this.add(new ErrorNotification(e.getMessage()));
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
                 }
             } else {
