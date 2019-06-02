@@ -2,6 +2,7 @@ package ch.bfh.bti7081.view;
 
 import ch.bfh.bti7081.model.dto.UserDTO;
 import ch.bfh.bti7081.presenter.UserPresenter;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -19,39 +20,84 @@ import com.vaadin.flow.data.validator.StringLengthValidator;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Author: heuzl1
+ */
 @StyleSheet("styles/style.css")
 public class Layout extends VerticalLayout implements RouterLayout {
+    @Autowired
+    private UserPresenter presenter;
+
+    private HorizontalLayout menuBar = new HorizontalLayout();
+    private Label filler = new Label("");
+
+    // elements for login
+    private Button loginDialogBtn = new Button("Login");
+    private HorizontalLayout loginLayout = new HorizontalLayout(loginDialogBtn);
+
+    // elements for logged in user
+    private Label loggedInUser = new Label();
+    private Button logoutBtn = new Button("Logout");
+    private HorizontalLayout loggedInLayout = new HorizontalLayout(loggedInUser, logoutBtn);
+
+    // LoginForm
     private FormLayout formLayout = new FormLayout();
     private Dialog loginForm = new Dialog();
     private TextField userName = new TextField();
     private PasswordField userPw = new PasswordField();
-    private Button loginDialogBtn = new Button("Login");
-
-    @Autowired
-    private UserPresenter presenter;
 
     public Layout() {
-        loginDialogBtn.addClickListener(Event -> showLogin());
-        loginDialogBtn.getClassNames().add("login");
-        HorizontalLayout menuBar = new HorizontalLayout(
+        HorizontalLayout links = new HorizontalLayout(
                 new RouterLink("Startseite", MainView.class),
                 new RouterLink("Seminare", SeminarView.class),
                 new RouterLink("FaQ", FaqView.class),
                 new RouterLink("Forum", ForumView.class)
         );
+        menuBar.add(links);
+
+        // check if user is logged in
+
+        String userName = (String) VaadinSession.getCurrent().getAttribute("userName");
+        if ((userName == null) || ("".equals(userName))) {
+            // user not logged in
+            loginDialogBtn.addClickListener(Event -> showLogin());
+            loginLayout.getClassNames().add("login");
+            menuBar.add(loginLayout);
+        } else {
+            loggedInUser.setText(userName);
+            logoutBtn.addClickListener(Event -> logout());
+            loggedInLayout.getClassNames().add("login");
+            menuBar.add(loggedInLayout);
+        }
+
         menuBar.getClassNames().add("mainnav");
-        menuBar.add(loginDialogBtn);
         generateLoginLayout();
         this.add(menuBar, loginForm);
     }
 
     private void showLogin() {
         loginForm.open();
+    }
+
+    /**
+     * Author: heuzl1
+     */
+    private void logout() {
+        VaadinSession.getCurrent().setAttribute("userName", null);
+        refreshSite();
+    }
+
+    /**
+     * Author: heuzl1
+     */
+    private void refreshSite() {
+        UI.getCurrent().getPage().reload();
     }
 
     /*
@@ -86,7 +132,7 @@ public class Layout extends VerticalLayout implements RouterLayout {
         Button loginBtn = new Button("Login");
 
         loginForm.add(status);
-        //TODO Session Handling + besseres Feedback bei ButtonClick
+        //TODO besseres Feedback bei ButtonClick
         loginBtn.addClickListener(Event -> {
             status.setText("");
             if (binder.writeBeanIfValid(userToLogin)) {
@@ -95,8 +141,10 @@ public class Layout extends VerticalLayout implements RouterLayout {
                     return;
                 } else if (checkLogin(userToLogin)) {
                     loginForm.removeAll();
+                    VaadinSession.getCurrent().setAttribute("userName", userToLogin.getUsername());
                     loginForm.add(new H2("Willkommen " + userToLogin.getUsername()));
                     loginDialogBtn.getStyle().set("display", "none");
+                    refreshSite();
                 } else {
                     status.setText("Falsches Passwort!");
                     return;

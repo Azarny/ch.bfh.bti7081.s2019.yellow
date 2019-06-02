@@ -12,6 +12,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Author: heuzl1
+ */
 @Component
 public class MainViewPresenter {
     @Autowired
@@ -22,8 +25,8 @@ public class MainViewPresenter {
 
     /**
      * creates a List with the next few seminaries to display on the homepage
-     *
      * @return List containing details of next seminaries
+     *  Author: heuzl1
      */
     public List<String> getNextSeminaries() {
         List<String> nextSeminars = new ArrayList<>();
