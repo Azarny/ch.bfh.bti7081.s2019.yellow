@@ -1,12 +1,17 @@
 package ch.bfh.bti7081.model.manager;
 
 import ch.bfh.bti7081.model.faq.FaqEntry;
+import ch.bfh.bti7081.model.repositories.FaqEntryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 public class FaqManager {
     // manages the communication between backend and frontend
     // the list of methods isn't completed yet, just some sample methods for the class diagramm
+
+    @Autowired
+    FaqEntryRepository faqEntryRepository;
 
     public List<FaqEntry> getAllFaqEntries() {
         throw new IllegalArgumentException("Not implemented yet.");
@@ -16,8 +21,8 @@ public class FaqManager {
         throw new IllegalArgumentException("Not implemented yet.");
     }
 
-    public FaqEntry createFaqEntry(FaqEntry entry) {
-        throw new IllegalArgumentException("Not implemented yet.");
+    public void createFaqEntry(FaqEntry entry) {
+        faqEntryRepository.save(entry);
     }
 
     public void deleteFaqEntry(Integer id) {

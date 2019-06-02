@@ -1,6 +1,8 @@
 package ch.bfh.bti7081.model.manager;
 
+import ch.bfh.bti7081.model.repositories.SeminarCategoryRepository;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
@@ -10,8 +12,11 @@ import java.util.Optional;
 @Controller
 public class SeminarCategoryManager {
 
+    @Autowired
+    SeminarCategoryRepository seminarCategoryRepository;
+
     public List<SeminarCategory> getSeminarCategories() {
-        return mockCategories();
+        return seminarCategoryRepository.findAll();
     }
 
     public SeminarCategory getSeminarByName(String name) throws NoSuchFieldException {
@@ -22,15 +27,5 @@ public class SeminarCategoryManager {
         } else {
             throw new NoSuchFieldException("Category does not exist.");
         }
-    }
-
-    private List<SeminarCategory> mockCategories() {
-        //These is mock data, nothing here is productive code.
-        List<SeminarCategory> mockSeminaryCategories = new ArrayList<>();
-        mockSeminaryCategories.add(new SeminarCategory("Betroffene helfen Betroffenen"));
-        mockSeminaryCategories.add(new SeminarCategory("Angehörige erzählen"));
-        mockSeminaryCategories.add(new SeminarCategory("Ärzte geben Auskunft"));
-        mockSeminaryCategories.add(new SeminarCategory("Allgemeines"));
-        return mockSeminaryCategories;
     }
 }

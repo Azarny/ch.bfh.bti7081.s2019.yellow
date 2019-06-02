@@ -9,9 +9,12 @@ import java.util.List;
 
 
 public class MockTest {
+
+    UserManager manager = new UserManager();
+
     @Test
     public void UserTester(){
-        Assert.assertEquals(4,(long)UserManager.getUserByUsername("Admin").getPermission());
+        Assert.assertEquals(4,(long)manager.getUserByUsername("Admin").getPermission());
     }
 
     @Test

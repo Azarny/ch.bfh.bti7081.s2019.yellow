@@ -1,49 +1,30 @@
-package ch.bfh.bti7081.model;
+package ch.bfh.bti7081.model.dto;
 
 import ch.bfh.bti7081.model.forum.ForumEntry;
 import ch.bfh.bti7081.model.forum.ForumEntryComment;
+import ch.bfh.bti7081.model.manager.UserManager;
+import ch.bfh.bti7081.presenter.UserPresenter;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
-@Entity
-@Table(name = "user")
-public class User {
-    private static final String PREFIX = "USER_";
+public class UserDTO {
 
-    @Id
-    @Column(name=PREFIX + "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Autowired
+    UserManager usermanager;
 
-    @Column(name = PREFIX + "USERNAME", length = 20)
+    @Autowired
+    UserPresenter userPresenter;
+
     private String username;
-
-    @Column(name = PREFIX + "EMAIL", length = 255)
     private String email;
-
-    @Column(name = PREFIX + "PASSWORD", length = 512)
     private String password;
-
-    @Column(name = PREFIX + "PERMISSION")
     private Integer permission;
-
-    @Column(name = PREFIX + "SALT", length = 512)
     private String salt;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "author")
     private List<ForumEntry> forumEntries;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "author")
     private List<ForumEntryComment> comments;
-
 
     public String getUsername() {
         return username;
@@ -65,7 +46,11 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setClearPassword(String password) throws Exception {
+        this.password = userPresenter.encryptPassword(getUsername(), password);
+    }
+
+    public void setEncryptedPassword(String password){
         this.password = password;
     }
 

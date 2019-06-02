@@ -32,7 +32,14 @@ INSERT into seminar(SEM_STREET, SEM_HOUSE_NUMBER, SEM_PLZ, SEM_LOCATION, SEM_TIT
               parsedatetime('2020-02-15 09:00:00.0', 'yyyy-MM-dd hh:mm:ss.SS'), 1,
               'https://de.wikipedia.org/wiki/Soziale_Phobie','Ein Treffen mit anderen Betroffenen. Hier können Sie sich ' ||
               'entspannt fühlen, niemand wird sie verurteilen, da wir dasselbe tagtäglich auch durchmachen.');
-INSERT into user(USER_USERNAME, USER_EMAIL, USER_PASSWORD, USER_PERMISSION) values
-                ('Lara', 'nomail@nomailhausen.com', '12345', 1);
-                INSERT into user(USER_USERNAME, USER_EMAIL, USER_PASSWORD, USER_PERMISSION) values
-                ('Admin', 'nomail@nomailhausen.com', 'admin', 4);
+INSERT into user(USER_USERNAME, USER_EMAIL, USER_PASSWORD, USER_PERMISSION, USER_SALT) values
+                ('Lara', 'nomail@nomailhausen.com',
+                'vWi0Hhwi/HFt1VhL5QEwq8LdtrJHTrxjNMMI7wj6zFJ1goLXg4NtWCx+qyzA08A7hQZjojt/BBWGSsOwpSLF9g==', 1,
+                'glTVyIEVBEsYS1GGG6RiSwEA/h4ggak+2yHE4vE6aXQm3sWCXDmK+YtOkIFyM3ipVpG0LXOPfm8i8oUrgE4oy3GhTlyyole4IBZ0L6xWoj1lC59Mj3aoTkTkWS1eMhlazQQupAJDUlPFHUvBY6wcJ+NtKPxiRUkRhhiWWHionbg=');
+                INSERT into user(USER_USERNAME, USER_EMAIL, USER_PASSWORD, USER_PERMISSION, USER_SALT) values
+                ('Admin', 'nomail@nomailhausen.com',
+                'fqPu3cGAabyRvlYJN6dyexh9UDBpcq2ZsdlfEIj1ZHdQF5M22dPgHM4W7PSbq53xnHKlPT45rnGhDmtCt808Og==', 4,
+                'RB+unl1d05yQm+wHQYRBdTrJN9Pg+jl4JNyfssVXwbCeVGEFtmE8jaEb5D1UftKwcLBl6MWGGhMTrjbqtKEBSkJRqMxQJxH+2UDQ/61pB6QlNnyr3/+IYAchTXc1vAfukfU3i/ejPxaRLr3YeIMMXXb/0MstowLhbxxldbg2tMo=');
+
+                --Password Lara: 12345
+                --Password Admin: admin
