@@ -242,12 +242,12 @@ public class SeminarView extends VerticalLayout {
         link.getStyle().set("display", "block");
         description.getStyle().set("display", "block");
 
-    details.add(title, date,time, category, locationAndPlz, link, description);
-    details.setWidth("500px");
-    details.setHeight("auto");
-  }
+        details.add(title, date,time, category, locationAndPlz, link, description);
+        details.setWidth("500px");
+        details.setHeight("auto");
+    }
 
-    private GoogleMap generateMap(List<Seminar> seminaries){
+    private GoogleMap generateMap(List<SeminarDTO> seminaries){
         GoogleMap seminarMap = new GoogleMap(googleApiKey);
         //Karte auf Mittelpunkt der Schweiz setzen
         seminarMap.setLatitude(46.798);
@@ -255,7 +255,7 @@ public class SeminarView extends VerticalLayout {
         seminarMap.setZoomLevel(8);
 
         double i = 0;
-        for (Seminar seminar:seminaries) {
+        for (SeminarDTO seminar:seminaries) {
             GoogleMapMarker seminarMarker = new GoogleMapMarker(47+i, 7.5+i);
             i=i+1;
             seminarMarker.setTitle(seminar.getTitle());
