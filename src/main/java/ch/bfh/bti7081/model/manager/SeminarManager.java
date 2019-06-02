@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +24,11 @@ public class SeminarManager {
         return seminarRepository.findAll();
     }
 
+    /*
+     * Returns filtered seminaries from db
+     *
+     * Author: luscm1
+     * */
     public List<Seminar> getFilteredSeminars(SeminarFilter filter) {
         return getSeminaries().stream()
                 //filter category
@@ -91,6 +95,11 @@ public class SeminarManager {
         }
     }
 
+    /*
+     * validates if the seminar fulfills all the requirements
+     *
+     * Author: luscm1
+     * */
     public String validateSeminar(Seminar seminar) {
         String returnString = "";
 
@@ -152,8 +161,9 @@ public class SeminarManager {
         return LocalDateTime.parse(timeToParse, formatter);
     }
 
-    public void deleteSeminar(Integer id) {
-        throw new IllegalArgumentException("Not implemented yet.");
+
+    public void deleteSeminar(Seminar seminar) {
+        seminarRepository.delete(seminar);
     }
 
 
