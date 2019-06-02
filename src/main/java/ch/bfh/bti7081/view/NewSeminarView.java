@@ -1,7 +1,9 @@
 package ch.bfh.bti7081.view;
 
 import ch.bfh.bti7081.model.dto.SeminarDTO;
+import ch.bfh.bti7081.model.dto.UserDTO;
 import ch.bfh.bti7081.presenter.NewSeminarPresenter;
+import ch.bfh.bti7081.presenter.UserPresenter;
 import ch.bfh.bti7081.view.customComponents.ErrorNotification;
 import com.google.maps.errors.NotFoundException;
 import com.vaadin.flow.component.button.Button;
@@ -22,6 +24,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.UIScope;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,8 +40,13 @@ import java.util.stream.Collectors;
 @Component
 @Route(value = "seminar/new", layout = Layout.class)
 public class NewSeminarView extends VerticalLayout {
+    private static final String NOT_PERMITTED = "Sie verfügen nicht über die benötigten Berechtigungen.";
+    private static final String NOT_LOGGED_IN = "Bitte melden Sie sich an.";
+
     @Autowired
     private NewSeminarPresenter presenter;
+    @Autowired
+    private UserPresenter userPresenter;
 
     private H1 title = new H1("Seminar erstellen");
     private FormLayout seminarForm = new FormLayout();
@@ -71,12 +79,36 @@ public class NewSeminarView extends VerticalLayout {
 
     @PostConstruct
     public void init() {
-        addElementsToForm();
-        setFieldSettings();
-        addBindingToForm();
-        buildPage();
-        mvpBinding();
-        fillCategoryField();
+        // check if user is logged in
+        String userName = (String) VaadinSession.getCurrent().getAttribute("userName");
+        if (!((userName == null) || ("".equals(userName)))) {
+            UserDTO user = userPresenter.getUserByUsername(userName);
+
+            // check if user is expert or moderator
+            if (user.getPermission() >= 2) {
+                addElementsToForm();
+                setFieldSettings();
+                addBindingToForm();
+                buildPage();
+                mvpBinding();
+                fillCategoryField();
+            } else {
+                addErrorNotificationWithRedirect(NOT_PERMITTED);
+            }
+        } else {
+            addErrorNotificationWithRedirect(NOT_LOGGED_IN);
+        }
+    }
+
+    /**
+     * Shows error notification and redirects the user to the homepage.
+     *
+     * @param text Text to be displayed to the user
+     */
+    private void addErrorNotificationWithRedirect(String text) {
+        ErrorNotification errorNotification = new ErrorNotification(text);
+        errorNotification.addDetachListener(event -> errorNotification.getUI().ifPresent(ui -> ui.navigate("")));
+        this.add(errorNotification);
     }
 
     private void mvpBinding() {

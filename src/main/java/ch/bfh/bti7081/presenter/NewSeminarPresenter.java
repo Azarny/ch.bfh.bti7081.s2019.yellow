@@ -3,6 +3,7 @@ package ch.bfh.bti7081.presenter;
 
 import ch.bfh.bti7081.model.ValidationConstants;
 import ch.bfh.bti7081.model.dto.SeminarDTO;
+import ch.bfh.bti7081.model.dto.UserDTO;
 import ch.bfh.bti7081.model.manager.SeminarCategoryManager;
 import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
@@ -13,6 +14,7 @@ import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
 import com.google.maps.errors.NotFoundException;
 import com.google.maps.model.GeocodingResult;
+import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -31,6 +33,8 @@ public class NewSeminarPresenter {
     private SeminarCategoryManager seminarCategoryManager;
     @Value("${healthApp.googleApiKey:NOKEYFOUND}")
     private String googleApiKey;
+    @Autowired
+    private UserPresenter userPresenter;
 
     /**
      * Is accessed by view to get the categories for a seminar.
@@ -45,9 +49,24 @@ public class NewSeminarPresenter {
     }
 
     public void sendSeminarToBackend(SeminarDTO frontendObject) throws Exception {
-        enrichWithCoordinates(frontendObject);
-        Seminar seminarToBeSaved = convertDTOtoModel(frontendObject);
-        seminarManager.createSeminar(seminarToBeSaved);
+        String userName = (String) VaadinSession.getCurrent().getAttribute("userName");
+        if (userName != null || !userName.isEmpty()) {
+            UserDTO user = userPresenter.getUserByUsername(userName);
+            if (user != null) {
+                // check if user is expert or moderator
+                if (user.getPermission() >= 2) {
+                    enrichWithCoordinates(frontendObject);
+                    Seminar seminarToBeSaved = convertDTOtoModel(frontendObject);
+                    seminarManager.createSeminar(seminarToBeSaved);
+                } else {
+                    throw new IllegalAccessError("the user isn't privileged to create a seminar");
+                }
+            } else {
+                throw new IllegalArgumentException("no user with this username was found");
+            }
+        } else {
+            throw new IllegalArgumentException("no user is logged in");
+        }
     }
 
     /**

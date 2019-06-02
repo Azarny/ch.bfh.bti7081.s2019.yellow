@@ -32,6 +32,12 @@ public class User {
     @Column(name = PREFIX + "PASSWORD", length = 512)
     private String password;
 
+    /*
+    permission levels and roles:
+    1 user (logged in)
+    2 expert
+    3 moderator
+     */
     @Column(name = PREFIX + "PERMISSION")
     private Integer permission;
 
