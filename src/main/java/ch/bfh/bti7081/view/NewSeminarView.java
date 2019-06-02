@@ -174,12 +174,10 @@ public class NewSeminarView extends VerticalLayout {
             }
         });
 
-        cancel.addClickListener(event -> {
-            cancel.getUI().ifPresent(ui -> ui.navigate("seminar"));
-        });
+        cancel.addClickListener(event -> cancel.getUI().ifPresent(ui -> ui.navigate("seminar")));
     }
 
-    public void fillCategoryField() {
+    private void fillCategoryField() {
         List<String> seminarCategories = presenter.getSeminarCategories();
         seminarCategory.setItems(seminarCategories);
     }
