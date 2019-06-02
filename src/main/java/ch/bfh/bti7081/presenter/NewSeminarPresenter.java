@@ -36,13 +36,9 @@ public class NewSeminarPresenter {
 
     public void sendSeminarToBackend(SeminarDTO frontendObject) throws Exception {
         String userName = (String) VaadinSession.getCurrent().getAttribute("userName");
-        if ((userName == null) || ("".equals(userName))) {
-            throw new IllegalArgumentException("no user is logged in");
-        } else {
+        if (userName != null || !userName.isEmpty()) {
             UserDTO user = userPresenter.getUserByUsername(userName);
-            if (user == null) {
-                throw new IllegalArgumentException("no user with this username was found");
-            } else {
+            if (user != null) {
                 // check if user is expert or moderator
                 if (user.getPermission() >= 2) {
                     Seminar seminarToBeSaved = convertDTOtoModel(frontendObject);
@@ -50,7 +46,11 @@ public class NewSeminarPresenter {
                 } else {
                     throw new IllegalAccessError("the user isn't privileged to create a seminar");
                 }
+            } else {
+                throw new IllegalArgumentException("no user with this username was found");
             }
+        } else {
+            throw new IllegalArgumentException("no user is logged in");
         }
     }
 
