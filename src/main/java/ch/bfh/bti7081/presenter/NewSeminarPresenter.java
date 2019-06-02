@@ -9,9 +9,6 @@ import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.view.NewSeminarView;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,23 +34,24 @@ public class NewSeminarPresenter {
         return categories;
     }
 
-    public void sendSeminarToBackend(SeminarDTO frontendObject, UserDTO userDTO) throws Exception {
-        // check if user is logged in
-        UserDTO sessionUser = (UserDTO) VaadinSession.getCurrent().getAttribute("user");
-        if (sessionUser != null) {
-            /* If the user saved in the session is used here, a NullPointerException due to timing problems
-             will be thrown (all properties except the username are null).
-             As a workaround, the user object will be loaded seperately
-             */
-            UserDTO user = userPresenter.getUserByUsername(sessionUser.getUsername());
-
-            // check if user is expert or moderator
-            if (user.getPermission() >= 2) {
-                Seminar seminarToBeSaved = convertDTOtoModel(frontendObject);
-                seminarManager.createSeminar(seminarToBeSaved);
+    public void sendSeminarToBackend(SeminarDTO frontendObject) throws Exception {
+        String userName = (String) VaadinSession.getCurrent().getAttribute("userName");
+        if ((userName == null) || ("".equals(userName))) {
+            throw new IllegalArgumentException("no user is logged in");
+        } else {
+            UserDTO user = userPresenter.getUserByUsername(userName);
+            if (user == null) {
+                throw new IllegalArgumentException("no user with this username was found");
+            } else {
+                // check if user is expert or moderator
+                if (user.getPermission() >= 2) {
+                    Seminar seminarToBeSaved = convertDTOtoModel(frontendObject);
+                    seminarManager.createSeminar(seminarToBeSaved);
+                } else {
+                    throw new IllegalAccessError("the user isn't privileged to create a seminar");
+                }
             }
         }
-
     }
 
     private Seminar convertDTOtoModel(SeminarDTO seminarDTO) throws Exception {

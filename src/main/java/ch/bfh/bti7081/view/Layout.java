@@ -31,6 +31,9 @@ import java.util.stream.Collectors;
  */
 @StyleSheet("styles/style.css")
 public class Layout extends VerticalLayout implements RouterLayout {
+    @Autowired
+    private UserPresenter presenter;
+
     private HorizontalLayout menuBar = new HorizontalLayout();
     private Label filler = new Label("");
 
@@ -49,9 +52,6 @@ public class Layout extends VerticalLayout implements RouterLayout {
     private TextField userName = new TextField();
     private PasswordField userPw = new PasswordField();
 
-    @Autowired
-    private UserPresenter presenter;
-
     public Layout() {
         HorizontalLayout links = new HorizontalLayout(
                 new RouterLink("Startseite", MainView.class),
@@ -62,14 +62,15 @@ public class Layout extends VerticalLayout implements RouterLayout {
         menuBar.add(links);
 
         // check if user is logged in
-        UserDTO user = (UserDTO) VaadinSession.getCurrent().getAttribute("user");
-        if (user == null) {
+
+        String userName = (String) VaadinSession.getCurrent().getAttribute("userName");
+        if ((userName == null) || ("".equals(userName))) {
             // user not logged in
             loginDialogBtn.addClickListener(Event -> showLogin());
             loginLayout.getClassNames().add("login");
             menuBar.add(loginLayout);
         } else {
-            loggedInUser.setText(user.getUsername());
+            loggedInUser.setText(userName);
             logoutBtn.addClickListener(Event -> logout());
             loggedInLayout.getClassNames().add("login");
             menuBar.add(loggedInLayout);
@@ -88,7 +89,7 @@ public class Layout extends VerticalLayout implements RouterLayout {
      * Author: heuzl1
      */
     private void logout() {
-        VaadinSession.getCurrent().setAttribute("user", null);
+        VaadinSession.getCurrent().setAttribute("userName", null);
         refreshSite();
     }
 
@@ -140,7 +141,7 @@ public class Layout extends VerticalLayout implements RouterLayout {
                     return;
                 } else if (checkLogin(userToLogin)) {
                     loginForm.removeAll();
-                    VaadinSession.getCurrent().setAttribute("user", userToLogin);
+                    VaadinSession.getCurrent().setAttribute("userName", userToLogin.getUsername());
                     loginForm.add(new H2("Willkommen " + userToLogin.getUsername()));
                     loginDialogBtn.getStyle().set("display", "none");
                     refreshSite();

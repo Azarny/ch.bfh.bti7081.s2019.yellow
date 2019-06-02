@@ -77,13 +77,9 @@ public class NewSeminarView extends VerticalLayout {
     @PostConstruct
     public void init() {
         // check if user is logged in
-        UserDTO sessionUser = (UserDTO) VaadinSession.getCurrent().getAttribute("user");
-        if (sessionUser != null) {
-            /* If the user saved in the session is directly used here, a NullPointerException due to timing problems
-             will be thrown (all properties except the username are null).
-             As a workaround, the user object will be loaded seperately
-             */
-            UserDTO user = userPresenter.getUserByUsername(sessionUser.getUsername());
+        String userName = (String) VaadinSession.getCurrent().getAttribute("userName");
+        if (!((userName == null) || ("".equals(userName)))) {
+            UserDTO user = userPresenter.getUserByUsername(userName);
 
             // check if user is expert or moderator
             if (user.getPermission() >= 2) {
@@ -178,11 +174,9 @@ public class NewSeminarView extends VerticalLayout {
 
     private void setFormActions() {
         save.addClickListener(event -> {
-            UserDTO sessionUser = (UserDTO) VaadinSession.getCurrent().getAttribute("user");
-
             if (binder.writeBeanIfValid(newSeminar)) {
                 try {
-                    presenter.sendSeminarToBackend(newSeminar, sessionUser);
+                    presenter.sendSeminarToBackend(newSeminar);
                     save.getUI().ifPresent(ui -> ui.navigate("seminar"));
                 } catch (IllegalArgumentException e){
                     this.add(new ErrorNotification(e.getMessage()));
