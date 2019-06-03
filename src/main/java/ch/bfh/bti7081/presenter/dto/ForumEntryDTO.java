@@ -1,4 +1,4 @@
-package ch.bfh.bti7081.model.dto;
+package ch.bfh.bti7081.presenter.dto;
 
 import ch.bfh.bti7081.model.User;
 import ch.bfh.bti7081.model.forum.ForumCategory;

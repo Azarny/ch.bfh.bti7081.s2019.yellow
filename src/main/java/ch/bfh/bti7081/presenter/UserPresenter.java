@@ -1,13 +1,10 @@
 package ch.bfh.bti7081.presenter;
 
 import ch.bfh.bti7081.model.User;
-import ch.bfh.bti7081.model.dto.UserDTO;
+import ch.bfh.bti7081.presenter.dto.UserDTO;
 import ch.bfh.bti7081.model.manager.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 
 @Component
 public class UserPresenter {
