@@ -8,27 +8,27 @@ INSERT into seminar_category(S_CAT_NAME) values ( 'Betroffene helfen Betroffenen
 INSERT into seminar_category(S_CAT_NAME) values ( 'Angehörige erzählen' );
 INSERT into seminar_category(S_CAT_NAME) values ( 'Ärzte geben Auskunft' );
 INSERT into seminar_category(S_CAT_NAME) values ( 'Allgemeines' );
-INSERT into seminar(SEM_STREET, SEM_HOUSE_NUMBER, SEM_PLZ, SEM_LOCATION, SEM_TITLE, SEM_DATE, SEM_CATEGORY, SEM_URL,
-                    SEM_DESCRIPTION)
-      values ('Wankdorffeldstrasse','102',3014,'Bern', 'Wie unterstütze ich einen Angehörigen?',
+INSERT into seminar(SEM_STREET, SEM_HOUSE_NUMBER, SEM_PLZ, SEM_LOCATION, SEM_LOCATION_LAT,
+                    SEM_LOCATION_LNG, SEM_TITLE, SEM_DATE, SEM_CATEGORY, SEM_URL,SEM_DESCRIPTION)
+      values ('Wankdorffeldstrasse','102',3014,'Bern', 46.9648475, 7.455995199999961, 'Wie unterstütze ich einen Angehörigen?',
               parsedatetime('2019-11-07 13:30:00.0', 'yyyy-MM-dd hh:mm:ss.SS'), 3,
               'https://vaadin.com','Ärzte berichten von ihren Erlebnissen mit der Krankheit. Dr. Luis Alvador gibt Ihnen ' ||
               'einen Überblick über die medizinischen Informationen, eine Podiumsdiskussion mit Angehörigen findet statt.');
-INSERT into seminar(SEM_STREET, SEM_HOUSE_NUMBER, SEM_PLZ, SEM_LOCATION, SEM_TITLE, SEM_DATE, SEM_CATEGORY, SEM_URL,
-                    SEM_DESCRIPTION)
-      values ('Schanzenstrasse','5',3008,'Bern', 'Sozialphobie - Mit der Angst umgehen',
+INSERT into seminar(SEM_STREET, SEM_HOUSE_NUMBER, SEM_PLZ, SEM_LOCATION, SEM_LOCATION_LAT,
+                    SEM_LOCATION_LNG, SEM_TITLE, SEM_DATE, SEM_CATEGORY, SEM_URL,SEM_DESCRIPTION)
+      values ('Schanzenstrasse','5',3008,'Bern', 46.9479748, 7.436327200000051,  'Sozialphobie - Mit der Angst umgehen',
               parsedatetime('2019-08-07 10:30:00.0', 'yyyy-MM-dd hh:mm:ss.SS'), 1,
               'https://www.nzz.ch/','Betroffene erzählen von Ihren Problemen im Umgang mit der Krankheit und zeigen wie ' ||
                                     'Sie diese tagtäglich überwinden.');
-INSERT into seminar(SEM_STREET, SEM_HOUSE_NUMBER, SEM_PLZ, SEM_LOCATION, SEM_TITLE, SEM_DATE, SEM_CATEGORY, SEM_URL,
-                    SEM_DESCRIPTION)
-      values ('Bachweg','18b',3852,'Rothrist', 'Angehörigentreffen',
+INSERT into seminar(SEM_STREET, SEM_HOUSE_NUMBER, SEM_PLZ, SEM_LOCATION, SEM_LOCATION_LAT,
+                    SEM_LOCATION_LNG, SEM_TITLE, SEM_DATE, SEM_CATEGORY, SEM_URL,SEM_DESCRIPTION)
+      values ('Bachweg','18b',3852,'Rothrist', 47.305191, 7.889495000000011,  'Angehörigentreffen',
               parsedatetime('2019-09-09 20:00:00.0', 'yyyy-MM-dd hh:mm:ss.SS'), 2,
               'https://www.zeit.de/index','Wir haben zehn Angehörige von Personen mit Sozialphobie eingeladen, die ' ||
                'Ihnen von Ihren Erlebnissen erzählen. Treffen Sie uns zu einem Feierabendbier. Mehr unter dem Link.');
-INSERT into seminar(SEM_STREET, SEM_HOUSE_NUMBER, SEM_PLZ, SEM_LOCATION, SEM_TITLE, SEM_DATE, SEM_CATEGORY, SEM_URL,
-                    SEM_DESCRIPTION)
-      values ('Badenerstrasse','420',8040,'Zürich', 'Betroffenenhöck',
+INSERT into seminar(SEM_STREET, SEM_HOUSE_NUMBER, SEM_PLZ, SEM_LOCATION, SEM_LOCATION_LAT,
+                    SEM_LOCATION_LNG, SEM_TITLE, SEM_DATE, SEM_CATEGORY, SEM_URL,SEM_DESCRIPTION)
+      values ('Badenerstrasse','420',8040,'Zürich',47.3803332, 8.506266399999959,  'Betroffenenhöck',
               parsedatetime('2020-02-15 09:00:00.0', 'yyyy-MM-dd hh:mm:ss.SS'), 1,
               'https://de.wikipedia.org/wiki/Soziale_Phobie','Ein Treffen mit anderen Betroffenen. Hier können Sie sich ' ||
               'entspannt fühlen, niemand wird sie verurteilen, da wir dasselbe tagtäglich auch durchmachen.');

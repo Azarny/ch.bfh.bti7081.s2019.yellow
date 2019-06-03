@@ -31,6 +31,10 @@ import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
+import com.vaadin.flow.router.BeforeLeaveEvent;
+import com.vaadin.flow.router.BeforeLeaveObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,11 +49,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Route(value = "seminar", layout = Layout.class)
-public class SeminarView extends VerticalLayout {
+public class SeminarView extends VerticalLayout  {
     @Autowired
     private SeminarPresenter seminarPresenter;
     @Autowired
     private UserPresenter userPresenter;
+    @Value("${healthApp.googleApiKey:NOKEYFOUND}")
+    private String googleApiKey;
 
     private H1 title = new H1("Seminarfinder");
     private VerticalLayout welcomeLayout = new VerticalLayout(title);
@@ -73,12 +79,10 @@ public class SeminarView extends VerticalLayout {
     private Dialog details = new Dialog();
 
     private VerticalLayout leftLayout = new VerticalLayout();
-    //map-layout
-    private VerticalLayout rightLayout = new VerticalLayout();
-    private HorizontalLayout contentLayout = new HorizontalLayout(leftLayout, rightLayout);
 
-    @Value("${healthApp.googleApiKey:NOKEYFOUND}")
-    private String googleApiKey;
+    private GoogleMap seminarMap= new GoogleMap();
+    private VerticalLayout rightLayout = new VerticalLayout(seminarMap);
+    private HorizontalLayout contentLayout = new HorizontalLayout(leftLayout, rightLayout);
 
     @PostConstruct
     public void init() throws Exception {
@@ -101,11 +105,11 @@ public class SeminarView extends VerticalLayout {
                 leftLayout.add(newSeminar);
             }
         }
-
         // finish constructing leftLayout
         leftLayout.add(filterFormLayout, seminarGrid, details);
 
         this.add(welcomeLayout,contentLayout);
+
     }
 
     private void addBindingToForm(){
@@ -140,6 +144,12 @@ public class SeminarView extends VerticalLayout {
         seminarGrid.addColumn(new ComponentRenderer<>(() -> new Icon(VaadinIcon.INFO_CIRCLE))).setWidth("10px");
         seminarGrid.asSingleSelect().addValueChangeListener(event -> showDetails(event.getValue()));
         seminarGrid.setHeightByRows(true);
+
+        //Map-Settings
+        seminarMap.setApiKey(googleApiKey);
+        seminarMap.setLatitude(46.798);
+        seminarMap.setLongitude(8.231);
+        seminarMap.setZoomLevel(8);
     }
 
     private void setActions(){
@@ -177,7 +187,10 @@ public class SeminarView extends VerticalLayout {
         });
 
         // new seminar action
-        newSeminar.addClickListener(event -> newSeminar.getUI().ifPresent(ui -> ui.navigate("seminar/new")));
+        newSeminar.addClickListener(event -> {
+            newSeminar.getUI().ifPresent(ui -> ui.navigate("seminar/new"));
+        });
+
     }
 
     /*
@@ -192,9 +205,31 @@ public class SeminarView extends VerticalLayout {
                 Notification note = new Notification("Es wurden keine Seminare gefunden.",3000);
                 note.open();
             }
+            setSeminarMarkers(seminaries);
         }catch(Exception e){
             this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. " +
                     "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
+        }
+    }
+
+    /**
+     * For every seminary in the list, the seminarMap gets a marker.
+     * The map only will show the seminaries in the list.
+     * A click on a seminar marker opens the detail-box.
+     * Author: walty1
+     * @param seminaries (List of all active seminaries.)
+     */
+    private void setSeminarMarkers(List<SeminarDTO> seminaries){
+        seminarMap.resetMarkers();
+        for (SeminarDTO seminar:seminaries) {
+            GoogleMapMarker seminarMarker = new GoogleMapMarker(
+                    seminar.getLocation_lat(),
+                    seminar.getLocation_lng());
+
+            seminarMarker.setTitle(seminar.getTitle());
+            seminarMarker.setDraggable(false);
+            seminarMarker.addClickListener(event -> showDetails(seminar));
+            seminarMap.addMarker(seminarMarker);
         }
     }
 
@@ -247,23 +282,4 @@ public class SeminarView extends VerticalLayout {
         details.setHeight("auto");
     }
 
-    private GoogleMap generateMap(List<SeminarDTO> seminaries){
-        GoogleMap seminarMap = new GoogleMap(googleApiKey);
-        //Karte auf Mittelpunkt der Schweiz setzen
-        seminarMap.setLatitude(46.798);
-        seminarMap.setLongitude(8.231);
-        seminarMap.setZoomLevel(8);
-
-        double i = 0;
-        for (SeminarDTO seminar:seminaries) {
-            GoogleMapMarker seminarMarker = new GoogleMapMarker(47+i, 7.5+i);
-            i=i+1;
-            seminarMarker.setTitle(seminar.getTitle());
-            seminarMarker.setDraggable(false);
-            seminarMarker.addClickListener(event -> showDetails(seminar));
-            seminarMap.addMarker(seminarMarker);
-        }
-
-        return seminarMap;
-    }
 }

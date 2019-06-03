@@ -1,5 +1,6 @@
 package ch.bfh.bti7081.view.customComponents;
 
+import ch.bfh.bti7081.model.dto.SeminarDTO;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Synchronize;

@@ -14,20 +14,28 @@ import com.vaadin.flow.component.dependency.HtmlImport;
 @HtmlImport("bower_components/google-map/google-map.html")
 public class GoogleMap extends Component {
 
-    public GoogleMap(String apiKey) {
+    public GoogleMap() {
         //Fits the zoom level so that all markers are present
-        getElement().setProperty("fitToMarkers", true);
+        getElement().setProperty("fitToMarkers", false);
         getElement().getStyle().set("height", "100%");
         getElement().getStyle().set("width", "100%");
-        getElement().setProperty("apiKey", apiKey);
     }
 
+    public void setApiKey(String apiKey){
+        getElement().setProperty("apiKey", apiKey);
+    }
     public void setZoomLevel(int level){
         getElement().setProperty("zoom", level);
     }
 
     public void addMarker(GoogleMapMarker marker) {
         getElement().appendChild(marker.getElement());
+    }
+
+    public void resetMarkers(){
+        if(getElement().getChildren().count()>0){
+            getElement().removeAllChildren();
+        }
     }
 
     public void setLatitude(double lat) {
