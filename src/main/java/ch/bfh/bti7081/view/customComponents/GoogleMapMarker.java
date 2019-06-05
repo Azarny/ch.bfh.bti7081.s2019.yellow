@@ -1,9 +1,7 @@
 package ch.bfh.bti7081.view.customComponents;
 
-import ch.bfh.bti7081.model.dto.SeminarDTO;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.Synchronize;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.shared.Registration;
@@ -21,6 +19,7 @@ public class GoogleMapMarker extends Component {
     /**
      * Creates a new Marker for the map.
      * Author: walty1
+     *
      * @param lat
      * @param lon
      */
@@ -31,6 +30,7 @@ public class GoogleMapMarker extends Component {
 
     /**
      * Author: walty1
+     *
      * @param clickListener
      * @return
      */
@@ -44,7 +44,7 @@ public class GoogleMapMarker extends Component {
         getElement().setProperty("draggable", draggable);
     }
 
-    public void setTitle(String title){
+    public void setTitle(String title) {
         getElement().setProperty("title", title);
     }
 }
