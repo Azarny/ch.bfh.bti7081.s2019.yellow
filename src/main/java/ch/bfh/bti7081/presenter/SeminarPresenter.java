@@ -52,6 +52,8 @@ public class SeminarPresenter {
             seminarDTO.setTime(modelObject.getDate().toLocalTime());
             seminarDTO.setTitle(modelObject.getTitle());
             seminarDTO.setUrl(modelObject.getUrl());
+            seminarDTO.setLocation_lat(modelObject.getLocation_lat());
+            seminarDTO.setLocation_lng(modelObject.getLocation_lng());
             seminarDtos.add(seminarDTO);
         }
         return seminarDtos;

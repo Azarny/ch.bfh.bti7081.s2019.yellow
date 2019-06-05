@@ -5,6 +5,7 @@ import ch.bfh.bti7081.presenter.dto.UserDTO;
 import ch.bfh.bti7081.presenter.NewSeminarPresenter;
 import ch.bfh.bti7081.presenter.UserPresenter;
 import ch.bfh.bti7081.view.customComponents.ErrorNotification;
+import com.google.maps.errors.NotFoundException;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.StyleSheet;
@@ -49,22 +50,30 @@ public class NewSeminarView extends VerticalLayout {
 
     private H1 title = new H1("Seminar erstellen");
     private FormLayout seminarForm = new FormLayout();
+
     private TextField seminarTitle = new TextField("Seminar-Titel");
     private Select<String> seminarCategory = new Select<>();
+
     private TimePicker seminarTime = new TimePicker("Zeit");
     private DatePicker seminarDate = new DatePicker("Datum");
     private FormLayout dateComposite = new FormLayout(seminarDate, seminarTime);
+
     private TextArea seminarDescription = new TextArea("Beschreibung");
     private TextField seminarUrl = new TextField("Externer Link");
+
     private TextField seminarStreet = new TextField("Strasse");
     private TextField seminarStreetNbr = new TextField("Nr.");
     private FormLayout streetComposite = new FormLayout(seminarStreet, seminarStreetNbr);
+
     private NumberField seminarPlz = new NumberField("PLZ");
     private TextField seminarPlace = new TextField("Ort");
     private FormLayout placeComposite = new FormLayout(seminarPlz, seminarPlace);
+
     private Button save = new Button("Save", new Icon(VaadinIcon.PLUS));
     private Button cancel = new Button("Cancel", new Icon(VaadinIcon.EXIT));
+
     private HorizontalLayout formActions = new HorizontalLayout(save, cancel);
+
     private Binder<SeminarDTO> binder = new Binder<>();
     private SeminarDTO newSeminar = new SeminarDTO();
 
@@ -93,7 +102,7 @@ public class NewSeminarView extends VerticalLayout {
 
     /**
      * Shows error notification and redirects the user to the homepage.
-     *
+     * Author: siegn1
      * @param text Text to be displayed to the user
      */
     private void addErrorNotificationWithRedirect(String text) {
@@ -181,10 +190,11 @@ public class NewSeminarView extends VerticalLayout {
                 try {
                     presenter.sendSeminarToBackend(newSeminar);
                     save.getUI().ifPresent(ui -> ui.navigate("seminar"));
-                } catch (IllegalArgumentException e) {
-                    this.add(new ErrorNotification(e.getMessage()));
+                } catch (IllegalArgumentException | NotFoundException e) {
+                    displayErrorMessage(e.getMessage());
                 } catch (Exception e) {
-                    this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
+                    displayErrorMessage("Es ist ein technischer Fehler aufgetreten. " +
+                            "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support.");
                 }
             } else {
                 BinderValidationStatus<SeminarDTO> validate = binder.validate();
@@ -193,7 +203,7 @@ public class NewSeminarView extends VerticalLayout {
                         .map(BindingValidationStatus::getMessage)
                         .map(Optional::get).distinct()
                         .collect(Collectors.joining(", "));
-                this.add(new ErrorNotification(errorText));
+                displayErrorMessage(errorText);
             }
         });
 
@@ -203,5 +213,9 @@ public class NewSeminarView extends VerticalLayout {
     private void fillCategoryField() {
         List<String> seminarCategories = presenter.getSeminarCategories();
         seminarCategory.setItems(seminarCategories);
+    }
+
+    private void displayErrorMessage(String message) {
+        this.add(new ErrorNotification(message));
     }
 }
