@@ -18,11 +18,22 @@ import com.vaadin.flow.shared.Registration;
 @HtmlImport("bower_components/google-map/google-map-marker.html")
 public class GoogleMapMarker extends Component {
 
+    /**
+     * Creates a new Marker for the map.
+     * Author: walty1
+     * @param lat
+     * @param lon
+     */
     public GoogleMapMarker(double lat, double lon) {
         getElement().setProperty("latitude", lat);
         getElement().setProperty("longitude", lon);
     }
 
+    /**
+     * Author: walty1
+     * @param clickListener
+     * @return
+     */
     public Registration addClickListener(ComponentEventListener<MarkerClickEvent> clickListener) {
         //Event has to be activated in JS.
         getElement().setProperty("clickEvents", true);
@@ -35,18 +46,5 @@ public class GoogleMapMarker extends Component {
 
     public void setTitle(String title){
         getElement().setProperty("title", title);
-    }
-
-    //Synchronises the location in case it was dragged by the user.
-    @Synchronize("google-map-marker-dragend")
-    public double getLatitude() {
-        String property = getElement().getProperty("latitude");
-        return Double.valueOf(property);
-    }
-    //Synchronises the location in case it was dragged by the user.
-    @Synchronize("google-map-marker-dragend")
-    public double getLongitude() {
-        String property = getElement().getProperty("longitude");
-        return Double.valueOf(property);
     }
 }

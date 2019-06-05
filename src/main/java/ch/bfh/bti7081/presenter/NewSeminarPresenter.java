@@ -1,6 +1,5 @@
 package ch.bfh.bti7081.presenter;
 
-
 import ch.bfh.bti7081.model.ValidationConstants;
 import ch.bfh.bti7081.model.dto.SeminarDTO;
 import ch.bfh.bti7081.model.dto.UserDTO;
@@ -39,6 +38,7 @@ public class NewSeminarPresenter {
     /**
      * Is accessed by view to get the categories for a seminar.
      * Author: walty1
+     *
      * @return stringlist of seminaries.
      */
     public List<String> getSeminarCategories() {
@@ -72,6 +72,7 @@ public class NewSeminarPresenter {
     /**
      * Converts a SeminarDTO to Seminar object. (Just value mapping.)
      * Author: walty1
+     *
      * @param seminarDTO
      * @return Seminar
      * @throws NoSuchFieldException Throws an exception if the category could not be set.
@@ -99,10 +100,12 @@ public class NewSeminarPresenter {
     /**
      * Enriches a SeminarDTO with coordinates corresponding to the address.
      * Author: walty1
+     *
      * @param seminar
-     * @throws ApiException
-     * @throws InterruptedException
-     * @throws IOException
+     * @throws ApiException Standard
+     * @throws NotFoundException If the adress is not found...
+     * @throws InterruptedException Standard
+     * @throws IOException Standard
      */
     private void enrichWithCoordinates(SeminarDTO seminar)
             throws ApiException, InterruptedException, IOException {

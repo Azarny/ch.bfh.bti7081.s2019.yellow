@@ -78,7 +78,10 @@ public class SeminarView extends VerticalLayout {
 
     private GoogleMap seminarMap = new GoogleMap();
     private List<SeminarDTO> mapSeminaries;
-    private boolean mapIsReady = false;
+    private double STANDARDLAT = 46.798;
+    private double STANDARDLNG = 8.231;
+    private int STANDARDZOOM = 8;
+
     private VerticalLayout rightLayout = new VerticalLayout(seminarMap);
     private HorizontalLayout contentLayout = new HorizontalLayout(leftLayout, rightLayout);
 
@@ -118,6 +121,10 @@ public class SeminarView extends VerticalLayout {
         binder.forField(ortTf).bind(SeminarFilter::getLocation, SeminarFilter::setLocation);
     }
 
+    /**
+     * Sets different settings for the components.
+     * Author: oppls7 and walty1
+     */
     private void setElementSettings() {
         //Filter-Settings
         categoriesCb.setItemLabelGenerator(SeminarCategory::getName);
@@ -145,11 +152,10 @@ public class SeminarView extends VerticalLayout {
 
         //Map-Settings
         seminarMap.setApiKey(googleApiKey);
-        seminarMap.setLatitude(46.798);
-        seminarMap.setLongitude(8.231);
-        seminarMap.setZoomLevel(8);
+        seminarMap.setLatitude(STANDARDLAT);
+        seminarMap.setLongitude(STANDARDLNG);
+        seminarMap.setZoomLevel(STANDARDZOOM);
         seminarMap.addMapReadyListener(event -> {
-            mapIsReady = true;
             setSeminarMarkers(mapSeminaries);
         });
     }
@@ -195,11 +201,11 @@ public class SeminarView extends VerticalLayout {
 
     }
 
-    /*
+    /**
      * Fills the grid with seminaries
-     *
-     * Author: oppls7
-     * */
+     * <p>
+     * Author: oppls7 and walty1
+     */
     private void setViewContent(List<SeminarDTO> seminaries) {
         try {
             seminarGrid.setItems(seminaries);
@@ -223,22 +229,23 @@ public class SeminarView extends VerticalLayout {
      * @param seminaries (List of all active seminaries.)
      */
     private void setSeminarMarkers(List<SeminarDTO> seminaries) {
-        if (!mapIsReady) {
+        if (!seminarMap.isMapReady()) {
+            //If the map is not ready, we memorize the seminaries for later display.
+            //See listener that is set in setElementSettings
             mapSeminaries = seminaries;
         } else {
             seminarMap.resetMarkers();
-            if(seminaries.size()>0) {
-                for (SeminarDTO seminar : seminaries) {
-                    GoogleMapMarker seminarMarker = new GoogleMapMarker(
-                            seminar.getLocation_lat(),
-                            seminar.getLocation_lng());
-
-                    seminarMarker.setTitle(seminar.getTitle());
-                    seminarMarker.setDraggable(false);
-                    seminarMarker.addClickListener(event -> showDetails(seminar));
-                    seminarMap.addMarker(seminarMarker);
-                }
-
+            for (SeminarDTO seminar : seminaries) {
+                GoogleMapMarker seminarMarker = new GoogleMapMarker(
+                        seminar.getLocation_lat(),
+                        seminar.getLocation_lng());
+                seminarMarker.setTitle(seminar.getTitle());
+                seminarMarker.setDraggable(false);
+                seminarMarker.addClickListener(event -> showDetails(seminar));
+                seminarMap.addMarker(seminarMarker);
+            }
+            //Set the new center of the map.
+            if (seminaries.size() > 0) {
                 double mapCenterLat = seminaries.stream().
                         mapToDouble(SeminarDTO::getLocation_lat).
                         average().

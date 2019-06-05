@@ -102,7 +102,7 @@ public class NewSeminarView extends VerticalLayout {
 
     /**
      * Shows error notification and redirects the user to the homepage.
-     *
+     * Author: siegn1
      * @param text Text to be displayed to the user
      */
     private void addErrorNotificationWithRedirect(String text) {

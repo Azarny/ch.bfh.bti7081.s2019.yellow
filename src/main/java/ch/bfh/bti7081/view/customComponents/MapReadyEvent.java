@@ -5,9 +5,7 @@ import com.vaadin.flow.component.DomEvent;
 
 @DomEvent("google-map-ready")
 public class MapReadyEvent extends ComponentEvent<GoogleMap> {
-
     public MapReadyEvent(GoogleMap source, boolean fromClient){
         super(source, fromClient);
     }
-
 }
