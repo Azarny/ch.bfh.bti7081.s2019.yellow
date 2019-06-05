@@ -7,30 +7,53 @@ import ch.bfh.bti7081.model.seminar.SeminarFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
 public class SeminarManager {
-    // manages the communication between backend and frontend
-    // the list of methods isn't completed yet, just some sample methods for the class diagramm
 
     @Autowired
     private SeminarRepository seminarRepository;
 
     public List<Seminar> getSeminaries() {
-        return seminarRepository.findAll();
+        List<Seminar> seminaries = seminarRepository.findByDateGreaterThanEqual(LocalDateTime.now());
+        return seminaries.stream()
+                .sorted(Comparator.nullsLast(Comparator.comparing(Seminar::getDate)))
+                .collect(Collectors.toList());
     }
 
     /*
      * Returns filtered seminaries from db
      *
-     * Author: luscm1
+     * Author: luscm1, siegn2
      * */
     public List<Seminar> getFilteredSeminars(SeminarFilter filter) {
-        return getSeminaries().stream()
+        List<Seminar> listToFilter;
+
+        LocalDate from = filter.getFromDate();
+        LocalDate to = filter.getToDate();
+        if (from != null && to != null) {
+            // get all seminaries that take place in the given time period
+            listToFilter = seminarRepository.getAllBetweenDates(from.atStartOfDay(), to.atStartOfDay());
+        } else if (from != null) {
+            // get all seminaries that take place after the given date
+            listToFilter = seminarRepository.findByDateGreaterThanEqual(from.atStartOfDay());
+        } else if (to != null) {
+            // get all seminaries that is before the given date
+            listToFilter = seminarRepository.findByDateLessThanEqual(to.atStartOfDay());
+        } else {
+            // if we have no date-filter active, we just get all seminaries in the future,
+            // and stream-filter them here
+            listToFilter = getSeminaries();
+        }
+
+        // filter the list with the other filters
+        return listToFilter.stream()
                 //filter category
                 .filter(seminar -> {
                     if (filter.getCategory() == null) {
@@ -73,7 +96,7 @@ public class SeminarManager {
                         int matchedKeywordsCount = 0;
                         for (String keyword : keywords) {
                             if (seminar.getTitle().toLowerCase().contains(keyword.toLowerCase())
-                                            || seminar.getDescription().toLowerCase().contains(keyword.toLowerCase())){
+                                    || seminar.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
                                 matchedKeywordsCount++;
                             }
                         }
@@ -81,16 +104,17 @@ public class SeminarManager {
                         return matchedKeywordsCount == keywords.length;
                     }
                 })
+                // order the seminaries according to their date
+                .sorted(Comparator.nullsLast(Comparator.comparing(Seminar::getDate)))
                 .collect(Collectors.toList());
 
     }
 
     public void createSeminar(Seminar seminar) throws IllegalArgumentException {
         String validationResult = validateSeminar(seminar);
-        if ("".equals(validationResult)){
+        if (validationResult.isEmpty()) {
             seminarRepository.save(seminar);
-        }
-        else{
+        } else {
             throw new IllegalArgumentException("Following errors occured: "+ validationResult);
         }
     }

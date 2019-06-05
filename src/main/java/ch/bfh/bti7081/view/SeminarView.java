@@ -38,6 +38,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -135,6 +136,9 @@ public class SeminarView extends VerticalLayout {
         seminarGrid.addColumn(new ComponentRenderer<>(() -> new Icon(VaadinIcon.INFO_CIRCLE))).setWidth("10px");
         seminarGrid.asSingleSelect().addValueChangeListener(event -> showDetails(event.getValue()));
         seminarGrid.setHeightByRows(true);
+        // set the locale for the date format
+        toDateDp.setLocale(Locale.GERMANY);
+        fromDateDp.setLocale(Locale.GERMANY);
     }
 
     private void setActions(){

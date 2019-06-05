@@ -28,8 +28,7 @@ public class UserManager {
     private static final String ALGORITHM = "PBKDF2WithHmacSHA512";
 
     public User getUserByUsername(String name) {
-        Optional<User> user = userRepository.findAll().stream().filter(u -> u.getUsername().equals(name)).findAny();
-        return user.orElse(null);
+        return userRepository.findByUsername(name);
     }
 
     public void createUser(User user){

@@ -16,6 +16,7 @@ public class SeminarCategoryManager {
     SeminarCategoryRepository seminarCategoryRepository;
 
     public List<SeminarCategory> getSeminarCategories() {
+        // we get here all categories, since we see no point in limiting the selection on the UI
         return seminarCategoryRepository.findAll();
     }
 

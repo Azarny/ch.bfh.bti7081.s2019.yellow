@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 public class ForumManager {
-    // manages the communication between backend and frontend
-    // the list of methods isn't completed yet, just some sample methods for the class diagramm
 
     @Autowired
     private ForumEntryRepository forumEntryRepository;
