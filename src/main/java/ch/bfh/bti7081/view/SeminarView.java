@@ -256,6 +256,10 @@ public class SeminarView extends VerticalLayout {
                         getAsDouble();
                 seminarMap.setLatitude(mapCenterLat);
                 seminarMap.setLongitude(mapCenterLng);
+            }else{
+                seminarMap.setLongitude(STANDARDLNG);
+                seminarMap.setLatitude(STANDARDLAT);
+                seminarMap.setZoomLevel(STANDARDZOOM);
             }
         }
     }

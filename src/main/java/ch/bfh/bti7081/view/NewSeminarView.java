@@ -193,7 +193,8 @@ public class NewSeminarView extends VerticalLayout {
                 } catch (IllegalArgumentException | NotFoundException e) {
                     displayErrorMessage(e.getMessage());
                 } catch (Exception e) {
-                    displayErrorMessage("Es ist ein technischer Fehler aufgetreten. Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support.");
+                    displayErrorMessage("Es ist ein technischer Fehler aufgetreten. " +
+                            "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support.");
                 }
             } else {
                 BinderValidationStatus<SeminarDTO> validate = binder.validate();
