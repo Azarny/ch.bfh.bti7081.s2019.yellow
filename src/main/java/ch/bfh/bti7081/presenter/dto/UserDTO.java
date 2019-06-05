@@ -1,4 +1,4 @@
-package ch.bfh.bti7081.model.dto;
+package ch.bfh.bti7081.presenter.dto;
 
 import ch.bfh.bti7081.model.forum.ForumEntry;
 import ch.bfh.bti7081.model.forum.ForumEntryComment;
@@ -6,8 +6,6 @@ import ch.bfh.bti7081.model.manager.UserManager;
 import ch.bfh.bti7081.presenter.UserPresenter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
 public class UserDTO {

@@ -1,6 +1,6 @@
 package ch.bfh.bti7081.presenter;
 
-import ch.bfh.bti7081.model.dto.SeminarDTO;
+import ch.bfh.bti7081.presenter.dto.SeminarDTO;
 import ch.bfh.bti7081.model.manager.SeminarCategoryManager;
 import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;

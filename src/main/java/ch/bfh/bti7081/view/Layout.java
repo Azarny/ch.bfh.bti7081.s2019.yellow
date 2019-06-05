@@ -1,6 +1,6 @@
 package ch.bfh.bti7081.view;
 
-import ch.bfh.bti7081.model.dto.UserDTO;
+import ch.bfh.bti7081.presenter.dto.UserDTO;
 import ch.bfh.bti7081.presenter.UserPresenter;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;

@@ -1,6 +1,6 @@
 package ch.bfh.bti7081.model.manager;
 
-import ch.bfh.bti7081.model.dto.ForumEntryDTO;
+import ch.bfh.bti7081.presenter.dto.ForumEntryDTO;
 import ch.bfh.bti7081.model.forum.ForumCategory;
 import ch.bfh.bti7081.model.forum.ForumEntry;
 import ch.bfh.bti7081.model.repositories.ForumEntryRepository;
