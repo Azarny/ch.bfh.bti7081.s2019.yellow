@@ -1,15 +1,15 @@
 package ch.bfh.bti7081.view;
 
-import ch.bfh.bti7081.model.dto.UserDTO;
 import ch.bfh.bti7081.model.dto.SeminarDTO;
+import ch.bfh.bti7081.model.dto.UserDTO;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.model.seminar.SeminarFilter;
 import ch.bfh.bti7081.presenter.SeminarPresenter;
 import ch.bfh.bti7081.presenter.UserPresenter;
 import ch.bfh.bti7081.view.customComponents.ErrorNotification;
-import com.vaadin.flow.component.Key;
 import ch.bfh.bti7081.view.customComponents.GoogleMap;
 import ch.bfh.bti7081.view.customComponents.GoogleMapMarker;
+import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
@@ -31,10 +31,6 @@ import com.vaadin.flow.data.binder.BinderValidationStatus;
 import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
-import com.vaadin.flow.router.AfterNavigationEvent;
-import com.vaadin.flow.router.AfterNavigationObserver;
-import com.vaadin.flow.router.BeforeLeaveEvent;
-import com.vaadin.flow.router.BeforeLeaveObserver;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +45,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Route(value = "seminar", layout = Layout.class)
-public class SeminarView extends VerticalLayout  {
+public class SeminarView extends VerticalLayout {
     @Autowired
     private SeminarPresenter seminarPresenter;
     @Autowired
@@ -64,7 +60,7 @@ public class SeminarView extends VerticalLayout  {
     private TextField searchTf = new TextField("Suchbegriff:");
     private DatePicker fromDateDp = new DatePicker("Datum von:");
     private DatePicker toDateDp = new DatePicker("Datum bis:");
-    private TextField ortTf = new TextField("Ort:","Ort eingeben:");
+    private TextField ortTf = new TextField("Ort:", "Ort eingeben:");
     private Button filterBtn = new Button("Filter anwenden", new Icon(VaadinIcon.CHECK));
     private Button resetFilterBtn = new Button("Filter löschen", new Icon(VaadinIcon.CLOSE));
     private SeminarFilter seminarFilter = new SeminarFilter();
@@ -80,7 +76,9 @@ public class SeminarView extends VerticalLayout  {
 
     private VerticalLayout leftLayout = new VerticalLayout();
 
-    private GoogleMap seminarMap= new GoogleMap();
+    private GoogleMap seminarMap = new GoogleMap();
+    private List<SeminarDTO> mapSeminaries;
+    private boolean mapIsReady = false;
     private VerticalLayout rightLayout = new VerticalLayout(seminarMap);
     private HorizontalLayout contentLayout = new HorizontalLayout(leftLayout, rightLayout);
 
@@ -108,11 +106,11 @@ public class SeminarView extends VerticalLayout  {
         // finish constructing leftLayout
         leftLayout.add(filterFormLayout, seminarGrid, details);
 
-        this.add(welcomeLayout,contentLayout);
+        this.add(welcomeLayout, contentLayout);
 
     }
 
-    private void addBindingToForm(){
+    private void addBindingToForm() {
         binder.forField(searchTf).bind(SeminarFilter::getKeyword, SeminarFilter::setKeyword);
         binder.forField(fromDateDp).bind(SeminarFilter::getFromDate, SeminarFilter::setFromDate);
         binder.forField(toDateDp).bind(SeminarFilter::getToDate, SeminarFilter::setToDate);
@@ -150,15 +148,19 @@ public class SeminarView extends VerticalLayout  {
         seminarMap.setLatitude(46.798);
         seminarMap.setLongitude(8.231);
         seminarMap.setZoomLevel(8);
+        seminarMap.addMapReadyListener(event -> {
+            mapIsReady = true;
+            setSeminarMarkers(mapSeminaries);
+        });
     }
 
-    private void setActions(){
+    private void setActions() {
         // filter-button action
         filterBtn.addClickListener(event -> {
             if (binder.writeBeanIfValid(seminarFilter)) {
                 try {
                     setViewContent(seminarPresenter.getFilteredSeminarDtos(seminarFilter));
-                } catch(Exception ex){
+                } catch (Exception ex) {
                     this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. " +
                             "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
                 }
@@ -198,15 +200,15 @@ public class SeminarView extends VerticalLayout  {
      *
      * Author: oppls7
      * */
-    private void setViewContent(List<SeminarDTO> seminaries){
+    private void setViewContent(List<SeminarDTO> seminaries) {
         try {
             seminarGrid.setItems(seminaries);
-            if(seminaries.size()==0) {
-                Notification note = new Notification("Es wurden keine Seminare gefunden.",3000);
+            if (seminaries.size() == 0) {
+                Notification note = new Notification("Es wurden keine Seminare gefunden.", 3000);
                 note.open();
             }
             setSeminarMarkers(seminaries);
-        }catch(Exception e){
+        } catch (Exception e) {
             this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. " +
                     "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
         }
@@ -217,19 +219,24 @@ public class SeminarView extends VerticalLayout  {
      * The map only will show the seminaries in the list.
      * A click on a seminar marker opens the detail-box.
      * Author: walty1
+     *
      * @param seminaries (List of all active seminaries.)
      */
-    private void setSeminarMarkers(List<SeminarDTO> seminaries){
-        seminarMap.resetMarkers();
-        for (SeminarDTO seminar:seminaries) {
-            GoogleMapMarker seminarMarker = new GoogleMapMarker(
-                    seminar.getLocation_lat(),
-                    seminar.getLocation_lng());
+    private void setSeminarMarkers(List<SeminarDTO> seminaries) {
+        if (!mapIsReady) {
+            mapSeminaries = seminaries;
+        } else {
+            seminarMap.resetMarkers();
+            for (SeminarDTO seminar : seminaries) {
+                GoogleMapMarker seminarMarker = new GoogleMapMarker(
+                        seminar.getLocation_lat(),
+                        seminar.getLocation_lng());
 
-            seminarMarker.setTitle(seminar.getTitle());
-            seminarMarker.setDraggable(false);
-            seminarMarker.addClickListener(event -> showDetails(seminar));
-            seminarMap.addMarker(seminarMarker);
+                seminarMarker.setTitle(seminar.getTitle());
+                seminarMarker.setDraggable(false);
+                seminarMarker.addClickListener(event -> showDetails(seminar));
+                seminarMap.addMarker(seminarMarker);
+            }
         }
     }
 
@@ -263,8 +270,8 @@ public class SeminarView extends VerticalLayout  {
         Span locationAndPlz = new Span("Veranstaltungsort: " + seminar.getStreet() + " " + seminar.getHouseNumber() + ", "
                 + seminar.getPlz() + " " + seminar.getLocation());
         Span category = new Span("Kategorie: " + seminar.getCategory());
-        Span date = new Span("Datum: "+formatDate);
-        Span time = new Span("Uhrzeit: "+formatTime);
+        Span date = new Span("Datum: " + formatDate);
+        Span time = new Span("Uhrzeit: " + formatTime);
         Anchor link = new Anchor(seminar.getUrl(), "Weitere Informationen (Externer Link)");
         // opens in a new tab
         link.setTarget("_blank");
@@ -277,7 +284,7 @@ public class SeminarView extends VerticalLayout  {
         link.getStyle().set("display", "block");
         description.getStyle().set("display", "block");
 
-        details.add(title, date,time, category, locationAndPlz, link, description);
+        details.add(title, date, time, category, locationAndPlz, link, description);
         details.setWidth("500px");
         details.setHeight("auto");
     }

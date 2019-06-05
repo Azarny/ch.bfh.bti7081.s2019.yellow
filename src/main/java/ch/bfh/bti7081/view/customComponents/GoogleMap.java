@@ -1,8 +1,10 @@
 package ch.bfh.bti7081.view.customComponents;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.shared.Registration;
 
 /**
  * Google Map object as Vaadin Component.
@@ -20,6 +22,12 @@ public class GoogleMap extends Component {
         getElement().getStyle().set("height", "100%");
         getElement().getStyle().set("width", "100%");
     }
+    public Registration addMapReadyListener(ComponentEventListener<MapReadyEvent> clickListener) {
+        //Event has to be activated in JS.
+        getElement().setProperty("clickEvents", true);
+        return super.addListener(MapReadyEvent.class, clickListener);
+    }
+
 
     public void setApiKey(String apiKey){
         getElement().setProperty("apiKey", apiKey);
