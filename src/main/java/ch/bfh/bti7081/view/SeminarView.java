@@ -227,15 +227,28 @@ public class SeminarView extends VerticalLayout {
             mapSeminaries = seminaries;
         } else {
             seminarMap.resetMarkers();
-            for (SeminarDTO seminar : seminaries) {
-                GoogleMapMarker seminarMarker = new GoogleMapMarker(
-                        seminar.getLocation_lat(),
-                        seminar.getLocation_lng());
+            if(seminaries.size()>0) {
+                for (SeminarDTO seminar : seminaries) {
+                    GoogleMapMarker seminarMarker = new GoogleMapMarker(
+                            seminar.getLocation_lat(),
+                            seminar.getLocation_lng());
 
-                seminarMarker.setTitle(seminar.getTitle());
-                seminarMarker.setDraggable(false);
-                seminarMarker.addClickListener(event -> showDetails(seminar));
-                seminarMap.addMarker(seminarMarker);
+                    seminarMarker.setTitle(seminar.getTitle());
+                    seminarMarker.setDraggable(false);
+                    seminarMarker.addClickListener(event -> showDetails(seminar));
+                    seminarMap.addMarker(seminarMarker);
+                }
+
+                double mapCenterLat = seminaries.stream().
+                        mapToDouble(SeminarDTO::getLocation_lat).
+                        average().
+                        getAsDouble();
+                double mapCenterLng = seminaries.stream().
+                        mapToDouble(SeminarDTO::getLocation_lng).
+                        average().
+                        getAsDouble();
+                seminarMap.setLatitude(mapCenterLat);
+                seminarMap.setLongitude(mapCenterLng);
             }
         }
     }
