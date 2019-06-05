@@ -68,7 +68,7 @@ public class NewSeminarPresenter {
         modelObject.setPlz(seminarDTO.getPlz().intValue());
         modelObject.setDate(LocalDateTime.of(seminarDTO.getDate(), seminarDTO.getTime()));
 
-        modelObject.setCategory(seminarCategoryManager.getSeminarByName(seminarDTO.getCategory()));
+        modelObject.setCategory(seminarCategoryManager.getSeminarCategoryByName(seminarDTO.getCategory()));
         return modelObject;
     }
 

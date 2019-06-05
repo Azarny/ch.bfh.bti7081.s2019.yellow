@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+/**
+ * @author siegn2
+ */
 public class ForumManager {
 
     @Autowired

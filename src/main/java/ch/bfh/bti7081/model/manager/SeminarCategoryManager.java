@@ -5,9 +5,7 @@ import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class SeminarCategoryManager {
@@ -20,11 +18,13 @@ public class SeminarCategoryManager {
         return seminarCategoryRepository.findAll();
     }
 
-    public SeminarCategory getSeminarByName(String name) throws Exception {
-        Optional<SeminarCategory> categories = getSeminarCategories().stream()
-                .filter(s -> s.getName().equals(name)).findFirst();
-        if (categories.isPresent()) {
-            return categories.get();
+    /*
+     * Author: siegn2
+     */
+    public SeminarCategory getSeminarCategoryByName(String name) throws Exception {
+        SeminarCategory category = seminarCategoryRepository.findByName(name);
+        if (category != null) {
+            return category;
         } else {
             throw new Exception("Category does not exist.");
         }

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * @author siegn2
+ */
 @Repository
 public interface SeminarRepository extends JpaRepository<Seminar, Long> {
     List<Seminar> findByDateGreaterThanEqual(LocalDateTime startDate);

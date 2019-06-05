@@ -14,12 +14,18 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author siegn2
+ */
 @Controller
 public class SeminarManager {
 
     @Autowired
     private SeminarRepository seminarRepository;
 
+    /*
+     * Author: siegn2
+     */
     public List<Seminar> getSeminaries() {
         List<Seminar> seminaries = seminarRepository.findByDateGreaterThanEqual(LocalDateTime.now());
         return seminaries.stream()
