@@ -77,7 +77,7 @@ public class NewSeminarPresenter {
      * @return Seminar
      * @throws NoSuchFieldException Throws an exception if the category could not be set.
      */
-    private Seminar convertDTOtoModel(SeminarDTO seminarDTO) throws NoSuchFieldException {
+    private Seminar convertDTOtoModel(SeminarDTO seminarDTO) throws Exception {
         Seminar modelObject = new Seminar();
 
         modelObject.setTitle(seminarDTO.getTitle());

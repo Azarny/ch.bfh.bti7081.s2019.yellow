@@ -19,13 +19,13 @@ public class SeminarCategoryManager {
         return seminarCategoryRepository.findAll();
     }
 
-    public SeminarCategory getSeminarByName(String name) throws NoSuchFieldException {
+    public SeminarCategory getSeminarByName(String name) throws Exception {
         Optional<SeminarCategory> categories = getSeminarCategories().stream()
                 .filter(s -> s.getName().equals(name)).findFirst();
         if (categories.isPresent()) {
             return categories.get();
         } else {
-            throw new NoSuchFieldException("Category does not exist.");
+            throw new Exception("Category does not exist.");
         }
     }
 }
