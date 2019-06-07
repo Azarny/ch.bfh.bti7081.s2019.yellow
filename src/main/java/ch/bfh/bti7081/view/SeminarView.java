@@ -41,6 +41,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -158,6 +159,9 @@ public class SeminarView extends VerticalLayout {
         seminarMap.addMapReadyListener(event -> {
             setSeminarMarkers(mapSeminaries);
         });
+        // set the locale for the date format
+        toDateDp.setLocale(Locale.GERMANY);
+        fromDateDp.setLocale(Locale.GERMANY);
     }
 
     private void setActions() {
