@@ -51,6 +51,12 @@ public class Seminar {
     @Column(name = PREFIX + "DESCRIPTION", length = 255)
     private String description;
 
+    @Column(name = PREFIX + "LOCATION_LAT")
+    private double location_lat;
+
+    @Column(name = PREFIX + "LOCATION_LNG")
+    private double location_lng;
+
     public String getStreet() {
         return street;
     }
@@ -121,5 +127,21 @@ public class Seminar {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public double getLocation_lat() {
+        return location_lat;
+    }
+
+    public void setLocation_lat(double location_lat) {
+        this.location_lat = location_lat;
+    }
+
+    public double getLocation_lng() {
+        return location_lng;
+    }
+
+    public void setLocation_lng(double location_lng) {
+        this.location_lng = location_lng;
     }
 }
