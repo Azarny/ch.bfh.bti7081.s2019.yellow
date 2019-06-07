@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = PREFIX + "USERNAME", length = 20)
+    @Column(name = PREFIX + "USERNAME",unique = true, length = 20)
     private String username;
 
     @Column(name = PREFIX + "EMAIL", length = 255)

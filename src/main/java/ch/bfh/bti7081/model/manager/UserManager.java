@@ -30,8 +30,11 @@ public class UserManager {
     private static final int KEY_LENGTH = 512;
     private static final String ALGORITHM = "PBKDF2WithHmacSHA512";
 
-    /*
-     * Author: siegn2
+    /**
+     * Returns user with username from DB
+     * @param name Username
+     * @return User
+     * @author siegn2
      */
     public User getUserByUsername(String name) {
         return userRepository.findByUsername(name);

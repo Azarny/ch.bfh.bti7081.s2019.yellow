@@ -23,8 +23,11 @@ public class SeminarManager {
     @Autowired
     private SeminarRepository seminarRepository;
 
-    /*
-     * Author: siegn2
+    /**
+     * Gets all seminaries from DB that take place after today, sorted by date
+     *
+     * @return list of seminaries
+     * @author siegn2
      */
     public List<Seminar> getSeminaries() {
         List<Seminar> seminaries = seminarRepository.findByDateGreaterThanEqual(LocalDateTime.now());
@@ -33,11 +36,15 @@ public class SeminarManager {
                 .collect(Collectors.toList());
     }
 
-    /*
+    /**
      * Returns filtered seminaries from db
      *
-     * Author: luscm1, siegn2
-     * */
+     * @param filter Filters for the seminaries
+     * @return List of filtered and sorted seminaries
+     *
+     * @author luscm1
+     * @author siegn2
+     */
     public List<Seminar> getFilteredSeminars(SeminarFilter filter) {
         List<Seminar> listToFilter;
 
@@ -125,10 +132,12 @@ public class SeminarManager {
         }
     }
 
-    /*
+    /**
      * validates if the seminar fulfills all the requirements
      *
-     * Author: luscm1
+     * @param seminar
+     * @return
+     * @author: luscm1
      * */
     public String validateSeminar(Seminar seminar) {
         String returnString = "";
