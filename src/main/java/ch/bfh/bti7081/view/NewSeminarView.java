@@ -77,6 +77,11 @@ public class NewSeminarView extends VerticalLayout {
     private Binder<SeminarDTO> binder = new Binder<>();
     private SeminarDTO newSeminar = new SeminarDTO();
 
+    /**
+     * Initialises the content of the view.
+     * @author walty1
+     * @author heuzl1
+     */
     @PostConstruct
     public void init() {
         // check if user is logged in
@@ -102,7 +107,7 @@ public class NewSeminarView extends VerticalLayout {
 
     /**
      * Shows error notification and redirects the user to the homepage.
-     * Author: siegn1
+     * @author: siegn1
      * @param text Text to be displayed to the user
      */
     private void addErrorNotificationWithRedirect(String text) {
@@ -111,17 +116,26 @@ public class NewSeminarView extends VerticalLayout {
         this.add(errorNotification);
     }
 
+    /**
+     * @author walty1
+     */
     private void mvpBinding() {
         presenter.setView(this);
         setFormActions();
     }
 
+    /**
+     * @author walty1
+     */
     private void buildPage() {
         this.add(title);
         this.add(seminarForm);
         this.add(formActions);
     }
 
+    /**
+     * @author walty1
+     */
     private void addElementsToForm() {
         seminarForm.add(seminarTitle);
         seminarForm.add(seminarCategory);
@@ -132,6 +146,9 @@ public class NewSeminarView extends VerticalLayout {
         seminarForm.add(seminarDescription);
     }
 
+    /**
+     * @author walty1
+     */
     private void setFieldSettings() {
         seminarTitle.setRequiredIndicatorVisible(true);
         seminarCategory.setRequiredIndicatorVisible(true);
@@ -151,6 +168,9 @@ public class NewSeminarView extends VerticalLayout {
         seminarCategory.setEmptySelectionAllowed(false);
     }
 
+    /**
+     * @author walty1
+     */
     private void addBindingToForm() {
         //Binder-Configuration
         binder.forField(seminarTitle).asRequired("Bitte Titel angeben")
@@ -184,6 +204,9 @@ public class NewSeminarView extends VerticalLayout {
                 .bind(SeminarDTO::getDescription, SeminarDTO::setDescription);
     }
 
+    /**
+     * @author walty1
+     */
     private void setFormActions() {
         save.addClickListener(event -> {
             if (binder.writeBeanIfValid(newSeminar)) {
@@ -210,11 +233,17 @@ public class NewSeminarView extends VerticalLayout {
         cancel.addClickListener(event -> cancel.getUI().ifPresent(ui -> ui.navigate("seminar")));
     }
 
+    /**
+     * @author walty1
+     */
     private void fillCategoryField() {
         List<String> seminarCategories = presenter.getSeminarCategories();
         seminarCategory.setItems(seminarCategories);
     }
 
+    /**
+     * @author walty1
+     */
     private void displayErrorMessage(String message) {
         this.add(new ErrorNotification(message));
     }
