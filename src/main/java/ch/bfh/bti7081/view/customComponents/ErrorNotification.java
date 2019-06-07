@@ -11,7 +11,9 @@ public class ErrorNotification extends Notification {
      * This is a custom object to display errors to the user.
      * The constants can be used to create a consistent experience.
      * Adds a css-class to the content, can be styled using CSS.
+     *
      * @param message
+     * @author walty1
      */
     public ErrorNotification(String message) {
         //DIV is used for css-styling of text

@@ -11,6 +11,8 @@ import com.vaadin.flow.shared.Registration;
  * The marker is in HTML an is appended as a child to the map.
  * (See @HTMLImport and Polymer)
  * Properties are set via JavaScript.
+ *
+ * @author walty1
  */
 @Tag("google-map-marker")
 @HtmlImport("bower_components/google-map/google-map-marker.html")
@@ -18,10 +20,10 @@ public class GoogleMapMarker extends Component {
 
     /**
      * Creates a new Marker for the map.
-     * Author: walty1
      *
      * @param lat
      * @param lon
+     * @author walty1
      */
     public GoogleMapMarker(double lat, double lon) {
         getElement().setProperty("latitude", lat);
@@ -29,10 +31,9 @@ public class GoogleMapMarker extends Component {
     }
 
     /**
-     * Author: walty1
-     *
      * @param clickListener
      * @return
+     * @author: walty1
      */
     public Registration addClickListener(ComponentEventListener<MarkerClickEvent> clickListener) {
         //Event has to be activated in JS.

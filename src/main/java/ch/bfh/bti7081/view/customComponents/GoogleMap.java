@@ -12,28 +12,30 @@ import com.vaadin.flow.shared.Registration;
  * (See @HTMLImport and Polymer)
  * Properties are set via JavaScript.
  * Please use the isMapReady boolean to check if markers can be set.
+ *
+ * @author walty1
  */
 @Tag("google-map")
 @HtmlImport("bower_components/google-map/google-map.html")
 public class GoogleMap extends Component {
 
-    private boolean mapIsReady=false;
+    private boolean mapIsReady = false;
 
     /**
-     * Author: walty1
+     * @author walty1
      */
     public GoogleMap() {
         //Fits the zoom level so that all markers are present
         getElement().setProperty("fitToMarkers", true);
         getElement().getStyle().set("height", "100%");
         getElement().getStyle().set("width", "100%");
-        this.addMapReadyListener(event->mapIsReady=true);
+        this.addMapReadyListener(event -> mapIsReady = true);
     }
 
     /**
-     * Author: walty1
      * @param clickListener
      * @return
+     * @author walty1
      */
     public Registration addMapReadyListener(ComponentEventListener<MapReadyEvent> clickListener) {
         //Event has to be activated in JS.
@@ -42,19 +44,19 @@ public class GoogleMap extends Component {
     }
 
     /**
-     * Author: walty1
      * @param marker GoogleMapMarker to add
+     * @author walty1
      */
     public void addMarker(GoogleMapMarker marker) {
         getElement().appendChild(marker.getElement());
     }
 
     /**
-     * Author: walty1
+     * @author walty1
      * Deletes all markers from the DOM.
      */
-    public void resetMarkers(){
-        if(getElement().getChildren().count()>0){
+    public void resetMarkers() {
+        if (getElement().getChildren().count() > 0) {
             getElement().removeAllChildren();
         }
     }
@@ -63,10 +65,11 @@ public class GoogleMap extends Component {
         return mapIsReady;
     }
 
-    public void setApiKey(String apiKey){
+    public void setApiKey(String apiKey) {
         getElement().setProperty("apiKey", apiKey);
     }
-    public void setZoomLevel(int level){
+
+    public void setZoomLevel(int level) {
         getElement().setProperty("zoom", level);
     }
 
@@ -77,6 +80,5 @@ public class GoogleMap extends Component {
     public void setLongitude(double lon) {
         getElement().setProperty("longitude", lon);
     }
-
 }
 
