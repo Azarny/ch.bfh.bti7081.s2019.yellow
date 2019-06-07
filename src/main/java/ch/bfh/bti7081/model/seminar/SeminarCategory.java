@@ -7,6 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * @author siegn2
+ */
 @Entity
 @Table(name = "seminar_category")
 public class SeminarCategory {

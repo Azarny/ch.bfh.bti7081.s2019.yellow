@@ -11,8 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.List;
 
+/**
+ * @author siegn2
+ */
 @Entity
 @Table(name = "user")
 public class User {
@@ -23,7 +27,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = PREFIX + "USERNAME", length = 20)
+    @Column(name = PREFIX + "USERNAME",unique = true, length = 20)
     private String username;
 
     @Column(name = PREFIX + "EMAIL", length = 255)
@@ -50,6 +54,13 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "author")
     private List<ForumEntryComment> comments;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;

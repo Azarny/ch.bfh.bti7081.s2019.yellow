@@ -15,6 +15,9 @@ import java.util.Optional;
 
 import static java.util.Arrays.fill;
 
+/**
+ * @author siegn2
+ */
 @Component
 public class UserManager {
 
@@ -27,9 +30,14 @@ public class UserManager {
     private static final int KEY_LENGTH = 512;
     private static final String ALGORITHM = "PBKDF2WithHmacSHA512";
 
+    /**
+     * Returns user with username from DB
+     * @param name Username
+     * @return User
+     * @author siegn2
+     */
     public User getUserByUsername(String name) {
-        Optional<User> user = userRepository.findAll().stream().filter(u -> u.getUsername().equals(name)).findAny();
-        return user.orElse(null);
+        return userRepository.findByUsername(name);
     }
 
     public void createUser(User user){
