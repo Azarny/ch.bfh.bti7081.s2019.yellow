@@ -12,6 +12,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+/**
+ * @author siegn2
+ */
 @Entity
 @Table(name = "forum_entry_comment")
 public class ForumEntryComment {
