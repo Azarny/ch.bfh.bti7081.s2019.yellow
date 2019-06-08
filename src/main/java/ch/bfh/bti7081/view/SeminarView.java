@@ -1,11 +1,11 @@
 package ch.bfh.bti7081.view;
 
-import ch.bfh.bti7081.presenter.dto.UserDTO;
-import ch.bfh.bti7081.presenter.dto.SeminarDTO;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.model.seminar.SeminarFilter;
 import ch.bfh.bti7081.presenter.SeminarPresenter;
 import ch.bfh.bti7081.presenter.UserPresenter;
+import ch.bfh.bti7081.presenter.dto.SeminarDTO;
+import ch.bfh.bti7081.presenter.dto.UserDTO;
 import ch.bfh.bti7081.view.customComponents.ErrorNotification;
 import ch.bfh.bti7081.view.customComponents.GoogleMap;
 import ch.bfh.bti7081.view.customComponents.GoogleMapMarker;
@@ -124,7 +124,8 @@ public class SeminarView extends VerticalLayout {
 
     /**
      * Sets different settings for the components.
-     * Author: oppls7 and walty1
+     * @author oppls7
+     * @author walty1
      */
     private void setElementSettings() {
         //Filter-Settings
@@ -208,7 +209,8 @@ public class SeminarView extends VerticalLayout {
     /**
      * Fills the grid with seminaries
      * <p>
-     * Author: oppls7 and walty1
+     * @author oppls7
+     * @author walty1
      */
     private void setViewContent(List<SeminarDTO> seminaries) {
         try {
@@ -228,7 +230,7 @@ public class SeminarView extends VerticalLayout {
      * For every seminary in the list, the seminarMap gets a marker.
      * The map only will show the seminaries in the list.
      * A click on a seminar marker opens the detail-box.
-     * Author: walty1
+     * @author walty1
      *
      * @param seminaries (List of all active seminaries.)
      */
@@ -260,7 +262,7 @@ public class SeminarView extends VerticalLayout {
                         getAsDouble();
                 seminarMap.setLatitude(mapCenterLat);
                 seminarMap.setLongitude(mapCenterLng);
-            }else{
+            } else {
                 seminarMap.setLongitude(STANDARDLNG);
                 seminarMap.setLatitude(STANDARDLAT);
                 seminarMap.setZoomLevel(STANDARDZOOM);
@@ -271,7 +273,7 @@ public class SeminarView extends VerticalLayout {
     /*
      * Used for the ListItemClickEvent. It opens the dialog with seminary-details.
      *
-     * Author: oppls7
+     * @author oppls7
      * */
     private void showDetails(SeminarDTO seminar) {
         details.removeAll();
@@ -279,10 +281,11 @@ public class SeminarView extends VerticalLayout {
         details.open();
     }
 
-    /*
+    /**
      * Generates a dialog, which shows the details from the clicked seminary
-     *
-     * Author: oppls7
+     * @param seminar DTO of the seminar to be visible in the pop-up
+     * @author: oppls7
+     * @author: siegn2
      * */
     private void generateDialog(SeminarDTO seminar) {
         H3 title = new H3(seminar.getTitle());
@@ -296,7 +299,7 @@ public class SeminarView extends VerticalLayout {
         String formatDate = localDate.format(dateFormatter);
 
         Span locationAndPlz = new Span("Veranstaltungsort: " + seminar.getStreet() + " " + seminar.getHouseNumber() + ", "
-                + seminar.getPlz() + " " + seminar.getLocation());
+                + seminar.getPlz().intValue() + " " + seminar.getLocation());
         Span category = new Span("Kategorie: " + seminar.getCategory());
         Span date = new Span("Datum: " + formatDate);
         Span time = new Span("Uhrzeit: " + formatTime);
