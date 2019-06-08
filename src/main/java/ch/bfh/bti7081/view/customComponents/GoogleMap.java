@@ -32,6 +32,7 @@ public class GoogleMap extends Component {
         getElement().setProperty("fitToMarkers", true);
         getElement().getStyle().set("height", "100%");
         getElement().getStyle().set("width", "100%");
+        //By using this listener, isMapReady will deliver true information.
         this.addMapReadyListener(event -> mapIsReady = true);
     }
 

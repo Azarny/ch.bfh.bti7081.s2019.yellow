@@ -1,11 +1,11 @@
 package ch.bfh.bti7081.view;
 
-import ch.bfh.bti7081.presenter.dto.UserDTO;
-import ch.bfh.bti7081.presenter.dto.SeminarDTO;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.model.seminar.SeminarFilter;
 import ch.bfh.bti7081.presenter.SeminarPresenter;
 import ch.bfh.bti7081.presenter.UserPresenter;
+import ch.bfh.bti7081.presenter.dto.SeminarDTO;
+import ch.bfh.bti7081.presenter.dto.UserDTO;
 import ch.bfh.bti7081.view.customComponents.ErrorNotification;
 import ch.bfh.bti7081.view.customComponents.GoogleMap;
 import ch.bfh.bti7081.view.customComponents.GoogleMapMarker;
@@ -76,7 +76,7 @@ public class SeminarView extends VerticalLayout {
     private Dialog details = new Dialog();
 
     private VerticalLayout leftLayout = new VerticalLayout();
-
+    //Seminar-Map and settings for having Switzerland focussed. (Standard.)
     private GoogleMap seminarMap = new GoogleMap();
     private List<SeminarDTO> mapSeminaries;
     private double STANDARDLAT = 46.798;
@@ -86,6 +86,12 @@ public class SeminarView extends VerticalLayout {
     private VerticalLayout rightLayout = new VerticalLayout(seminarMap);
     private HorizontalLayout contentLayout = new HorizontalLayout(leftLayout, rightLayout);
 
+    /**
+     * Initializes the creation of the view after it has been constructed by Spring.
+     *
+     * @throws Exception
+     * @author oppls7
+     */
     @PostConstruct
     public void init() throws Exception {
         setElementSettings();
@@ -96,6 +102,11 @@ public class SeminarView extends VerticalLayout {
         categoriesCb.setItems(seminarPresenter.getSeminarCategories());
     }
 
+    /**
+     * Using this method, the page is built. --> Elements are shown on the client.
+     *
+     * @author oppls7
+     */
     private void buildPage() {
         // check if user is logged in
         String userName = (String) VaadinSession.getCurrent().getAttribute("userName");
@@ -114,6 +125,11 @@ public class SeminarView extends VerticalLayout {
 
     }
 
+    /**
+     * The filter on the frontend is bound to a SeminarFilter object.
+     *
+     * @author oppls7
+     */
     private void addBindingToForm() {
         binder.forField(searchTf).bind(SeminarFilter::getKeyword, SeminarFilter::setKeyword);
         binder.forField(fromDateDp).bind(SeminarFilter::getFromDate, SeminarFilter::setFromDate);
@@ -124,7 +140,9 @@ public class SeminarView extends VerticalLayout {
 
     /**
      * Sets different settings for the components.
-     * Author: oppls7 and walty1
+     *
+     * @author oppls7
+     * @author walty1
      */
     private void setElementSettings() {
         //Filter-Settings
@@ -133,7 +151,6 @@ public class SeminarView extends VerticalLayout {
         filterFormLayout.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("0", 1),
                 new FormLayout.ResponsiveStep("21em", 2));
-
         //List-Settings
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("kk:mm");
@@ -150,7 +167,6 @@ public class SeminarView extends VerticalLayout {
         seminarGrid.addColumn(new ComponentRenderer<>(() -> new Icon(VaadinIcon.INFO_CIRCLE))).setWidth("10px");
         seminarGrid.asSingleSelect().addValueChangeListener(event -> showDetails(event.getValue()));
         seminarGrid.setHeightByRows(true);
-
         //Map-Settings
         seminarMap.setApiKey(googleApiKey);
         seminarMap.setLatitude(STANDARDLAT);
@@ -164,6 +180,11 @@ public class SeminarView extends VerticalLayout {
         fromDateDp.setLocale(Locale.GERMANY);
     }
 
+    /**
+     * Configuration for the buttons on the view.
+     *
+     * @author oppls7
+     */
     private void setActions() {
         // filter-button action
         filterBtn.addClickListener(event -> {
@@ -206,9 +227,10 @@ public class SeminarView extends VerticalLayout {
     }
 
     /**
-     * Fills the grid with seminaries
-     * <p>
-     * Author: oppls7 and walty1
+     * Fills the grid with seminaries and adds them also to the map.
+     *
+     * @author oppls7
+     * @author walty1
      */
     private void setViewContent(List<SeminarDTO> seminaries) {
         try {
@@ -228,9 +250,9 @@ public class SeminarView extends VerticalLayout {
      * For every seminary in the list, the seminarMap gets a marker.
      * The map only will show the seminaries in the list.
      * A click on a seminar marker opens the detail-box.
-     * Author: walty1
      *
      * @param seminaries (List of all active seminaries.)
+     * @author walty1
      */
     private void setSeminarMarkers(List<SeminarDTO> seminaries) {
         if (!seminarMap.isMapReady()) {
@@ -260,7 +282,7 @@ public class SeminarView extends VerticalLayout {
                         getAsDouble();
                 seminarMap.setLatitude(mapCenterLat);
                 seminarMap.setLongitude(mapCenterLng);
-            }else{
+            } else {
                 seminarMap.setLongitude(STANDARDLNG);
                 seminarMap.setLatitude(STANDARDLAT);
                 seminarMap.setZoomLevel(STANDARDZOOM);
@@ -268,22 +290,22 @@ public class SeminarView extends VerticalLayout {
         }
     }
 
-    /*
+    /**
      * Used for the ListItemClickEvent. It opens the dialog with seminary-details.
      *
-     * Author: oppls7
-     * */
+     * @author oppls7
+     */
     private void showDetails(SeminarDTO seminar) {
         details.removeAll();
         generateDialog(seminar);
         details.open();
     }
 
-    /*
+    /**
      * Generates a dialog, which shows the details from the clicked seminary
      *
-     * Author: oppls7
-     * */
+     * @author oppls7
+     */
     private void generateDialog(SeminarDTO seminar) {
         H3 title = new H3(seminar.getTitle());
 

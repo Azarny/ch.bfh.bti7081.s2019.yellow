@@ -1,9 +1,9 @@
 package ch.bfh.bti7081.view;
 
-import ch.bfh.bti7081.presenter.dto.SeminarDTO;
-import ch.bfh.bti7081.presenter.dto.UserDTO;
 import ch.bfh.bti7081.presenter.NewSeminarPresenter;
 import ch.bfh.bti7081.presenter.UserPresenter;
+import ch.bfh.bti7081.presenter.dto.SeminarDTO;
+import ch.bfh.bti7081.presenter.dto.UserDTO;
 import ch.bfh.bti7081.view.customComponents.ErrorNotification;
 import com.google.maps.errors.NotFoundException;
 import com.vaadin.flow.component.button.Button;
@@ -79,6 +79,7 @@ public class NewSeminarView extends VerticalLayout {
 
     /**
      * Initialises the content of the view.
+     *
      * @author walty1
      * @author heuzl1
      */
@@ -107,8 +108,9 @@ public class NewSeminarView extends VerticalLayout {
 
     /**
      * Shows error notification and redirects the user to the homepage.
-     * @author: siegn1
+     *
      * @param text Text to be displayed to the user
+     * @author siegn2
      */
     private void addErrorNotificationWithRedirect(String text) {
         ErrorNotification errorNotification = new ErrorNotification(text);
@@ -117,23 +119,8 @@ public class NewSeminarView extends VerticalLayout {
     }
 
     /**
-     * @author walty1
-     */
-    private void mvpBinding() {
-        presenter.setView(this);
-        setFormActions();
-    }
-
-    /**
-     * @author walty1
-     */
-    private void buildPage() {
-        this.add(title);
-        this.add(seminarForm);
-        this.add(formActions);
-    }
-
-    /**
+     * Prepares the form.
+     *
      * @author walty1
      */
     private void addElementsToForm() {
@@ -147,6 +134,8 @@ public class NewSeminarView extends VerticalLayout {
     }
 
     /**
+     * Sets the settings on different fields.
+     *
      * @author walty1
      */
     private void setFieldSettings() {
@@ -169,7 +158,10 @@ public class NewSeminarView extends VerticalLayout {
     }
 
     /**
+     * Using binder, the frontend-validation is implemented.
+     *
      * @author walty1
+     * @author luscm1
      */
     private void addBindingToForm() {
         //Binder-Configuration
@@ -204,7 +196,31 @@ public class NewSeminarView extends VerticalLayout {
                 .bind(SeminarDTO::getDescription, SeminarDTO::setDescription);
     }
 
+
     /**
+     * After all objects have been prepared, they are added to the view. -> Displaying starts.
+     *
+     * @author walty1
+     */
+    private void buildPage() {
+        this.add(title);
+        this.add(seminarForm);
+        this.add(formActions);
+    }
+
+    /**
+     * Adds a connection between presenter and view.
+     *
+     * @author walty1
+     */
+    private void mvpBinding() {
+        presenter.setView(this);
+        setFormActions();
+    }
+
+    /**
+     * Configuration for the buttons on the view.
+     *
      * @author walty1
      */
     private void setFormActions() {
@@ -234,6 +250,8 @@ public class NewSeminarView extends VerticalLayout {
     }
 
     /**
+     * The view gets the categories from the presenter.
+     *
      * @author walty1
      */
     private void fillCategoryField() {
@@ -242,6 +260,8 @@ public class NewSeminarView extends VerticalLayout {
     }
 
     /**
+     * Displays an error-message to the user.
+     *
      * @author walty1
      */
     private void displayErrorMessage(String message) {
