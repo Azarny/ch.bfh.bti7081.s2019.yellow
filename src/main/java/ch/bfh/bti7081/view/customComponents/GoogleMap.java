@@ -22,6 +22,9 @@ public class GoogleMap extends Component {
     private boolean mapIsReady = false;
 
     /**
+     * Constructs a basic Google-Maps object to add to a Vaadin View.
+     * Consider using "isMapReady" before adding any objects.
+     *
      * @author walty1
      */
     public GoogleMap() {
@@ -33,17 +36,19 @@ public class GoogleMap extends Component {
     }
 
     /**
-     * @param clickListener
-     * @return
+     * Add a listener to the map to check if elements can be added already.
+     *
+     * @param mapReadyListener The Listener (own class)
+     * @return Registrates a listener.
      * @author walty1
      */
-    public Registration addMapReadyListener(ComponentEventListener<MapReadyEvent> clickListener) {
-        //Event has to be activated in JS.
-        getElement().setProperty("clickEvents", true);
-        return super.addListener(MapReadyEvent.class, clickListener);
+    public Registration addMapReadyListener(ComponentEventListener<MapReadyEvent> mapReadyListener) {
+        return super.addListener(MapReadyEvent.class, mapReadyListener);
     }
 
     /**
+     * Adds a Google-Maps-Marker to the current map object.
+     *
      * @param marker GoogleMapMarker to add
      * @author walty1
      */
@@ -52,8 +57,9 @@ public class GoogleMap extends Component {
     }
 
     /**
-     * @author walty1
      * Deletes all markers from the DOM.
+     *
+     * @author walty1
      */
     public void resetMarkers() {
         if (getElement().getChildren().count() > 0) {
@@ -61,10 +67,22 @@ public class GoogleMap extends Component {
         }
     }
 
+    /**
+     * Returns the state of the map and if adding elements is already allowed.
+     *
+     * @return state
+     * @author walty1
+     */
     public boolean isMapReady() {
         return mapIsReady;
     }
 
+    /**
+     * An API-key for Google Maps provided by Google is needed.
+     *
+     * @param apiKey Google-Maps-Api-Key
+     * @author walty1
+     */
     public void setApiKey(String apiKey) {
         getElement().setProperty("apiKey", apiKey);
     }

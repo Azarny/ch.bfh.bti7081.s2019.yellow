@@ -21,19 +21,21 @@ public class GoogleMapMarker extends Component {
     /**
      * Creates a new Marker for the map.
      *
-     * @param lat
-     * @param lon
+     * @param lat latitude of the location
+     * @param lng longitude of the location
      * @author walty1
      */
-    public GoogleMapMarker(double lat, double lon) {
+    public GoogleMapMarker(double lat, double lng) {
         getElement().setProperty("latitude", lat);
-        getElement().setProperty("longitude", lon);
+        getElement().setProperty("longitude", lng);
     }
 
     /**
-     * @param clickListener
-     * @return
-     * @author: walty1
+     * Adds a listener that checks if the marker has been clicked on.
+     *
+     * @param clickListener (Own class for listener)
+     * @return Registration for listener.
+     * @author walty1
      */
     public Registration addClickListener(ComponentEventListener<MarkerClickEvent> clickListener) {
         //Event has to be activated in JS.
@@ -41,6 +43,12 @@ public class GoogleMapMarker extends Component {
         return super.addListener(MarkerClickEvent.class, clickListener);
     }
 
+    /**
+     * By standard, a marker is draggable, means, its location can be changed on the map by the user.
+     *
+     * @param draggable boolean
+     * @author walty1
+     */
     public void setDraggable(boolean draggable) {
         getElement().setProperty("draggable", draggable);
     }

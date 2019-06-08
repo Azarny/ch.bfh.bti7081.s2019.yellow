@@ -3,16 +3,22 @@ package ch.bfh.bti7081.view.customComponents;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
 
+/**
+ * This is a custom object to display errors to the user.
+ * The constants can be used to create a consistent experience.
+ * Adds a css-class to the content, can be styled using CSS.
+ *
+ * @author walty1
+ */
 public class ErrorNotification extends Notification {
     private final String CLASSNAME = "error-notification";
     private final int DURATION_IN_MS = 5000;
 
     /**
-     * This is a custom object to display errors to the user.
-     * The constants can be used to create a consistent experience.
-     * Adds a css-class to the content, can be styled using CSS.
+     * Creates the notification.
+     * Needs to be added to a view, disappears automatically.
      *
-     * @param message
+     * @param message Message to display.
      * @author walty1
      */
     public ErrorNotification(String message) {
