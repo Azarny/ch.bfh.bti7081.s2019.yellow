@@ -16,10 +16,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -74,6 +71,7 @@ public class SeminarView extends VerticalLayout {
     private Grid<SeminarDTO> seminarGrid = new Grid<>();
 
     private Dialog details = new Dialog();
+    private Button closeDetails = new Button("Schliessen", new Icon(VaadinIcon.CLOSE));
 
     private VerticalLayout leftLayout = new VerticalLayout();
 
@@ -152,6 +150,10 @@ public class SeminarView extends VerticalLayout {
         seminarGrid.asSingleSelect().addValueChangeListener(event -> showDetails(event.getValue()));
         seminarGrid.setHeightByRows(true);
 
+        contentLayout.getStyle().set("width","100%");
+        details.setCloseOnEsc(false);
+        details.setCloseOnOutsideClick(false);
+
         //Map-Settings
         seminarMap.setApiKey(googleApiKey);
         seminarMap.setLatitude(STANDARDLAT);
@@ -166,6 +168,8 @@ public class SeminarView extends VerticalLayout {
     }
 
     private void setActions() {
+        seminarGrid.asSingleSelect().addValueChangeListener(event -> showDetails(event.getValue()));
+
         // filter-button action
         filterBtn.addClickListener(event -> {
             if (binder.writeBeanIfValid(seminarFilter)) {
@@ -204,6 +208,10 @@ public class SeminarView extends VerticalLayout {
             newSeminar.getUI().ifPresent(ui -> ui.navigate("seminar/new"));
         });
 
+        // close details action
+        closeDetails.addClickListener(event -> {
+            details.close();
+        });
     }
 
     /**
@@ -270,7 +278,7 @@ public class SeminarView extends VerticalLayout {
         }
     }
 
-    /*
+    /**
      * Used for the ListItemClickEvent. It opens the dialog with seminary-details.
      *
      * @author oppls7
@@ -288,6 +296,7 @@ public class SeminarView extends VerticalLayout {
      * @author: siegn2
      * */
     private void generateDialog(SeminarDTO seminar) {
+        Div content = new Div();
         H3 title = new H3(seminar.getTitle());
 
         LocalTime localtime = seminar.getTime();
@@ -298,26 +307,50 @@ public class SeminarView extends VerticalLayout {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         String formatDate = localDate.format(dateFormatter);
 
-        Span locationAndPlz = new Span("Veranstaltungsort: " + seminar.getStreet() + " " + seminar.getHouseNumber() + ", "
-                + seminar.getPlz().intValue() + " " + seminar.getLocation());
-        Span category = new Span("Kategorie: " + seminar.getCategory());
-        Span date = new Span("Datum: " + formatDate);
-        Span time = new Span("Uhrzeit: " + formatTime);
-        Anchor link = new Anchor(seminar.getUrl(), "Weitere Informationen (Externer Link)");
+        Div locationLabel = new Div(new Span("Veranstaltungsort:"));
+        locationLabel.setClassName("detail-label");
+        Div locationAndPlz = new Div(new Span(seminar.getStreet() + " " + seminar.getHouseNumber() + ", "
+                + seminar.getPlz().intValue() + " " + seminar.getLocation()));
+        locationAndPlz.setClassName("detail-wert");
+        Div locationDiv = new Div(locationLabel, locationAndPlz);
+        locationDiv.setClassName("detail-div");
+
+        Div categoryLabel = new Div(new Span("Kategorie:"));
+        categoryLabel.setClassName("detail-label");
+        Div category = new Div( new Span(seminar.getCategory()));
+        category.setClassName("detail-wert");
+        Div categoryDiv = new Div(categoryLabel,category);
+        categoryDiv.setClassName("detail-div");
+
+        Div dateLabel = new Div( new Span("Termin:"));
+        dateLabel.setClassName("detail-label");
+        Div dateTime = new Div(new Span(formatDate+", "+ formatTime+" Uhr"));
+        dateTime.setClassName("detail-wert");
+        Div dateDiv = new Div(dateLabel,dateTime);
+        dateDiv.setClassName("detail-div");
+
+        Div linkLabel = new Div(new Span("Link zum Veranstalter:"));
+        linkLabel.setClassName("detail-label");
+        Anchor linkAnchor = new Anchor(seminar.getUrl(),seminar.getUrl());
         // opens in a new tab
-        link.setTarget("_blank");
-        Span description = new Span("Beschreibung: " + seminar.getDescription());
+        linkAnchor.setTarget("_blank");
+        Div link = new Div(linkAnchor);
+        link.setClassName("detail-wert");
+        Div linkDiv = new Div(linkLabel,link);
+        linkDiv.setClassName("detail-div");
 
-        locationAndPlz.getStyle().set("display", "block");
-        time.getStyle().set("display", "block");
-        date.getStyle().set("display", "block");
-        category.getStyle().set("display", "block");
-        link.getStyle().set("display", "block");
-        description.getStyle().set("display", "block");
+        Div descriptionLabel = new Div(new Span("Beschreibung:"));
+        descriptionLabel.setClassName("detail-label");
+        Div description = new Div(new Span(seminar.getDescription()));
+        description.setClassName("detail-wert");
+        Div descriptionDiv = new Div(descriptionLabel,description);
+        descriptionDiv.setClassName("detail-div");
+        Div last = new Div();
+        last.setClassName("last");
 
-        details.add(title, date, time, category, locationAndPlz, link, description);
-        details.setWidth("500px");
-        details.setHeight("auto");
+        content.add(title, dateDiv, locationDiv, categoryDiv, linkDiv, descriptionDiv,last,closeDetails);
+        details.add(content);
+        content.setId("details");
     }
 
 }

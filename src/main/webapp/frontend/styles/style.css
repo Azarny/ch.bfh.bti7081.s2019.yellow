@@ -9,6 +9,30 @@ h2{
   margin-top:10px;
   margin-bottom:10px;
 }
+h3{
+  margin-top:10px;
+  margin-bottom:10px;
+}
+#details{
+  padding:10px;
+  width:600px;
+  overflow:visible;
+}
+.detail-div{
+  clear:both;
+}
+.last{
+  clear:both;
+}
+.detail-label{
+  width: 200px;
+  float:left;
+  font-weight:bold;
+}
+.detail-wert{
+  width: 400px;
+  float:left;
+}
 .error-notification {
   color: red;
 }
