@@ -196,14 +196,6 @@ public class NewSeminarView extends VerticalLayout {
                     displayErrorMessage("Es ist ein technischer Fehler aufgetreten. " +
                             "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support.");
                 }
-            } else {
-                BinderValidationStatus<SeminarDTO> validate = binder.validate();
-                String errorText = validate.getFieldValidationStatuses()
-                        .stream().filter(BindingValidationStatus::isError)
-                        .map(BindingValidationStatus::getMessage)
-                        .map(Optional::get).distinct()
-                        .collect(Collectors.joining(", "));
-                displayErrorMessage(errorText);
             }
         });
 
