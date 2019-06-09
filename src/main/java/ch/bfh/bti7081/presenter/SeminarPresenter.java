@@ -6,11 +6,13 @@ import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.model.seminar.SeminarFilter;
+import ch.bfh.bti7081.presenter.dto.SeminarFilterDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class SeminarPresenter {
@@ -19,8 +21,11 @@ public class SeminarPresenter {
     @Autowired
     private SeminarManager seminarManager;
 
-    public List<SeminarCategory> getSeminarCategories() {
-        return seminarCategoryManager.getSeminarCategories();
+    public List<String> getSeminarCategories() {
+        List<String> categories = seminarCategoryManager.getSeminarCategories().stream()
+                .map(SeminarCategory::getName)
+                .collect(Collectors.toList());
+        return categories;
     }
 
     private List<Seminar> getSeminaries() {
@@ -31,14 +36,14 @@ public class SeminarPresenter {
         return seminarManager.getFilteredSeminars(filter);
     }
     public List<SeminarDTO> getSeminarDtos() throws Exception{
-        return convertModelsToDtos(getSeminaries());
+        return convertSeminarModelsToDtos(getSeminaries());
     }
-    public List<SeminarDTO> getFilteredSeminarDtos(SeminarFilter filter) throws Exception{
+    public List<SeminarDTO> getFilteredSeminarDtos(SeminarFilterDTO filter) throws Exception{
 
-        return convertModelsToDtos(getFilteredSeminaries(filter));
+        return convertSeminarModelsToDtos(getFilteredSeminaries(convertFilterDtoToModel(filter)));
     }
 
-    private List<SeminarDTO> convertModelsToDtos(List<Seminar> seminaries) throws Exception{
+    private List<SeminarDTO> convertSeminarModelsToDtos(List<Seminar> seminaries) throws Exception{
         List<SeminarDTO> seminarDtos = new ArrayList<>();
         for (Seminar modelObject : seminaries) {
             SeminarDTO seminarDTO = new SeminarDTO();
@@ -57,5 +62,17 @@ public class SeminarPresenter {
             seminarDtos.add(seminarDTO);
         }
         return seminarDtos;
+    }
+
+    private SeminarFilter convertFilterDtoToModel(SeminarFilterDTO seminarFilterDTO){
+        SeminarFilter model = new SeminarFilter();
+        model.setKeyword(seminarFilterDTO.getKeyword());
+        model.setFromDate(seminarFilterDTO.getFromDate());
+        model.setToDate(seminarFilterDTO.getToDate());
+        model.setLocation(seminarFilterDTO.getLocation());
+        if(seminarFilterDTO.getCategory()!=null) {
+            model.setCategory(seminarCategoryManager.getSeminarCategoryByName(seminarFilterDTO.getCategory()));
+        }
+        return model;
     }
 }

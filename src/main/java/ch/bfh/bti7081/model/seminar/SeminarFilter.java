@@ -14,25 +14,19 @@ public class SeminarFilter {
         return keyword;
     }
 
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
-    }
+    public void setKeyword(String keyword) { this.keyword = keyword; }
 
     public LocalDate getFromDate() {
         return fromDate;
     }
 
-    public void setFromDate(LocalDate fromDate) {
-        this.fromDate = fromDate;
-    }
+    public void setFromDate(LocalDate fromDate) { this.fromDate = fromDate; }
 
     public LocalDate getToDate() {
         return toDate;
     }
 
-    public void setToDate(LocalDate toDate) {
-        this.toDate = toDate;
-    }
+    public void setToDate(LocalDate toDate) { this.toDate = toDate; }
 
     public SeminarCategory getCategory() {
         return category;
@@ -46,15 +40,5 @@ public class SeminarFilter {
         return location;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public void reset(){
-        this.setCategory(null);
-        this.setKeyword("");
-        this.setFromDate(null);
-        this.setLocation("");
-        this.setToDate(null);
-    }
+    public void setLocation(String location) { this.location = location; }
 }

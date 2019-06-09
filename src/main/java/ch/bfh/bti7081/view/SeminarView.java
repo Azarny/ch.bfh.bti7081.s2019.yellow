@@ -1,9 +1,8 @@
 package ch.bfh.bti7081.view;
 
+import ch.bfh.bti7081.presenter.dto.SeminarFilterDTO;
 import ch.bfh.bti7081.presenter.dto.UserDTO;
 import ch.bfh.bti7081.presenter.dto.SeminarDTO;
-import ch.bfh.bti7081.model.seminar.SeminarCategory;
-import ch.bfh.bti7081.model.seminar.SeminarFilter;
 import ch.bfh.bti7081.presenter.SeminarPresenter;
 import ch.bfh.bti7081.presenter.UserPresenter;
 import ch.bfh.bti7081.view.customComponents.ErrorNotification;
@@ -57,15 +56,15 @@ public class SeminarView extends VerticalLayout {
     private H1 title = new H1("Seminarfinder");
     private VerticalLayout welcomeLayout = new VerticalLayout(title);
 
-    private ComboBox<SeminarCategory> categoriesCb = new ComboBox<>("Kategorie:");
+    private ComboBox<String> categoriesCb = new ComboBox<>("Kategorie:");
     private TextField searchTf = new TextField("Suchbegriff:");
     private DatePicker fromDateDp = new DatePicker("Datum von:");
     private DatePicker toDateDp = new DatePicker("Datum bis:");
     private TextField ortTf = new TextField("Ort:", "Ort eingeben:");
     private Button filterBtn = new Button("Filter anwenden", new Icon(VaadinIcon.CHECK));
     private Button resetFilterBtn = new Button("Filter löschen", new Icon(VaadinIcon.CLOSE));
-    private SeminarFilter seminarFilter = new SeminarFilter();
-    private Binder<SeminarFilter> binder = new Binder<>();
+    private SeminarFilterDTO seminarFilter = new SeminarFilterDTO();
+    private Binder<SeminarFilterDTO> binder = new Binder<>();
     private FormLayout filterFormLayout = new FormLayout(searchTf, fromDateDp, toDateDp, categoriesCb,
             ortTf, resetFilterBtn, filterBtn);
 
@@ -115,11 +114,11 @@ public class SeminarView extends VerticalLayout {
     }
 
     private void addBindingToForm() {
-        binder.forField(searchTf).bind(SeminarFilter::getKeyword, SeminarFilter::setKeyword);
-        binder.forField(fromDateDp).bind(SeminarFilter::getFromDate, SeminarFilter::setFromDate);
-        binder.forField(toDateDp).bind(SeminarFilter::getToDate, SeminarFilter::setToDate);
-        binder.forField(categoriesCb).bind(SeminarFilter::getCategory, SeminarFilter::setCategory);
-        binder.forField(ortTf).bind(SeminarFilter::getLocation, SeminarFilter::setLocation);
+        binder.forField(searchTf).bind(SeminarFilterDTO::getKeyword, SeminarFilterDTO::setKeyword);
+        binder.forField(fromDateDp).bind(SeminarFilterDTO::getFromDate, SeminarFilterDTO::setFromDate);
+        binder.forField(toDateDp).bind(SeminarFilterDTO::getToDate, SeminarFilterDTO::setToDate);
+        binder.forField(categoriesCb).bind(SeminarFilterDTO::getCategory, SeminarFilterDTO::setCategory);
+        binder.forField(ortTf).bind(SeminarFilterDTO::getLocation, SeminarFilterDTO::setLocation);
     }
 
     /**
@@ -128,7 +127,6 @@ public class SeminarView extends VerticalLayout {
      */
     private void setElementSettings() {
         //Filter-Settings
-        categoriesCb.setItemLabelGenerator(SeminarCategory::getName);
         filterBtn.addClickShortcut(Key.ENTER);
         filterFormLayout.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("0", 1),
@@ -175,7 +173,7 @@ public class SeminarView extends VerticalLayout {
                             "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
                 }
             } else {
-                BinderValidationStatus<SeminarFilter> validate = binder.validate();
+                BinderValidationStatus<SeminarFilterDTO> validate = binder.validate();
                 String errorText = validate.getFieldValidationStatuses()
                         .stream().filter(BindingValidationStatus::isError)
                         .map(BindingValidationStatus::getMessage)
