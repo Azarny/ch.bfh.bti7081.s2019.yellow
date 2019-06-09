@@ -23,6 +23,10 @@ public class SeminarCategory {
     @Column(name = PREFIX + "NAME")
     private String name;
 
+    //Empty constructor needed for creation of elements with Spring.
+    public SeminarCategory() {
+    }
+
     public SeminarCategory(String name) {
         this.name = name;
     }

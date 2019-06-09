@@ -88,16 +88,34 @@ public class GoogleMap extends Component {
         getElement().setProperty("apiKey", apiKey);
     }
 
+    /**
+     * Sets the zoom level of the map.
+     *
+     * @param level int, higher number means further away
+     * @author walty1
+     */
     public void setZoomLevel(int level) {
         getElement().setProperty("zoom", level);
     }
 
+    /**
+     * Sets the center of the map. (LAT)
+     *
+     * @param lat double
+     * @author walty1
+     */
     public void setLatitude(double lat) {
         getElement().setProperty("latitude", lat);
     }
 
-    public void setLongitude(double lon) {
-        getElement().setProperty("longitude", lon);
+    /**
+     * Sets the center of the map. (LNG)
+     *
+     * @param lng double
+     * @author walty1
+     */
+    public void setLongitude(double lng) {
+        getElement().setProperty("longitude", lng);
     }
 }
 
