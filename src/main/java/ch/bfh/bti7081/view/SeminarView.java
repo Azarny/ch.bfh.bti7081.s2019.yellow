@@ -12,6 +12,7 @@ import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
@@ -19,6 +20,7 @@ import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -54,7 +56,6 @@ public class SeminarView extends VerticalLayout {
     private String googleApiKey;
 
     private H1 title = new H1("Seminarfinder");
-    private VerticalLayout welcomeLayout = new VerticalLayout(title);
 
     private ComboBox<String> categoriesCb = new ComboBox<>("Kategorie:");
     private TextField searchTf = new TextField("Suchbegriff:");
@@ -67,6 +68,7 @@ public class SeminarView extends VerticalLayout {
     private Binder<SeminarFilterDTO> binder = new Binder<>();
     private FormLayout filterFormLayout = new FormLayout(searchTf, fromDateDp, toDateDp, categoriesCb,
             ortTf, resetFilterBtn, filterBtn);
+    private Details filterDetails = new Details("Filter",null);
 
     private Button newSeminar = new Button("Neues Seminar", new Icon(VaadinIcon.EDIT));
 
@@ -83,6 +85,7 @@ public class SeminarView extends VerticalLayout {
     private double STANDARDLNG = 8.231;
     private int STANDARDZOOM = 8;
 
+    private VerticalLayout topLayout = new VerticalLayout(title);
     private VerticalLayout rightLayout = new VerticalLayout(seminarMap);
     private HorizontalLayout contentLayout = new HorizontalLayout(leftLayout, rightLayout);
 
@@ -104,13 +107,14 @@ public class SeminarView extends VerticalLayout {
 
             // check if user is expert or moderator
             if (user.getPermission() >= 2) {
-                leftLayout.add(newSeminar);
+                topLayout.add(newSeminar);
             }
         }
         // finish constructing leftLayout
-        leftLayout.add(filterFormLayout, seminarGrid, details);
-
-        this.add(welcomeLayout, contentLayout);
+        leftLayout.add(seminarGrid);
+        filterDetails.addContent(filterFormLayout);
+        topLayout.add(filterDetails);
+        this.add(topLayout, contentLayout,details);
 
     }
 
@@ -128,11 +132,16 @@ public class SeminarView extends VerticalLayout {
      * @author walty1
      */
     private void setElementSettings() {
+        contentLayout.setId("content");
+        rightLayout.setId("right-layout");
         //Filter-Settings
         filterBtn.addClickShortcut(Key.ENTER);
         filterFormLayout.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("0", 1),
-                new FormLayout.ResponsiveStep("21em", 2));
+                new FormLayout.ResponsiveStep("21em", 2),
+                new FormLayout.ResponsiveStep("21em", 3),
+                new FormLayout.ResponsiveStep("21em", 4),
+                new FormLayout.ResponsiveStep("21em", 5));
 
         //List-Settings
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -152,7 +161,7 @@ public class SeminarView extends VerticalLayout {
 
         contentLayout.getStyle().set("width","100%");
         details.setCloseOnEsc(false);
-        details.setCloseOnOutsideClick(false);
+        details.setCloseOnOutsideClick(true);
 
         closeDetails.setId("close-details");
 
@@ -170,7 +179,13 @@ public class SeminarView extends VerticalLayout {
     }
 
     private void setActions() {
-        seminarGrid.asSingleSelect().addValueChangeListener(event -> showDetails(event.getValue()));
+        seminarGrid.asSingleSelect();
+        seminarGrid.addSelectionListener(event -> showDetails(event.getFirstSelectedItem().get()));
+
+        details.addDialogCloseActionListener(event -> {
+            seminarGrid.deselectAll();
+            seminarGrid.select(null);
+        });
 
         // filter-button action
         filterBtn.addClickListener(event -> {
@@ -213,6 +228,8 @@ public class SeminarView extends VerticalLayout {
         // close details action
         closeDetails.addClickListener(event -> {
             details.close();
+            seminarGrid.select(null);
+            seminarGrid.deselectAll();
         });
     }
 
