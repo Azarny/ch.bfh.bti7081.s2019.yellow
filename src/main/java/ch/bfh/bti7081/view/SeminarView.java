@@ -67,8 +67,8 @@ public class SeminarView extends VerticalLayout {
     private SeminarFilterDTO seminarFilter = new SeminarFilterDTO();
     private Binder<SeminarFilterDTO> binder = new Binder<>();
     private FormLayout filterFormLayout = new FormLayout(searchTf, fromDateDp, toDateDp, categoriesCb,
-            ortTf, resetFilterBtn, filterBtn);
-    private Details filterDetails = new Details("Filter",null);
+            ortTf, filterBtn,resetFilterBtn);
+    private Details filterDetails = new Details("Filter",new Div());
 
     private Button newSeminar = new Button("Neues Seminar", new Icon(VaadinIcon.EDIT));
 
