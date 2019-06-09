@@ -12,7 +12,7 @@ import java.util.List;
  * This class serves as boundary between model and view, which allows to transfer values differently.
  * No logic is implemented on this class.
  *
- * @author luscms1
+ * @author luscm1
  */
 public class ForumEntryDTO {
     private String title;

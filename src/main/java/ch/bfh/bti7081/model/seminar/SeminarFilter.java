@@ -58,7 +58,7 @@ public class SeminarFilter {
     /**
      * Resets all values.
      *
-     * @author luscm1
+     * @author oppls7
      */
     public void reset() {
         this.setCategory(null);
