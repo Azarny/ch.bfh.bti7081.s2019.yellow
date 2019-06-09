@@ -1,9 +1,9 @@
 package ch.bfh.bti7081.model.manager;
 
-import ch.bfh.bti7081.presenter.dto.ForumEntryDTO;
 import ch.bfh.bti7081.model.forum.ForumCategory;
 import ch.bfh.bti7081.model.forum.ForumEntry;
 import ch.bfh.bti7081.model.repositories.ForumEntryRepository;
+import ch.bfh.bti7081.presenter.dto.ForumEntryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

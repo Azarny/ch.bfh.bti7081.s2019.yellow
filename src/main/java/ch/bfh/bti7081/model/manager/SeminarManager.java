@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,7 +40,6 @@ public class SeminarManager {
      *
      * @param filter Filters for the seminaries
      * @return List of filtered and sorted seminaries
-     *
      * @author luscm1
      * @author siegn2
      */
@@ -120,25 +118,31 @@ public class SeminarManager {
                 // order the seminaries according to their date
                 .sorted(Comparator.nullsLast(Comparator.comparing(Seminar::getDate)))
                 .collect(Collectors.toList());
-
     }
 
+    /**
+     * Saves a seminar in the database.
+     *
+     * @param seminar seminar with informations
+     * @throws IllegalArgumentException Aborts if validation-errors occur.
+     * @author luscm1
+     */
     public void createSeminar(Seminar seminar) throws IllegalArgumentException {
         String validationResult = validateSeminar(seminar);
         if (validationResult.isEmpty()) {
             seminarRepository.save(seminar);
         } else {
-            throw new IllegalArgumentException("Following errors occured: "+ validationResult);
+            throw new IllegalArgumentException("Following errors occured: " + validationResult);
         }
     }
 
     /**
      * validates if the seminar fulfills all the requirements
      *
-     * @param seminar
-     * @return
-     * @author: luscm1
-     * */
+     * @param seminar seminarobject with new information
+     * @return a string containing the result of the validation.
+     * @author luscm1
+     */
     public String validateSeminar(Seminar seminar) {
         String returnString = "";
 
@@ -195,15 +199,7 @@ public class SeminarManager {
         return returnString;
     }
 
-    private LocalDateTime dateGenerator(String timeToParse) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return LocalDateTime.parse(timeToParse, formatter);
-    }
-
-
     public void deleteSeminar(Seminar seminar) {
         seminarRepository.delete(seminar);
     }
-
-
 }

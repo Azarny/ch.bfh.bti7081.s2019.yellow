@@ -50,7 +50,7 @@ public class SeminarFilter {
         this.location = location;
     }
 
-    public void reset(){
+    public void reset() {
         this.setCategory(null);
         this.setKeyword("");
         this.setFromDate(null);

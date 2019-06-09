@@ -1,5 +1,11 @@
 package ch.bfh.bti7081.model;
 
+/**
+ * These are model-wide constants for validation.
+ * They can be reused by other parts of the product.
+ *
+ * @author luscm1
+ */
 public enum ValidationConstants {
     MAX_YEARS_IN_FUTURE(5),
     MIN_TITLE_LENGTH(4),

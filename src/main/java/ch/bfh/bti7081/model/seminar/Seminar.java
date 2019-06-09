@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 
 /**
  * @author siegn2
+ * @author walty1
  */
 @Entity
 @Table(name = "seminar")

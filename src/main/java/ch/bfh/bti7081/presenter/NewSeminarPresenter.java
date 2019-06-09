@@ -1,12 +1,12 @@
 package ch.bfh.bti7081.presenter;
 
 import ch.bfh.bti7081.model.ValidationConstants;
-import ch.bfh.bti7081.presenter.dto.SeminarDTO;
-import ch.bfh.bti7081.presenter.dto.UserDTO;
 import ch.bfh.bti7081.model.manager.SeminarCategoryManager;
 import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
+import ch.bfh.bti7081.presenter.dto.SeminarDTO;
+import ch.bfh.bti7081.presenter.dto.UserDTO;
 import ch.bfh.bti7081.view.NewSeminarView;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
@@ -30,16 +30,17 @@ public class NewSeminarPresenter {
     private SeminarManager seminarManager;
     @Autowired
     private SeminarCategoryManager seminarCategoryManager;
-    @Value("${healthApp.googleApiKey:NOKEYFOUND}")
-    private String googleApiKey;
     @Autowired
     private UserPresenter userPresenter;
+    //Auto-Filled value based on spring configuration
+    @Value("${healthApp.googleApiKey:NOKEYFOUND}")
+    private String googleApiKey;
 
     /**
      * Is accessed by view to get the categories for a seminar.
-     * Author: walty1
      *
      * @return stringlist of seminaries.
+     * @author walty1
      */
     public List<String> getSeminarCategories() {
         List<String> categories = seminarCategoryManager.getSeminarCategories().stream()
@@ -48,6 +49,17 @@ public class NewSeminarPresenter {
         return categories;
     }
 
+    /**
+     * This method in the end saves the seminar the user entered.
+     * -Coordinates are added.
+     * -Checks are performed in the backend
+     *
+     * @param frontendObject SeminarDTO
+     * @throws Exception different exceptions (problems with coordinates, validation)
+     *                   information to user in frontend.
+     * @author walty1
+     * @author luscm1
+     */
     public void sendSeminarToBackend(SeminarDTO frontendObject) throws Exception {
         String userName = (String) VaadinSession.getCurrent().getAttribute("userName");
         if (userName != null || !userName.isEmpty()) {
@@ -71,11 +83,11 @@ public class NewSeminarPresenter {
 
     /**
      * Converts a SeminarDTO to Seminar object. (Just value mapping.)
-     * Author: walty1
      *
-     * @param seminarDTO
-     * @return Seminar
+     * @param seminarDTO SeminarDTO with all values filled out.
+     * @return Seminar Seminar
      * @throws NoSuchFieldException Throws an exception if the category could not be set.
+     * @author walty1
      */
     private Seminar convertDTOtoModel(SeminarDTO seminarDTO) throws Exception {
         Seminar modelObject = new Seminar();
@@ -99,13 +111,13 @@ public class NewSeminarPresenter {
 
     /**
      * Enriches a SeminarDTO with coordinates corresponding to the address.
-     * Author: walty1
      *
-     * @param seminar
-     * @throws ApiException Standard
-     * @throws NotFoundException If the adress is not found...
+     * @param seminar SeminarDTO with no coordinates but address
+     * @throws ApiException         Standard
+     * @throws NotFoundException    If the address is not found...
      * @throws InterruptedException Standard
-     * @throws IOException Standard
+     * @throws IOException          Standard
+     * @author walty1
      */
     private void enrichWithCoordinates(SeminarDTO seminar)
             throws ApiException, InterruptedException, IOException {

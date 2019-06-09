@@ -7,6 +7,13 @@ import ch.bfh.bti7081.model.forum.ForumEntryComment;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Data-Transfer object for forum entries.
+ * This class serves as boundary between model and view, which allows to transfer values differently.
+ * No logic is implemented on this class.
+ *
+ * @author luscms1
+ */
 public class ForumEntryDTO {
     private String title;
     private String text;

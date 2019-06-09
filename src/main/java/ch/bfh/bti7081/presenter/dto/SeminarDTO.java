@@ -3,12 +3,21 @@ package ch.bfh.bti7081.presenter.dto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * Data-Transfer object for seminaries.
+ * This class serves as boundary between model and view, which allows to transfer values differently.
+ * No logic is implemented on this class.
+ *
+ * @author walty1
+ */
 public class SeminarDTO {
     private String street;
     private String houseNumber;
+    //PLZ as Double as frontend knows double-number-fields.
     private Double plz;
     private String location;
     private String title;
+    //Time and date are separated
     private LocalTime time;
     private LocalDate date;
     private String category;
