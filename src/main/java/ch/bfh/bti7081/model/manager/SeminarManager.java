@@ -140,7 +140,7 @@ public class SeminarManager {
      * validates if the seminar fulfills all the requirements
      *
      * @param seminar seminarobject with new information
-     * @return a string containing the result of the validation.
+     * @return a string containing the result of the validation (which errors were found).
      * @author luscm1
      */
     public String validateSeminar(Seminar seminar) {

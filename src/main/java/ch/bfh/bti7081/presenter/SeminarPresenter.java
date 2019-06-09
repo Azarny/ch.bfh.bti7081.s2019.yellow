@@ -71,6 +71,7 @@ public class SeminarPresenter {
         List<SeminarDTO> seminarDtos = new ArrayList<>();
         for (Seminar modelObject : seminaries) {
             SeminarDTO seminarDTO = new SeminarDTO();
+            seminarDTO.setId(modelObject.getId());
             seminarDTO.setCategory(modelObject.getCategory().getName());
             seminarDTO.setDate(modelObject.getDate().toLocalDate());
             seminarDTO.setDescription(modelObject.getDescription());

@@ -11,9 +11,10 @@ import java.time.LocalTime;
  * @author walty1
  */
 public class SeminarDTO {
+    private Long id;
     private String street;
     private String houseNumber;
-    //PLZ as Double as frontend knows double-number-fields.
+    //PLZ as Double as frontend only knows double-number-fields.
     private Double plz;
     private String location;
     private String title;
@@ -120,5 +121,13 @@ public class SeminarDTO {
 
     public void setLocation_lng(double location_lng) {
         this.location_lng = location_lng;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

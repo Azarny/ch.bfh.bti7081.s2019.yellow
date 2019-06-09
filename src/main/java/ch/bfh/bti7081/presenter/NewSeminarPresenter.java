@@ -32,7 +32,7 @@ public class NewSeminarPresenter {
     private SeminarCategoryManager seminarCategoryManager;
     @Autowired
     private UserPresenter userPresenter;
-    //Auto-Filled value based on spring configuration
+    //Auto-Filled value based on environment configuration
     @Value("${healthApp.googleApiKey:NOKEYFOUND}")
     private String googleApiKey;
 
@@ -85,7 +85,7 @@ public class NewSeminarPresenter {
      * Converts a SeminarDTO to Seminar object. (Just value mapping.)
      *
      * @param seminarDTO SeminarDTO with all values filled out.
-     * @return Seminar Seminar
+     * @return Seminar              Seminar
      * @throws NoSuchFieldException Throws an exception if the category could not be set.
      * @author walty1
      */
