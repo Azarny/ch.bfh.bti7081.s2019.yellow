@@ -180,7 +180,9 @@ public class SeminarView extends VerticalLayout {
 
     private void setActions() {
         seminarGrid.asSingleSelect();
-        seminarGrid.addSelectionListener(event -> showDetails(event.getFirstSelectedItem().get()));
+        seminarGrid.addSelectionListener(event -> {
+            if(event.getFirstSelectedItem().isPresent()) showDetails(event.getFirstSelectedItem().get());
+        });
 
         details.addDialogCloseActionListener(event -> {
             seminarGrid.deselectAll();
@@ -211,7 +213,7 @@ public class SeminarView extends VerticalLayout {
         resetFilterBtn.addClickListener(event -> {
             // clear fields by setting null
             binder.readBean(null);
-            seminarFilter.reset();
+            seminarFilter = seminarPresenter.reset(seminarFilter);
             try {
                 setViewContent(seminarPresenter.getFilteredSeminarDtos(seminarFilter));
             } catch (Exception e) {
@@ -311,8 +313,8 @@ public class SeminarView extends VerticalLayout {
     /**
      * Generates a dialog, which shows the details from the clicked seminary
      * @param seminar DTO of the seminar to be visible in the pop-up
-     * @author: oppls7
-     * @author: siegn2
+     * @author oppls7
+     * @author siegn2
      * */
     private void generateDialog(SeminarDTO seminar) {
         Div content = new Div();

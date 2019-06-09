@@ -64,6 +64,13 @@ public class SeminarPresenter {
         return seminarDtos;
     }
 
+    /**
+     * Converts FilterDTO to Model
+     *
+     * @param seminarFilterDTO SeminarfilterDTO
+     * @return SeminarFilter
+     * @author oppls7
+     */
     private SeminarFilter convertFilterDtoToModel(SeminarFilterDTO seminarFilterDTO){
         SeminarFilter model = new SeminarFilter();
         model.setKeyword(seminarFilterDTO.getKeyword());
@@ -74,5 +81,21 @@ public class SeminarPresenter {
             model.setCategory(seminarCategoryManager.getSeminarCategoryByName(seminarFilterDTO.getCategory()));
         }
         return model;
+    }
+
+    /**
+     * Resets the Filter-Values
+     *
+     * @param seminarFilterDTO SeminarFilterDTO
+     * @return SeminarFilter
+     * @author oppls7
+     */
+    public SeminarFilterDTO reset(SeminarFilterDTO seminarFilterDTO){
+        seminarFilterDTO.setCategory(null);
+        seminarFilterDTO.setKeyword("");
+        seminarFilterDTO.setFromDate(null);
+        seminarFilterDTO.setLocation("");
+        seminarFilterDTO.setToDate(null);
+        return seminarFilterDTO;
     }
 }

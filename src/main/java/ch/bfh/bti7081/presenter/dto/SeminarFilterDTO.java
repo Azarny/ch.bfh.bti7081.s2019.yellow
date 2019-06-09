@@ -3,6 +3,14 @@ package ch.bfh.bti7081.presenter.dto;
 
 import java.time.LocalDate;
 
+/**
+ * Data-Transfer object for seminarfilters.
+ * This class serves as boundary between model and view, which allows to transfer values differently.
+ *
+ * No logic is implemented on this class.
+ *
+ * @author oppls7
+ */
 public class SeminarFilterDTO {
     private String keyword;
     private LocalDate fromDate;
@@ -38,13 +46,5 @@ public class SeminarFilterDTO {
 
     public void setLocation(String location) {
       this.location = location;
-    }
-
-    public void reset(){
-        this.setCategory(null);
-        this.setKeyword("");
-        this.setFromDate(null);
-        this.setLocation("");
-        this.setToDate(null);
     }
 }
