@@ -40,38 +40,36 @@ import java.util.stream.Collectors;
 @Component
 @Route(value = "seminar/new", layout = Layout.class)
 public class NewSeminarView extends VerticalLayout {
+    //Error-Messages
     private static final String NOT_PERMITTED = "Sie verfügen nicht über die benötigten Berechtigungen.";
     private static final String NOT_LOGGED_IN = "Bitte melden Sie sich an.";
-
     @Autowired
     private NewSeminarPresenter presenter;
     @Autowired
     private UserPresenter userPresenter;
-
+    //Upper Part of website
     private H1 title = new H1("Seminar erstellen");
     private FormLayout seminarForm = new FormLayout();
-
+    //Form-Components
     private TextField seminarTitle = new TextField("Seminar-Titel");
     private Select<String> seminarCategory = new Select<>();
-
+    private TextArea seminarDescription = new TextArea("Beschreibung");
+    private TextField seminarUrl = new TextField("Externer Link");
+    //Date-composite
     private TimePicker seminarTime = new TimePicker("Zeit");
     private DatePicker seminarDate = new DatePicker("Datum");
     private FormLayout dateComposite = new FormLayout(seminarDate, seminarTime);
-
-    private TextArea seminarDescription = new TextArea("Beschreibung");
-    private TextField seminarUrl = new TextField("Externer Link");
-
+    //Street composite
     private TextField seminarStreet = new TextField("Strasse");
     private TextField seminarStreetNbr = new TextField("Nr.");
     private FormLayout streetComposite = new FormLayout(seminarStreet, seminarStreetNbr);
-
+    //Place composite
     private NumberField seminarPlz = new NumberField("PLZ");
     private TextField seminarPlace = new TextField("Ort");
     private FormLayout placeComposite = new FormLayout(seminarPlz, seminarPlace);
-
+    //Buttons
     private Button save = new Button("Save", new Icon(VaadinIcon.PLUS));
     private Button cancel = new Button("Cancel", new Icon(VaadinIcon.EXIT));
-
     private HorizontalLayout formActions = new HorizontalLayout(save, cancel);
 
     private Binder<SeminarDTO> binder = new Binder<>();

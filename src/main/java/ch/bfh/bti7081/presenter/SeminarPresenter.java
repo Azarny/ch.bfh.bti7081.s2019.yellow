@@ -1,11 +1,11 @@
 package ch.bfh.bti7081.presenter;
 
-import ch.bfh.bti7081.presenter.dto.SeminarDTO;
 import ch.bfh.bti7081.model.manager.SeminarCategoryManager;
 import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.model.seminar.SeminarFilter;
+import ch.bfh.bti7081.presenter.dto.SeminarDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,15 +30,17 @@ public class SeminarPresenter {
     private List<Seminar> getFilteredSeminaries(SeminarFilter filter) {
         return seminarManager.getFilteredSeminars(filter);
     }
-    public List<SeminarDTO> getSeminarDtos() throws Exception{
+
+    public List<SeminarDTO> getSeminarDtos() {
         return convertModelsToDtos(getSeminaries());
     }
-    public List<SeminarDTO> getFilteredSeminarDtos(SeminarFilter filter) throws Exception{
+
+    public List<SeminarDTO> getFilteredSeminarDtos(SeminarFilter filter) {
 
         return convertModelsToDtos(getFilteredSeminaries(filter));
     }
 
-    private List<SeminarDTO> convertModelsToDtos(List<Seminar> seminaries) throws Exception{
+    private List<SeminarDTO> convertModelsToDtos(List<Seminar> seminaries) {
         List<SeminarDTO> seminarDtos = new ArrayList<>();
         for (Seminar modelObject : seminaries) {
             SeminarDTO seminarDTO = new SeminarDTO();

@@ -13,42 +13,42 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
- * Author: heuzl1
+ * @author heuzl1
  */
 @Route(value = "", layout = Layout.class)
 public class MainView extends VerticalLayout {
     @Autowired
     private MainViewPresenter mainViewPresenter;
-
+    //Placeholder
     private String loremipsum = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, " +
             "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, " +
             "sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. " +
             "Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.";
-
     // title and welcometext
     private H1 title = new H1("Herzlich Willkommen!");
     private Label welcomeText = new Label(loremipsum);
     private VerticalLayout welcomeLayout = new VerticalLayout(title, welcomeText);
-
     // block "Wichtige Links"
     private H2 linksTitle = new H2("Wichtige Links");
     private Label linksText = new Label(loremipsum);
     private VerticalLayout linksLayout = new VerticalLayout(linksTitle, linksText);
-
     // block "Hot Topics"
     private H2 hotTopicsTitle = new H2("Hot Topics");
     private VerticalLayout hotTopicsLayout = new VerticalLayout(hotTopicsTitle);
-
     // block "nächste Seminare"
     private H2 seminariesTitle = new H2("Nächste Seminare");
     private VerticalLayout seminariesLayout = new VerticalLayout(seminariesTitle);
-
     // container for the feature views
     private HorizontalLayout siteFeatures = new HorizontalLayout();
 
     public MainView() {
     }
 
+    /**
+     * Builds the MainView on our page.
+     *
+     * @author heuzl1
+     */
     @PostConstruct
     public void init() {
         // title and welcometext

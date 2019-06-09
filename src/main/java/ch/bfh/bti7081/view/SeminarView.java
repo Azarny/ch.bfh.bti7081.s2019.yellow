@@ -53,10 +53,10 @@ public class SeminarView extends VerticalLayout {
     private UserPresenter userPresenter;
     @Value("${healthApp.googleApiKey:NOKEYFOUND}")
     private String googleApiKey;
-
+    //Upper Part of website
     private H1 title = new H1("Seminarfinder");
     private VerticalLayout welcomeLayout = new VerticalLayout(title);
-
+    //Components for filter
     private ComboBox<SeminarCategory> categoriesCb = new ComboBox<>("Kategorie:");
     private TextField searchTf = new TextField("Suchbegriff:");
     private DatePicker fromDateDp = new DatePicker("Datum von:");
@@ -68,32 +68,28 @@ public class SeminarView extends VerticalLayout {
     private Binder<SeminarFilter> binder = new Binder<>();
     private FormLayout filterFormLayout = new FormLayout(searchTf, fromDateDp, toDateDp, categoriesCb,
             ortTf, resetFilterBtn, filterBtn);
-
+    //New-Seminar-Button
     private Button newSeminar = new Button("Neues Seminar", new Icon(VaadinIcon.EDIT));
-
+    //Seminar-Components
     private Grid<SeminarDTO> seminarGrid = new Grid<>();
-
     private Dialog details = new Dialog();
-
-    private VerticalLayout leftLayout = new VerticalLayout();
-    //Seminar-Map and settings for having Switzerland focussed. (Standard.)
+    //Seminar-Map and settings for having Switzerland focused. (Standard.)
     private GoogleMap seminarMap = new GoogleMap();
     private List<SeminarDTO> mapSeminaries;
     private double STANDARDLAT = 46.798;
     private double STANDARDLNG = 8.231;
     private int STANDARDZOOM = 8;
-
+    private VerticalLayout leftLayout = new VerticalLayout();
     private VerticalLayout rightLayout = new VerticalLayout(seminarMap);
     private HorizontalLayout contentLayout = new HorizontalLayout(leftLayout, rightLayout);
 
     /**
      * Initializes the creation of the view after it has been constructed by Spring.
      *
-     * @throws Exception
      * @author oppls7
      */
     @PostConstruct
-    public void init() throws Exception {
+    public void init() {
         setElementSettings();
         setActions();
         addBindingToForm();
@@ -271,6 +267,7 @@ public class SeminarView extends VerticalLayout {
                 seminarMap.addMarker(seminarMarker);
             }
             //Set the new center of the map.
+            //As every seminar in our database must have lat and lng, no exception handling is necessary.
             if (seminaries.size() > 0) {
                 double mapCenterLat = seminaries.stream().
                         mapToDouble(SeminarDTO::getLocation_lat).
