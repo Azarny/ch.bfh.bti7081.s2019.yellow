@@ -71,7 +71,7 @@ public class SeminarView extends VerticalLayout {
     private Grid<SeminarDTO> seminarGrid = new Grid<>();
 
     private Dialog details = new Dialog();
-    private Button closeDetails = new Button("Schliessen", new Icon(VaadinIcon.CLOSE));
+    private Button closeDetails = new Button("", new Icon(VaadinIcon.CLOSE));
 
     private VerticalLayout leftLayout = new VerticalLayout();
 
@@ -153,6 +153,8 @@ public class SeminarView extends VerticalLayout {
         contentLayout.getStyle().set("width","100%");
         details.setCloseOnEsc(false);
         details.setCloseOnOutsideClick(false);
+
+        closeDetails.setId("close-details");
 
         //Map-Settings
         seminarMap.setApiKey(googleApiKey);

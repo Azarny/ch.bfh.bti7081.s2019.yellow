@@ -17,6 +17,7 @@ h3{
   padding:10px;
   width:600px;
   overflow:visible;
+  position:relative;
 }
 .detail-div{
   clear:both;
@@ -45,6 +46,11 @@ vaadin-button{
   right:40px;
   top:10px;
   background-color: #eee;
+}
+#close-details{
+  position:absolute;
+  top:0;
+  right:0;
 }
 
 /* Nav-Styles */
