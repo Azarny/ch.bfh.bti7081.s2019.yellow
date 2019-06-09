@@ -1,12 +1,12 @@
 package ch.bfh.bti7081.presenter;
 
 import ch.bfh.bti7081.model.ValidationConstants;
-import ch.bfh.bti7081.presenter.dto.SeminarDTO;
-import ch.bfh.bti7081.presenter.dto.UserDTO;
 import ch.bfh.bti7081.model.manager.SeminarCategoryManager;
 import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
+import ch.bfh.bti7081.presenter.dto.SeminarDTO;
+import ch.bfh.bti7081.presenter.dto.UserDTO;
 import ch.bfh.bti7081.view.NewSeminarView;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
@@ -99,13 +99,14 @@ public class NewSeminarPresenter {
 
     /**
      * Enriches a SeminarDTO with coordinates corresponding to the address.
-     * Author: walty1
+     * @author: walty1
+     * @author: siegn2
      *
      * @param seminar
-     * @throws ApiException Standard
-     * @throws NotFoundException If the adress is not found...
+     * @throws ApiException         Standard
+     * @throws NotFoundException    If the address is not found...
      * @throws InterruptedException Standard
-     * @throws IOException Standard
+     * @throws IOException          Standard
      */
     private void enrichWithCoordinates(SeminarDTO seminar)
             throws ApiException, InterruptedException, IOException {
@@ -113,7 +114,7 @@ public class NewSeminarPresenter {
                 .apiKey(googleApiKey)
                 .build();
         String address = seminar.getStreet() + " " + seminar.getHouseNumber() + ", " +
-                seminar.getPlz() + " " + seminar.getLocation();
+                seminar.getPlz().intValue() + " " + seminar.getLocation();
         //Throws errors in case of connection problems.
         GeocodingResult[] results = GeocodingApi.geocode(context,
                 address).await();
