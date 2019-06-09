@@ -193,7 +193,13 @@ public class SeminarManager {
             errorMessages.add("bitte gültige Beschreibung angeben");
         }
 
-        return String.join(", ", errorMessages);
+        String result;
+        if (errorMessages.isEmpty()){
+            result = "";
+        }else{
+            result = String.join(", ", errorMessages);
+        }
+        return result;
     }
 
     private LocalDateTime dateGenerator(String timeToParse) {
