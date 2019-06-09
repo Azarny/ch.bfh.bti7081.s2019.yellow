@@ -27,19 +27,46 @@ public class SeminarPresenter {
         return seminarManager.getSeminaries();
     }
 
+    /**
+     * Filters the seminaries.
+     *
+     * @param filter filter-object
+     * @return seminar-list based on filter (no DTO)
+     * @author luscm1
+     */
     private List<Seminar> getFilteredSeminaries(SeminarFilter filter) {
         return seminarManager.getFilteredSeminars(filter);
     }
 
+    /**
+     * Delivers all seminaries in DTO form.
+     *
+     * @return list of all seminaries
+     * @author oppls7
+     */
     public List<SeminarDTO> getSeminarDtos() {
         return convertModelsToDtos(getSeminaries());
     }
 
+    /**
+     * Delivers a list of seminaries based on a filter.
+     *
+     * @param filter filter object filled out by the user.
+     * @return list of seminaries (DTO)
+     * @author oppls7
+     */
     public List<SeminarDTO> getFilteredSeminarDtos(SeminarFilter filter) {
 
         return convertModelsToDtos(getFilteredSeminaries(filter));
     }
 
+    /**
+     * Converts a seminar (in a a list) to a seminar DTO
+     *
+     * @param seminaries list of seminaries
+     * @return list of SeminarDTO's
+     * @author oppls7
+     */
     private List<SeminarDTO> convertModelsToDtos(List<Seminar> seminaries) {
         List<SeminarDTO> seminarDtos = new ArrayList<>();
         for (Seminar modelObject : seminaries) {

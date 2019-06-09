@@ -2,6 +2,11 @@ package ch.bfh.bti7081.model.seminar;
 
 import java.time.LocalDate;
 
+/**
+ * Filter-object for the frontend.
+ *
+ * @author luscm1
+ */
 public class SeminarFilter {
 
     private String keyword;
@@ -50,6 +55,11 @@ public class SeminarFilter {
         this.location = location;
     }
 
+    /**
+     * Resets all values.
+     *
+     * @author luscm1
+     */
     public void reset() {
         this.setCategory(null);
         this.setKeyword("");

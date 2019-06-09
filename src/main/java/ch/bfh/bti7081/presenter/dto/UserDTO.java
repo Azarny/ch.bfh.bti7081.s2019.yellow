@@ -8,6 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+/**
+ * Data-Transfer object for users.
+ * This class serves as boundary between model and view, which allows to transfer values differently.
+ * No logic is implemented on this class.
+ *
+ * @author luscm1
+ */
 public class UserDTO {
 
     @Autowired
@@ -48,7 +55,7 @@ public class UserDTO {
         this.password = userPresenter.encryptPassword(getUsername(), password);
     }
 
-    public void setEncryptedPassword(String password){
+    public void setEncryptedPassword(String password) {
         this.password = password;
     }
 

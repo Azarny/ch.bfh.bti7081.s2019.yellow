@@ -27,9 +27,6 @@ public class SeminarCategory {
         this.name = name;
     }
 
-    public SeminarCategory() {
-    }
-
     public String getName() {
         return name;
     }
