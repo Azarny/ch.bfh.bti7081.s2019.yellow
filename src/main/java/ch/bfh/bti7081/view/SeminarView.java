@@ -152,7 +152,7 @@ public class SeminarView extends VerticalLayout {
 
         contentLayout.getStyle().set("width","100%");
         details.setCloseOnEsc(false);
-        details.setCloseOnOutsideClick(false);
+        details.setCloseOnOutsideClick(true);
 
         closeDetails.setId("close-details");
 
@@ -299,7 +299,8 @@ public class SeminarView extends VerticalLayout {
      * */
     private void generateDialog(SeminarDTO seminar) {
         Div content = new Div();
-        H3 title = new H3(seminar.getTitle());
+        String seminarTitle = seminar.getTitle();
+        H3 title = new H3(seminarTitle);
 
         LocalTime localtime = seminar.getTime();
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("kk:mm");
