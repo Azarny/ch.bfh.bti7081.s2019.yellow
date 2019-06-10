@@ -12,71 +12,110 @@ import com.vaadin.flow.shared.Registration;
  * (See @HTMLImport and Polymer)
  * Properties are set via JavaScript.
  * Please use the isMapReady boolean to check if markers can be set.
+ *
+ * @author walty1
  */
 @Tag("google-map")
 @HtmlImport("bower_components/google-map/google-map.html")
 public class GoogleMap extends Component {
 
-    private boolean mapIsReady=false;
+    private boolean mapIsReady = false;
 
     /**
-     * Author: walty1
+     * Constructs a basic Google-Maps object to add to a Vaadin View.
+     * Consider using "isMapReady" before adding any objects.
+     *
+     * @author walty1
      */
     public GoogleMap() {
         //Fits the zoom level so that all markers are present
         getElement().setProperty("fitToMarkers", true);
         getElement().getStyle().set("height", "100%");
         getElement().getStyle().set("width", "100%");
-        this.addMapReadyListener(event->mapIsReady=true);
+        //By using this listener, isMapReady will deliver true information.
+        this.addMapReadyListener(event -> mapIsReady = true);
     }
 
     /**
-     * Author: walty1
-     * @param clickListener
-     * @return
+     * Add a listener to the map to check if elements can be added already.
+     *
+     * @param mapReadyListener The Listener (own class)
+     * @return Registrates a listener.
+     * @author walty1
      */
-    public Registration addMapReadyListener(ComponentEventListener<MapReadyEvent> clickListener) {
-        //Event has to be activated in JS.
-        getElement().setProperty("clickEvents", true);
-        return super.addListener(MapReadyEvent.class, clickListener);
+    public Registration addMapReadyListener(ComponentEventListener<MapReadyEvent> mapReadyListener) {
+        return super.addListener(MapReadyEvent.class, mapReadyListener);
     }
 
     /**
-     * Author: walty1
+     * Adds a Google-Maps-Marker to the current map object.
+     *
      * @param marker GoogleMapMarker to add
+     * @author walty1
      */
     public void addMarker(GoogleMapMarker marker) {
         getElement().appendChild(marker.getElement());
     }
 
     /**
-     * Author: walty1
      * Deletes all markers from the DOM.
+     *
+     * @author walty1
      */
-    public void resetMarkers(){
-        if(getElement().getChildren().count()>0){
+    public void resetMarkers() {
+        if (getElement().getChildren().count() > 0) {
             getElement().removeAllChildren();
         }
     }
 
+    /**
+     * Returns the state of the map and if adding elements is already allowed.
+     *
+     * @return state
+     * @author walty1
+     */
     public boolean isMapReady() {
         return mapIsReady;
     }
 
-    public void setApiKey(String apiKey){
+    /**
+     * An API-key for Google Maps provided by Google is needed.
+     *
+     * @param apiKey Google-Maps-Api-Key
+     * @author walty1
+     */
+    public void setApiKey(String apiKey) {
         getElement().setProperty("apiKey", apiKey);
     }
-    public void setZoomLevel(int level){
+
+    /**
+     * Sets the zoom level of the map.
+     *
+     * @param level int, higher number means further away
+     * @author walty1
+     */
+    public void setZoomLevel(int level) {
         getElement().setProperty("zoom", level);
     }
 
+    /**
+     * Sets the center of the map. (LAT)
+     *
+     * @param lat double
+     * @author walty1
+     */
     public void setLatitude(double lat) {
         getElement().setProperty("latitude", lat);
     }
 
-    public void setLongitude(double lon) {
-        getElement().setProperty("longitude", lon);
+    /**
+     * Sets the center of the map. (LNG)
+     *
+     * @param lng double
+     * @author walty1
+     */
+    public void setLongitude(double lng) {
+        getElement().setProperty("longitude", lng);
     }
-
 }
 

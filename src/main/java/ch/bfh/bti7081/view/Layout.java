@@ -1,7 +1,7 @@
 package ch.bfh.bti7081.view;
 
-import ch.bfh.bti7081.presenter.dto.UserDTO;
 import ch.bfh.bti7081.presenter.UserPresenter;
+import ch.bfh.bti7081.presenter.dto.UserDTO;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.StyleSheet;
@@ -27,31 +27,36 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Author: heuzl1
+ * This View contains components that are present on every page of our product.
+ * Navigation-Header and login.
+ *
+ * @author heuzl1
+ * @author oppls7
  */
 @StyleSheet("styles/style.css")
 public class Layout extends VerticalLayout implements RouterLayout {
     @Autowired
     private UserPresenter presenter;
-
     private HorizontalLayout menuBar = new HorizontalLayout();
     private Label filler = new Label("");
-
     // elements for login
     private Button loginDialogBtn = new Button("Login");
     private HorizontalLayout loginLayout = new HorizontalLayout(loginDialogBtn);
-
     // elements for logged in user
     private Label loggedInUser = new Label();
     private Button logoutBtn = new Button("Logout");
     private HorizontalLayout loggedInLayout = new HorizontalLayout(loggedInUser, logoutBtn);
-
     // LoginForm
     private FormLayout formLayout = new FormLayout();
     private Dialog loginForm = new Dialog();
     private TextField userName = new TextField();
     private PasswordField userPw = new PasswordField();
 
+    /**
+     * Generates the view of routerbar and login.
+     *
+     * @author heuzl1
+     */
     public Layout() {
         HorizontalLayout links = new HorizontalLayout(
                 new RouterLink("Startseite", MainView.class),
@@ -86,7 +91,7 @@ public class Layout extends VerticalLayout implements RouterLayout {
     }
 
     /**
-     * Author: heuzl1
+     * @author heuzl1
      */
     private void logout() {
         VaadinSession.getCurrent().setAttribute("userName", null);
@@ -94,17 +99,17 @@ public class Layout extends VerticalLayout implements RouterLayout {
     }
 
     /**
-     * Author: heuzl1
+     * @author heuzl1
      */
     private void refreshSite() {
         UI.getCurrent().getPage().reload();
     }
 
-    /*
+    /**
      * Generates a Login Form with Vaadin-Binder
      *
-     * Author: oppls7
-     * */
+     * @author oppls7
+     */
     private void generateLoginLayout() {
         Binder<UserDTO> binder = new Binder<>();
         UserDTO userToLogin = new UserDTO();
@@ -163,11 +168,11 @@ public class Layout extends VerticalLayout implements RouterLayout {
         loginForm.add(title, formLayout);
     }
 
-    /*
+    /**
      * Gets the user with his username and checks his password.
      *
-     * Author: oppls7
-     * */
+     * @author oppls7
+     */
     private boolean checkLogin(UserDTO user) {
         UserDTO userCheck = presenter.getUserByUsername(user.getUsername());
         if (userCheck != null) {

@@ -11,10 +11,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import java.util.List;
 
 /**
+ * User-object in the data model
+ *
  * @author siegn2
  */
 @Entity
@@ -23,11 +24,11 @@ public class User {
     private static final String PREFIX = "USER_";
 
     @Id
-    @Column(name=PREFIX + "ID")
+    @Column(name = PREFIX + "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = PREFIX + "USERNAME",unique = true, length = 20)
+    @Column(name = PREFIX + "USERNAME", unique = true, length = 20)
     private String username;
 
     @Column(name = PREFIX + "EMAIL", length = 255)

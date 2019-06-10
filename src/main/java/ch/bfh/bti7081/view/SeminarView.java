@@ -16,7 +16,11 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -50,10 +54,10 @@ public class SeminarView extends VerticalLayout {
     private UserPresenter userPresenter;
     @Value("${healthApp.googleApiKey:NOKEYFOUND}")
     private String googleApiKey;
-
+    //Upper Part of website
     private H1 title = new H1("Seminarfinder");
     private VerticalLayout welcomeLayout = new VerticalLayout(title);
-
+    //Components for filter
     private ComboBox<SeminarCategory> categoriesCb = new ComboBox<>("Kategorie:");
     private TextField searchTf = new TextField("Suchbegriff:");
     private DatePicker fromDateDp = new DatePicker("Datum von:");
@@ -65,27 +69,29 @@ public class SeminarView extends VerticalLayout {
     private Binder<SeminarFilter> binder = new Binder<>();
     private FormLayout filterFormLayout = new FormLayout(searchTf, fromDateDp, toDateDp, categoriesCb,
             ortTf, resetFilterBtn, filterBtn);
-
+    //New-Seminar-Button
     private Button newSeminar = new Button("Neues Seminar", new Icon(VaadinIcon.EDIT));
-
+    //Seminar-Components
     private Grid<SeminarDTO> seminarGrid = new Grid<>();
-
     private Dialog details = new Dialog();
     private Button closeDetails = new Button("", new Icon(VaadinIcon.CLOSE));
-
-    private VerticalLayout leftLayout = new VerticalLayout();
-
+    //Seminar-Map and settings for having Switzerland focused. (Standard.)
     private GoogleMap seminarMap = new GoogleMap();
     private List<SeminarDTO> mapSeminaries;
     private double STANDARDLAT = 46.798;
     private double STANDARDLNG = 8.231;
     private int STANDARDZOOM = 8;
-
+    private VerticalLayout leftLayout = new VerticalLayout();
     private VerticalLayout rightLayout = new VerticalLayout(seminarMap);
     private HorizontalLayout contentLayout = new HorizontalLayout(leftLayout, rightLayout);
 
+    /**
+     * Initializes the creation of the view after it has been constructed by Spring.
+     *
+     * @author oppls7
+     */
     @PostConstruct
-    public void init() throws Exception {
+    public void init() {
         setElementSettings();
         setActions();
         addBindingToForm();
@@ -94,6 +100,11 @@ public class SeminarView extends VerticalLayout {
         categoriesCb.setItems(seminarPresenter.getSeminarCategories());
     }
 
+    /**
+     * Using this method, the page is built. --> Elements are shown on the client.
+     *
+     * @author oppls7
+     */
     private void buildPage() {
         // check if user is logged in
         String userName = (String) VaadinSession.getCurrent().getAttribute("userName");
@@ -112,6 +123,11 @@ public class SeminarView extends VerticalLayout {
 
     }
 
+    /**
+     * The filter on the frontend is bound to a SeminarFilter object.
+     *
+     * @author oppls7
+     */
     private void addBindingToForm() {
         binder.forField(searchTf).bind(SeminarFilter::getKeyword, SeminarFilter::setKeyword);
         binder.forField(fromDateDp).bind(SeminarFilter::getFromDate, SeminarFilter::setFromDate);
@@ -122,6 +138,7 @@ public class SeminarView extends VerticalLayout {
 
     /**
      * Sets different settings for the components.
+     *
      * @author oppls7
      * @author walty1
      */
@@ -132,7 +149,6 @@ public class SeminarView extends VerticalLayout {
         filterFormLayout.setResponsiveSteps(
                 new FormLayout.ResponsiveStep("0", 1),
                 new FormLayout.ResponsiveStep("21em", 2));
-
         //List-Settings
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("kk:mm");
@@ -150,7 +166,7 @@ public class SeminarView extends VerticalLayout {
         seminarGrid.asSingleSelect().addValueChangeListener(event -> showDetails(event.getValue()));
         seminarGrid.setHeightByRows(true);
 
-        contentLayout.getStyle().set("width","100%");
+        contentLayout.getStyle().set("width", "100%");
         details.setCloseOnEsc(false);
         details.setCloseOnOutsideClick(true);
 
@@ -169,6 +185,11 @@ public class SeminarView extends VerticalLayout {
         fromDateDp.setLocale(Locale.GERMANY);
     }
 
+    /**
+     * Configuration for the buttons on the view.
+     *
+     * @author oppls7
+     */
     private void setActions() {
         seminarGrid.asSingleSelect().addValueChangeListener(event -> showDetails(event.getValue()));
 
@@ -217,8 +238,8 @@ public class SeminarView extends VerticalLayout {
     }
 
     /**
-     * Fills the grid with seminaries
-     * <p>
+     * Fills the grid with seminaries and adds them also to the map.
+     *
      * @author oppls7
      * @author walty1
      */
@@ -240,9 +261,9 @@ public class SeminarView extends VerticalLayout {
      * For every seminary in the list, the seminarMap gets a marker.
      * The map only will show the seminaries in the list.
      * A click on a seminar marker opens the detail-box.
-     * @author walty1
      *
      * @param seminaries (List of all active seminaries.)
+     * @author walty1
      */
     private void setSeminarMarkers(List<SeminarDTO> seminaries) {
         if (!seminarMap.isMapReady()) {
@@ -261,6 +282,7 @@ public class SeminarView extends VerticalLayout {
                 seminarMap.addMarker(seminarMarker);
             }
             //Set the new center of the map.
+            //As every seminar in our database must have lat and lng, no exception handling is necessary.
             if (seminaries.size() > 0) {
                 double mapCenterLat = seminaries.stream().
                         mapToDouble(SeminarDTO::getLocation_lat).
@@ -284,7 +306,7 @@ public class SeminarView extends VerticalLayout {
      * Used for the ListItemClickEvent. It opens the dialog with seminary-details.
      *
      * @author oppls7
-     * */
+     */
     private void showDetails(SeminarDTO seminar) {
         details.removeAll();
         generateDialog(seminar);
@@ -293,10 +315,11 @@ public class SeminarView extends VerticalLayout {
 
     /**
      * Generates a dialog, which shows the details from the clicked seminary
+     *
      * @param seminar DTO of the seminar to be visible in the pop-up
      * @author: oppls7
      * @author: siegn2
-     * */
+     */
     private void generateDialog(SeminarDTO seminar) {
         Div content = new Div();
         String seminarTitle = seminar.getTitle();
@@ -320,38 +343,38 @@ public class SeminarView extends VerticalLayout {
 
         Div categoryLabel = new Div(new Span("Kategorie:"));
         categoryLabel.setClassName("detail-label");
-        Div category = new Div( new Span(seminar.getCategory()));
+        Div category = new Div(new Span(seminar.getCategory()));
         category.setClassName("detail-wert");
-        Div categoryDiv = new Div(categoryLabel,category);
+        Div categoryDiv = new Div(categoryLabel, category);
         categoryDiv.setClassName("detail-div");
 
-        Div dateLabel = new Div( new Span("Termin:"));
+        Div dateLabel = new Div(new Span("Termin:"));
         dateLabel.setClassName("detail-label");
-        Div dateTime = new Div(new Span(formatDate+", "+ formatTime+" Uhr"));
+        Div dateTime = new Div(new Span(formatDate + ", " + formatTime + " Uhr"));
         dateTime.setClassName("detail-wert");
-        Div dateDiv = new Div(dateLabel,dateTime);
+        Div dateDiv = new Div(dateLabel, dateTime);
         dateDiv.setClassName("detail-div");
 
         Div linkLabel = new Div(new Span("Link zum Veranstalter:"));
         linkLabel.setClassName("detail-label");
-        Anchor linkAnchor = new Anchor(seminar.getUrl(),seminar.getUrl());
+        Anchor linkAnchor = new Anchor(seminar.getUrl(), seminar.getUrl());
         // opens in a new tab
         linkAnchor.setTarget("_blank");
         Div link = new Div(linkAnchor);
         link.setClassName("detail-wert");
-        Div linkDiv = new Div(linkLabel,link);
+        Div linkDiv = new Div(linkLabel, link);
         linkDiv.setClassName("detail-div");
 
         Div descriptionLabel = new Div(new Span("Beschreibung:"));
         descriptionLabel.setClassName("detail-label");
         Div description = new Div(new Span(seminar.getDescription()));
         description.setClassName("detail-wert");
-        Div descriptionDiv = new Div(descriptionLabel,description);
+        Div descriptionDiv = new Div(descriptionLabel, description);
         descriptionDiv.setClassName("detail-div");
         Div last = new Div();
         last.setClassName("last");
 
-        content.add(title, dateDiv, locationDiv, categoryDiv, linkDiv, descriptionDiv,last,closeDetails);
+        content.add(title, dateDiv, locationDiv, categoryDiv, linkDiv, descriptionDiv, last, closeDetails);
         details.add(content);
         content.setId("details");
     }
