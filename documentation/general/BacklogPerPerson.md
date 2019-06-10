@@ -41,7 +41,7 @@ Startseite
 ## Simon Oppliger (oppls7)
 Allgemein
 * Layout aufgehübscht und überarbeitet
-* Fehlerbehebungen in Layout (inkl. Browserkompatibilität Chrome/Safari/Firefox)
+* Fehlerbehebungen in Layout
 * Klassendiagramm erstellt
 * Login erstellt
 
