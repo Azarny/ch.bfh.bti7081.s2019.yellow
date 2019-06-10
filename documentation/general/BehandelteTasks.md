@@ -31,8 +31,8 @@ Seminar
 Allgemein
 * Vaadin Setup (inkl. basic Layout)
 * Navigation erstellt (inkl. Routing)
-* MVP umgesetzt (ausser Seminar und User)
-* Berechtigungskonzept in jeder Komponente umgesetzt
+* MVP umgesetzt (aAufbau, Mainview, Seminar)
+* Session Handling, Berechtigungskonzept umgesetzt
 
 Startseite
 * Layout Grundgerüst erstellt
@@ -43,10 +43,12 @@ Allgemein
 * Layout aufgehübscht und überarbeitet
 * Fehlerbehebungen in Layout
 * Klassendiagramm erstellt
-* Login erstellt
+* Loginmaske erstellt
 
 Seminar
 * Seminarübersicht erstellt (ohne Karte, mit Filterdummy)
+* Detailansicht erstellt
+* MVP umgesetzt
 
 ## Michelle Lüscher (luscm1)
 Allgemein
