@@ -15,6 +15,7 @@ public class SeminarCategoryManager {
 
     /**
      * Get all SeminarCategories from the DB
+     *
      * @return List of SeminarCategories
      * @author siegn2
      */
@@ -28,7 +29,7 @@ public class SeminarCategoryManager {
      * Searches for SeminarCategory by name in the DB
      *
      * @param name SeminarCategory-name
-     * @return SeminarCategory
+     * @return SeminarCategory (only the one with the same name.)
      * @throws IllegalArgumentException Thrown if the category doesn't exist
      * @author siegn2
      */
@@ -37,7 +38,7 @@ public class SeminarCategoryManager {
         if (category != null) {
             return category;
         } else {
-            throw new IllegalArgumentException("Category does not exist.");
+            throw new IllegalArgumentException("Die angegebene Kategorie existiert nicht");
         }
     }
 }

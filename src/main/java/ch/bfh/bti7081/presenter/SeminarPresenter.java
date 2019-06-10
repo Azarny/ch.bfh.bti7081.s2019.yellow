@@ -1,12 +1,12 @@
 package ch.bfh.bti7081.presenter;
 
-import ch.bfh.bti7081.presenter.dto.SeminarDTO;
 import ch.bfh.bti7081.model.manager.SeminarCategoryManager;
 import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.model.seminar.SeminarFilter;
 import ch.bfh.bti7081.presenter.dto.SeminarFilterDTO;
+import ch.bfh.bti7081.presenter.dto.SeminarDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -32,21 +32,51 @@ public class SeminarPresenter {
         return seminarManager.getSeminaries();
     }
 
+    /**
+     * Filters the seminaries.
+     *
+     * @param filter filter-object
+     * @return seminar-list based on filter (no DTO)
+     * @author luscm1
+     */
     private List<Seminar> getFilteredSeminaries(SeminarFilter filter) {
         return seminarManager.getFilteredSeminars(filter);
     }
-    public List<SeminarDTO> getSeminarDtos() throws Exception{
+
+    /**
+     * Delivers all seminaries in DTO form.
+     *
+     * @return list of all seminaries
+     * @author oppls7
+     */
+    public List<SeminarDTO> getSeminarDtos(){
         return convertSeminarModelsToDtos(getSeminaries());
     }
-    public List<SeminarDTO> getFilteredSeminarDtos(SeminarFilterDTO filter) throws Exception{
+
+    /**
+     * Delivers a list of seminaries based on a filter.
+     *
+     * @param filter filter object filled out by the user.
+     * @return list of seminaries (DTO)
+     * @author oppls7
+     */
+    public List<SeminarDTO> getFilteredSeminarDtos(SeminarFilterDTO filter){
 
         return convertSeminarModelsToDtos(getFilteredSeminaries(convertFilterDtoToModel(filter)));
     }
 
+    /**
+     * Converts a seminar (in a a list) to a seminar DTO
+     *
+     * @param seminaries list of seminaries
+     * @return list of SeminarDTO's
+     * @author oppls7
+     */
     private List<SeminarDTO> convertSeminarModelsToDtos(List<Seminar> seminaries) throws Exception{
         List<SeminarDTO> seminarDtos = new ArrayList<>();
         for (Seminar modelObject : seminaries) {
             SeminarDTO seminarDTO = new SeminarDTO();
+            seminarDTO.setId(modelObject.getId());
             seminarDTO.setCategory(modelObject.getCategory().getName());
             seminarDTO.setDate(modelObject.getDate().toLocalDate());
             seminarDTO.setDescription(modelObject.getDescription());

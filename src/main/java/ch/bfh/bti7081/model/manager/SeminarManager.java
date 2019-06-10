@@ -9,8 +9,8 @@ import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +41,6 @@ public class SeminarManager {
      *
      * @param filter Filters for the seminaries
      * @return List of filtered and sorted seminaries
-     *
      * @author luscm1
      * @author siegn2
      */
@@ -120,61 +119,67 @@ public class SeminarManager {
                 // order the seminaries according to their date
                 .sorted(Comparator.nullsLast(Comparator.comparing(Seminar::getDate)))
                 .collect(Collectors.toList());
-
     }
 
+    /**
+     * Saves a seminar in the database.
+     *
+     * @param seminar seminar with informations
+     * @throws IllegalArgumentException Aborts if validation-errors occur.
+     * @author luscm1
+     */
     public void createSeminar(Seminar seminar) throws IllegalArgumentException {
         String validationResult = validateSeminar(seminar);
         if (validationResult.isEmpty()) {
             seminarRepository.save(seminar);
         } else {
-            throw new IllegalArgumentException("Following errors occured: "+ validationResult);
+            throw new IllegalArgumentException(validationResult);
         }
     }
 
     /**
      * validates if the seminar fulfills all the requirements
      *
-     * @param seminar
-     * @return
-     * @author: luscm1
-     * */
+     * @param seminar seminarobject with new information
+     * @return a string containing the result of the validation (which errors were found).
+     * @author luscm1
+     */
     public String validateSeminar(Seminar seminar) {
-        String returnString = "";
+        HashSet<String> errorMessages = new HashSet<>();
 
         if (seminar.getStreet() == null || seminar.getStreet().trim().length() <
                 ValidationConstants.MIN_STREET_LENGTH.value) {
-            returnString += "no valid street name, ";
+            errorMessages.add("bitte gültiger Strassenname angeben");
         }
 
         if (seminar.getHouseNumber() == null || !seminar.getHouseNumber().matches("^\\d*\\w$") ||
                 seminar.getHouseNumber().trim().length() <
                         ValidationConstants.MIN_STREETNUMBER_LENGTH.value) {
-            returnString += "no valid house number, ";
+            errorMessages.add("bitte gültige Strassennummer angeben");
         }
 
         if (seminar.getPlz() == null || !((seminar.getPlz() > 999 && seminar.getPlz() < 10000) ||
                 (seminar.getPlz() > 99999 && seminar.getPlz() < 1000000))) {
-            returnString += "no valid PLZ, ";
+            errorMessages.add("bitte gültige PLZ angeben");
         }
 
         if (seminar.getLocation() == null || seminar.getLocation().trim().length() <
                 ValidationConstants.MIN_LOCATION_LENGTH.value) {
-            returnString += "no valid location, ";
+            errorMessages.add("bitte gültiger Ort angeben");
         }
 
         if (seminar.getTitle() == null || seminar.getTitle().trim().length() <
                 ValidationConstants.MIN_TITLE_LENGTH.value) {
-            returnString += "no valid title, ";
+            errorMessages.add("bitte gültiger Titel angeben");
         }
 
         if (seminar.getDate() == null || seminar.getDate().isBefore(LocalDateTime.now()) || seminar.getDate()
                 .isAfter(LocalDateTime.now().plusYears(ValidationConstants.MAX_YEARS_IN_FUTURE.value))) {
-            returnString += "no valid date, ";
+            errorMessages.add("bitte gültige Datum/Zeit Kombination angeben (nur zukünftige Seminare sind erlaubt)");
         }
 
         if (seminar.getCategory() == null) {
-            returnString += "no valid category, ";
+            errorMessages.add("bitte gültige Kategorie angeben");
         }
 
         //regex pattern description:
@@ -184,26 +189,24 @@ public class SeminarManager {
         // (/\S+(\./\S+)*)?$ --> allows all the stuff after the last / but no whitespaces
         if (seminar.getUrl() == null || !seminar.getUrl().
                 matches("^((https?)://)?(\\w+\\.)+(\\w{2}|\\w{3})(/\\S+(\\./\\S+)*)?$")) {
-            returnString += "no valid URL, ";
+            errorMessages.add("bitte gültiger Link angeben");
         }
 
         if (seminar.getDescription() == null || seminar.getDescription().trim().length() <
                 ValidationConstants.MIN_DESCRIPTION_LENGTH.value) {
-            returnString += "no valid description, ";
+            errorMessages.add("bitte gültige Beschreibung angeben");
         }
 
-        return returnString;
+        String result;
+        if (errorMessages.isEmpty()) {
+            result = "";
+        } else {
+            result = String.join(", ", errorMessages);
+        }
+        return result;
     }
-
-    private LocalDateTime dateGenerator(String timeToParse) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return LocalDateTime.parse(timeToParse, formatter);
-    }
-
 
     public void deleteSeminar(Seminar seminar) {
         seminarRepository.delete(seminar);
     }
-
-
 }

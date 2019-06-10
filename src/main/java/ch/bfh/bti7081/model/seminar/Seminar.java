@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 
 /**
  * @author siegn2
+ * @author walty1
  */
 @Entity
 @Table(name = "seminar")
@@ -143,5 +144,13 @@ public class Seminar {
 
     public void setLocation_lng(double location_lng) {
         this.location_lng = location_lng;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

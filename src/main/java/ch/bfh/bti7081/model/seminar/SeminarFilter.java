@@ -2,6 +2,11 @@ package ch.bfh.bti7081.model.seminar;
 
 import java.time.LocalDate;
 
+/**
+ * Filter-object for the frontend.
+ *
+ * @author luscm1
+ */
 public class SeminarFilter {
 
     private String keyword;
