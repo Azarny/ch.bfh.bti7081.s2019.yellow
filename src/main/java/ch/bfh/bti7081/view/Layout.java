@@ -134,7 +134,6 @@ public class Layout extends VerticalLayout implements RouterLayout {
         Button loginBtn = new Button("Login");
 
         loginForm.add(status);
-        //TODO besseres Feedback bei ButtonClick
         loginBtn.addClickListener(Event -> {
             status.setText("");
             if (binder.writeBeanIfValid(userToLogin)) {
