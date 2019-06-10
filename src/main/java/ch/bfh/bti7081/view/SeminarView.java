@@ -67,7 +67,7 @@ public class SeminarView extends VerticalLayout {
     private SeminarFilterDTO seminarFilter = new SeminarFilterDTO();
     private Binder<SeminarFilterDTO> binder = new Binder<>();
     private FormLayout filterFormLayout = new FormLayout(
-            searchTf, fromDateDp, toDateDp, categoriesCb, ortTf, filterBtn,resetFilterBtn);
+            searchTf, fromDateDp, toDateDp, categoriesCb, ortTf, filterBtn, resetFilterBtn);
     private Details filterDetails = new Details("Filter",new Div());
 
     private Button newSeminar = new Button("Neues Seminar", new Icon(VaadinIcon.EDIT));
@@ -113,7 +113,7 @@ public class SeminarView extends VerticalLayout {
         leftLayout.add(seminarGrid);
         filterDetails.addContent(filterFormLayout);
         topLayout.add(filterDetails);
-        this.add(topLayout, contentLayout,details);
+        this.add(topLayout, contentLayout, details);
     }
 
     private void addBindingToForm() {
@@ -180,7 +180,6 @@ public class SeminarView extends VerticalLayout {
         seminarGrid.addSelectionListener(event -> {
             if(event.getFirstSelectedItem().isPresent()) showDetails(event.getFirstSelectedItem().get());
         });
-
         details.addDialogCloseActionListener(event -> {
             seminarGrid.deselectAll();
             seminarGrid.select(null);
@@ -367,7 +366,7 @@ public class SeminarView extends VerticalLayout {
         Div last = new Div();
         last.setClassName("last");
 
-        content.add(title, dateDiv, locationDiv, categoryDiv, linkDiv, descriptionDiv,last,closeDetails);
+        content.add(title, dateDiv, locationDiv, categoryDiv, linkDiv, descriptionDiv, last, closeDetails);
         details.add(content);
         content.setId("details");
     }
