@@ -79,7 +79,7 @@ public class UserManager {
             return Base64.getEncoder().encodeToString(securePassword);
 
         } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
-            throw new Exception("Exception encountered in hashPassword()");
+            throw new Exception("Fehler beim Erstellen des Hashs");
         } finally {
             spec.clearPassword();
         }

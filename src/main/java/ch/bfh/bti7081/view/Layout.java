@@ -127,12 +127,12 @@ public class Layout extends VerticalLayout implements RouterLayout {
                 .withValidator(new StringLengthValidator(
                         "Bitte Passwort eintragen", 1, null))
                 .bind(UserDTO::getPassword, (userDTO, password) -> {
-                    try {
-                        userDTO.setEncryptedPassword(presenter.encryptPassword(userName.getValue(), password));
-                    } catch (Exception e) {
-                        status.setText("Could not save Password.");
+                    try{
+                    userDTO.setEncryptedPassword(presenter.encryptPassword(userName.getValue(),password));
                     }
-                });
+                    catch(Exception e){
+                        status.setText("Passwort konnte nicht gespeichert werden");
+                    }});
 
         Button loginBtn = new Button("Login");
 

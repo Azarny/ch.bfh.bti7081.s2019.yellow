@@ -38,7 +38,7 @@ public class SeminarCategoryManager {
         if (category != null) {
             return category;
         } else {
-            throw new IllegalArgumentException("Category does not exist.");
+            throw new IllegalArgumentException("Die angegebene Kategorie existiert nicht");
         }
     }
 }
