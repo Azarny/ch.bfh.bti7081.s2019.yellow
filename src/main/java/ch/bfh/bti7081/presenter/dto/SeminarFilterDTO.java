@@ -1,18 +1,21 @@
-package ch.bfh.bti7081.model.seminar;
+package ch.bfh.bti7081.presenter.dto;
+
 
 import java.time.LocalDate;
 
 /**
- * Filter-object for the frontend.
+ * Data-Transfer object for seminarfilters.
+ * This class serves as boundary between model and view, which allows to transfer values differently.
  *
- * @author luscm1
+ * No logic is implemented on this class.
+ *
+ * @author oppls7
  */
-public class SeminarFilter {
-
+public class SeminarFilterDTO {
     private String keyword;
     private LocalDate fromDate;
     private LocalDate toDate;
-    private SeminarCategory category;
+    private String category;
     private String location;
 
     public String getKeyword() {
@@ -39,11 +42,11 @@ public class SeminarFilter {
         this.toDate = toDate;
     }
 
-    public SeminarCategory getCategory() {
+    public String getCategory() {
         return category;
     }
 
-    public void setCategory(SeminarCategory category) {
+    public void setCategory(String category) {
         this.category = category;
     }
 
