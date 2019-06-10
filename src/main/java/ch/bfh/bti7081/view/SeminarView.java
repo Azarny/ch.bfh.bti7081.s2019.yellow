@@ -66,8 +66,8 @@ public class SeminarView extends VerticalLayout {
     private Button resetFilterBtn = new Button("Filter löschen", new Icon(VaadinIcon.CLOSE));
     private SeminarFilterDTO seminarFilter = new SeminarFilterDTO();
     private Binder<SeminarFilterDTO> binder = new Binder<>();
-    private FormLayout filterFormLayout = new FormLayout(searchTf, fromDateDp, toDateDp, categoriesCb,
-            ortTf, filterBtn,resetFilterBtn);
+    private FormLayout filterFormLayout = new FormLayout(
+            searchTf, fromDateDp, toDateDp, categoriesCb, ortTf, filterBtn,resetFilterBtn);
     private Details filterDetails = new Details("Filter",new Div());
 
     private Button newSeminar = new Button("Neues Seminar", new Icon(VaadinIcon.EDIT));
@@ -104,7 +104,6 @@ public class SeminarView extends VerticalLayout {
         String userName = (String) VaadinSession.getCurrent().getAttribute("userName");
         if (!((userName == null) || ("".equals(userName)))) {
             UserDTO user = userPresenter.getUserByUsername(userName);
-
             // check if user is expert or moderator
             if (user.getPermission() >= 2) {
                 topLayout.add(newSeminar);
@@ -115,7 +114,6 @@ public class SeminarView extends VerticalLayout {
         filterDetails.addContent(filterFormLayout);
         topLayout.add(filterDetails);
         this.add(topLayout, contentLayout,details);
-
     }
 
     private void addBindingToForm() {
@@ -146,8 +144,7 @@ public class SeminarView extends VerticalLayout {
         //List-Settings
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("kk:mm");
-        seminarGrid.addColumn(TemplateRenderer.<SeminarDTO>of(
-                "<div style='padding:10px'>" +
+        seminarGrid.addColumn(TemplateRenderer.<SeminarDTO>of("<div style='padding:10px'>" +
                         "<div style='font-weight:bold'>[[item.title]]<br></div>" +
                         "<div>[[item.date]] [[item.time]]<div style='float:right'>[[item.location]]</div></div>" +
                         "</div>")
@@ -331,8 +328,8 @@ public class SeminarView extends VerticalLayout {
 
         Div locationLabel = new Div(new Span("Veranstaltungsort:"));
         locationLabel.setClassName("detail-label");
-        Div locationAndPlz = new Div(new Span(seminar.getStreet() + " " + seminar.getHouseNumber() + ", "
-                + seminar.getPlz().intValue() + " " + seminar.getLocation()));
+        Div locationAndPlz = new Div(new Span(seminar.getStreet() + " " + seminar.getHouseNumber() +
+                ", " + seminar.getPlz().intValue() + " " + seminar.getLocation()));
         locationAndPlz.setClassName("detail-wert");
         Div locationDiv = new Div(locationLabel, locationAndPlz);
         locationDiv.setClassName("detail-div");
