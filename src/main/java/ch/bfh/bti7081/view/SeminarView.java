@@ -26,6 +26,7 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.BinderValidationStatus;
@@ -57,7 +58,7 @@ public class SeminarView extends VerticalLayout {
     //Upper Part of website
     private H1 title = new H1("Seminarfinder");
     //Components for filter
-    private ComboBox<String> categoriesCb = new ComboBox<>("Kategorie:");
+    private Select<String> categoriesCb = new Select<>("Kategorie:");
     private TextField searchTf = new TextField("Suchbegriff:");
     private DatePicker fromDateDp = new DatePicker("Datum von:");
     private DatePicker toDateDp = new DatePicker("Datum bis:");
@@ -146,6 +147,10 @@ public class SeminarView extends VerticalLayout {
         //Layout-Settings
         contentLayout.setId("content");
         rightLayout.setId("right-layout");
+        contentLayout.getStyle().set("width", "100%");
+        details.setCloseOnEsc(false);
+        details.setCloseOnOutsideClick(true);
+        closeDetails.setId("close-details");
         //Filter-Settings
         filterBtn.addClickShortcut(Key.ENTER);
         filterFormLayout.setResponsiveSteps(
@@ -154,6 +159,7 @@ public class SeminarView extends VerticalLayout {
                 new FormLayout.ResponsiveStep("21em", 3),
                 new FormLayout.ResponsiveStep("21em", 4),
                 new FormLayout.ResponsiveStep("21em", 5));
+        categoriesCb.setLabel("Kategorie:");
         //List-Settings
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("kk:mm");
@@ -168,13 +174,6 @@ public class SeminarView extends VerticalLayout {
                 .setFlexGrow(6);
         seminarGrid.addColumn(new ComponentRenderer<>(() -> new Icon(VaadinIcon.INFO_CIRCLE))).setWidth("10px");
         seminarGrid.setHeightByRows(true);
-
-        contentLayout.getStyle().set("width", "100%");
-        details.setCloseOnEsc(false);
-        details.setCloseOnOutsideClick(true);
-
-        closeDetails.setId("close-details");
-
         //Map-Settings
         seminarMap.setApiKey(googleApiKey);
         seminarMap.setLatitude(STANDARDLAT);
@@ -199,8 +198,8 @@ public class SeminarView extends VerticalLayout {
             if(event.getFirstSelectedItem().isPresent()) showDetails(event.getFirstSelectedItem().get());
         });
         details.addDialogCloseActionListener(event -> {
-            seminarGrid.deselectAll();
-            seminarGrid.select(null);
+            seminarGrid.getSelectedItems().forEach(s->seminarGrid.deselect(s));
+            details.close();
         });
         // filter-button action
         filterBtn.addClickListener(event -> {

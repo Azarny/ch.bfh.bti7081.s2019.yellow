@@ -72,7 +72,7 @@ public class SeminarPresenter {
      * @return list of SeminarDTO's
      * @author oppls7
      */
-    private List<SeminarDTO> convertSeminarModelsToDtos(List<Seminar> seminaries) throws Exception{
+    private List<SeminarDTO> convertSeminarModelsToDtos(List<Seminar> seminaries){
         List<SeminarDTO> seminarDtos = new ArrayList<>();
         for (Seminar modelObject : seminaries) {
             SeminarDTO seminarDTO = new SeminarDTO();
