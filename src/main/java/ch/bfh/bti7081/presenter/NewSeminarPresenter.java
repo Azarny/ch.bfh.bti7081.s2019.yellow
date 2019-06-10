@@ -59,13 +59,14 @@ public class NewSeminarPresenter {
                     Seminar seminarToBeSaved = convertDTOtoModel(frontendObject);
                     seminarManager.createSeminar(seminarToBeSaved);
                 } else {
-                    throw new IllegalAccessError("the user isn't privileged to create a seminar");
+                    throw new IllegalAccessError("Fehlende Berechtigung für das Erstellen eines Seminars für User "
+                            + user.getUsername());
                 }
             } else {
-                throw new IllegalArgumentException("no user with this username was found");
+                throw new IllegalArgumentException("Es wurde kein User " + user.getUsername() + " gefunden");
             }
         } else {
-            throw new IllegalArgumentException("no user is logged in");
+            throw new IllegalArgumentException("Kein User ist eingeloggt");
         }
     }
 
@@ -75,9 +76,8 @@ public class NewSeminarPresenter {
      *
      * @param seminarDTO
      * @return Seminar
-     * @throws NoSuchFieldException Throws an exception if the category could not be set.
      */
-    private Seminar convertDTOtoModel(SeminarDTO seminarDTO) throws Exception {
+    private Seminar convertDTOtoModel(SeminarDTO seminarDTO) {
         Seminar modelObject = new Seminar();
 
         modelObject.setTitle(seminarDTO.getTitle());

@@ -1,4 +1,4 @@
-import ch.bfh.bti7081.model.manager.SeminarCategoryManager;
+import ch.bfh.bti7081.App;
 import ch.bfh.bti7081.model.manager.SeminarManager;
 import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
@@ -6,78 +6,86 @@ import ch.bfh.bti7081.model.seminar.SeminarFilter;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = App.class)
 public class SeminarManagerTest {
-    private SeminarManager seminarManager = new SeminarManager();
-    private SeminarCategoryManager seminarCategoryManager = new SeminarCategoryManager();
+    @Autowired
+    private SeminarManager seminarManager;
 
-    private List<Seminar> seminaries = seminarManager.getSeminaries();
-    private SeminarFilter seminarFilter = new SeminarFilter();
-    private int seminarCount = seminaries.size();
-    private int seminariesWithFilteredCategory = 0;
+    Seminar testSeminar = new Seminar();
+    ;
 
     @Test
     public void categoryFilter() {
-        int seminarCount = seminaries.size();
-        SeminarCategory categoryToFilter = seminaries.get(1).getCategory();
+        SeminarFilter seminarFilter = new SeminarFilter();
+        List<Seminar> seminaries = seminarManager.getSeminaries();
+        SeminarCategory categoryToFilter = seminaries.get(0).getCategory();
         int seminariesWithFilteredCategory = 0;
         seminarFilter.setCategory(categoryToFilter);
         for (Seminar seminar : seminaries) {
             if (seminar.getCategory().getName().equals(categoryToFilter.getName())) seminariesWithFilteredCategory++;
         }
         List<Seminar> filteredSeminaries = seminarManager.getFilteredSeminars(seminarFilter);
-        Assert.assertEquals(seminarCount - seminariesWithFilteredCategory, filteredSeminaries.size());
+        Assert.assertEquals(seminaries.size() - seminariesWithFilteredCategory, filteredSeminaries.size());
     }
 
     @Test
     public void locationFilter() {
-        seminarFilter.setLocation(seminaries.get(1).getLocation());
+        List<Seminar> seminaries = seminarManager.getSeminaries();
+        SeminarFilter seminarFilter = new SeminarFilter();
+        int seminariesWithFilteredCategory = 0;
+        seminarFilter.setLocation(seminaries.get(0).getLocation());
         for (Seminar seminar : seminaries) {
             if (seminar.getLocation().contains(seminarFilter.getLocation())) seminariesWithFilteredCategory++;
         }
         List<Seminar> filteredSeminaries = seminarManager.getFilteredSeminars(seminarFilter);
-        Assert.assertEquals(seminarCount - seminariesWithFilteredCategory, filteredSeminaries.size());
+        Assert.assertEquals(seminaries.size() - seminariesWithFilteredCategory, filteredSeminaries.size());
     }
 
     @Test
     public void locationFilterCaseInsensitive() {
-        seminarFilter.setLocation(seminaries.get(1).getLocation());
+        List<Seminar> seminaries = seminarManager.getSeminaries();
+        int seminariesWithFilteredCategory = 0;
+        SeminarFilter seminarFilter = new SeminarFilter();
+        seminarFilter.setLocation(seminaries.get(0).getLocation());
         for (Seminar seminar : seminaries) {
             if (seminar.getLocation().toLowerCase().contains(seminarFilter.getLocation().toLowerCase()))
                 seminariesWithFilteredCategory++;
         }
         List<Seminar> filteredSeminaries = seminarManager.getFilteredSeminars(seminarFilter);
-        Assert.assertEquals(seminarCount - seminariesWithFilteredCategory, filteredSeminaries.size());
+        Assert.assertEquals(seminaries.size() - seminariesWithFilteredCategory, filteredSeminaries.size());
     }
 
     @Test
     public void dateFilterTo() {
-
+        List<Seminar> seminaries = seminarManager.getSeminaries();
+        int seminariesWithFilteredCategory = 0;
+        SeminarFilter seminarFilter = new SeminarFilter();
         // test with min date
         seminarFilter.setToDate(seminaries.stream().map(Seminar::getDate).min(LocalDateTime::compareTo).get().toLocalDate());
-        for (Seminar seminar : seminaries) {
-            if (seminar.getDate().isAfter(seminarFilter.getToDate().atStartOfDay().plusDays(1).minusSeconds(1)))
-                seminariesWithFilteredCategory++;
-        }
         List<Seminar> filteredSeminaries = seminarManager.getFilteredSeminars(seminarFilter);
-        Assert.assertEquals(seminarCount - seminariesWithFilteredCategory, filteredSeminaries.size());
+        Assert.assertEquals(0, filteredSeminaries.size());
 
         seminariesWithFilteredCategory = 0;
         //test with max date
         seminarFilter.setToDate(seminaries.stream().map(Seminar::getDate).max(LocalDateTime::compareTo).get().toLocalDate());
-        for (Seminar seminar : seminaries) {
-            if (seminar.getDate().isAfter(seminarFilter.getToDate().atStartOfDay().plusDays(1).minusSeconds(1)))
-                seminariesWithFilteredCategory++;
-        }
         filteredSeminaries = seminarManager.getFilteredSeminars(seminarFilter);
-        Assert.assertEquals(seminarCount - seminariesWithFilteredCategory, filteredSeminaries.size());
+        Assert.assertEquals(seminaries.size() - 1, filteredSeminaries.size());
     }
 
     @Test
     public void dateFilterFrom() {
+        List<Seminar> seminaries = seminarManager.getSeminaries();
+        int seminariesWithFilteredCategory = 0;
+        SeminarFilter seminarFilter = new SeminarFilter();
         //test with min date
         seminarFilter.setFromDate(seminaries.stream().map(Seminar::getDate).min(LocalDateTime::compareTo).get().toLocalDate());
         for (Seminar seminar : seminaries) {
@@ -85,7 +93,7 @@ public class SeminarManagerTest {
                 seminariesWithFilteredCategory++;
         }
         List<Seminar> filteredSeminaries = seminarManager.getFilteredSeminars(seminarFilter);
-        Assert.assertEquals(seminarCount - seminariesWithFilteredCategory, filteredSeminaries.size());
+        Assert.assertEquals(seminaries.size() - seminariesWithFilteredCategory, filteredSeminaries.size());
 
         seminariesWithFilteredCategory = 0;
         //test with max date
@@ -95,12 +103,15 @@ public class SeminarManagerTest {
                 seminariesWithFilteredCategory++;
         }
         filteredSeminaries = seminarManager.getFilteredSeminars(seminarFilter);
-        Assert.assertEquals(seminarCount - seminariesWithFilteredCategory, filteredSeminaries.size());
+        Assert.assertEquals(seminaries.size() - seminariesWithFilteredCategory, filteredSeminaries.size());
     }
 
     @Test
     public void keywordFilter() {
-        String keyword = seminaries.get(3).getTitle().split(" ")[0];
+        List<Seminar> seminaries = seminarManager.getSeminaries();
+        int seminariesWithFilteredCategory = 0;
+        String keyword = "Wie";
+        SeminarFilter seminarFilter = new SeminarFilter();
         //one keyword
         seminarFilter.setKeyword(keyword);
         keyword = keyword.toLowerCase();
@@ -110,7 +121,7 @@ public class SeminarManagerTest {
                 seminariesWithFilteredCategory++;
             }
         }
-        Assert.assertEquals(seminariesWithFilteredCategory, filteredSeminaries.size());
+        Assert.assertEquals(seminaries.size() - seminariesWithFilteredCategory, filteredSeminaries.size());
 
         seminariesWithFilteredCategory = 0;
         //two keywords
@@ -129,15 +140,11 @@ public class SeminarManagerTest {
                 seminariesWithFilteredCategory++;
             }
         }
-        Assert.assertEquals(seminariesWithFilteredCategory, filteredSeminaries.size());
+        Assert.assertEquals(seminaries.size() - seminariesWithFilteredCategory, filteredSeminaries.size());
     }
 
-
-    private Seminar testSeminar= new Seminar();
-    private SeminarManager manager = new SeminarManager();
-    
     @Before
-    public void setup(){
+    public void setup() {
         testSeminar.setStreet("Strasse mit Ümläütén");
         testSeminar.setHouseNumber("1");
         testSeminar.setPlz(3132);
@@ -152,227 +159,235 @@ public class SeminarManagerTest {
 
     // tests for street
     @Test
-    public void testStreetOK(){
+    public void testStreetOK() {
         testSeminar.setStreet("Strasse mit Ümläütén");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setStreet("Str4sse mit Z4hl3n");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setStreet("Dies ist ein sehr sehr langer Strassenname denn es muss getestet werden ob auch sehr sehr lange Strassennamen funktionieren");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setStreet("Abkürzungsstr.");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setStreet("Ey");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
 
     }
+
     @Test
-    public void testStreetNOK(){
+    public void testStreetNOK() {
         testSeminar.setStreet("");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("street"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Strasse"));
         testSeminar.setStreet(null);
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("street"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Strasse"));
         testSeminar.setStreet("      ");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("street"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Strasse"));
         testSeminar.setStreet("A");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("street"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Strasse"));
     }
 
     //tests for houseNumber
     @Test
-    public void testHouseNumberOK(){
+    public void testHouseNumberOK() {
         testSeminar.setHouseNumber("1");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setHouseNumber("12");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setHouseNumber("1232353241234353");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setHouseNumber("1A");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setHouseNumber("1a");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
     }
+
     @Test
-    public void testHouseNumberNOK(){
+    public void testHouseNumberNOK() {
         testSeminar.setHouseNumber("");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("house number"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Strassennummer"));
         testSeminar.setHouseNumber("123s123");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("house number"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Strassennummer"));
         testSeminar.setHouseNumber(null);
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("house number"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Strassennummer"));
         testSeminar.setHouseNumber("   ");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("house number"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Strassennummer"));
     }
 
     //test for PLZ
     @Test
-    public void testPlzOK(){
+    public void testPlzOK() {
         testSeminar.setPlz(3132);
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setPlz(9999);
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setPlz(1000);
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setPlz(100000);
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setPlz(123456);
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setPlz(999999);
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
     }
+
     @Test
-    public void testPlzNOK(){
+    public void testPlzNOK() {
         testSeminar.setPlz(0);
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("PLZ"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("PLZ"));
         testSeminar.setPlz(null);
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("PLZ"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("PLZ"));
         testSeminar.setPlz(12);
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("PLZ"));
-        testSeminar.setPlz(1221314115);testSeminar.setPlz(0);
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("PLZ"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("PLZ"));
+        testSeminar.setPlz(1221314115);
+        testSeminar.setPlz(0);
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("PLZ"));
     }
 
 
     //test for location
     @Test
-    public void testLocationOK(){
+    public void testLocationOK() {
         testSeminar.setLocation("Location mit Ümläütén");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setLocation("Locati0n mit Z4hl3n");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setLocation("Dies ist ein sehr sehr langer Locationnname denn es muss getestet werden ob auch sehr sehr lange Locationnnamen funktionieren");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setLocation("Abkürzungsloc.");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setLocation("Ey");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
 
     }
+
     @Test
-    public void testLocationNOK(){
+    public void testLocationNOK() {
         testSeminar.setLocation("");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("location"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Ort"));
         testSeminar.setLocation(null);
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("location"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Ort"));
         testSeminar.setLocation("      ");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("location"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Ort"));
         testSeminar.setLocation("A");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("location"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Ort"));
     }
 
 
     //test for title
     @Test
-    public void testTitleOK(){
+    public void testTitleOK() {
         testSeminar.setTitle("Title mit Ümläütén");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setTitle("Title mit Z4hl3n");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setTitle("Dies ist ein sehr sehr langer Titlenname denn es muss getestet werden ob auch sehr sehr lange Titlennamen funktionieren");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setTitle("Abkürzungstitle.");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
 
     }
+
     @Test
-    public void testTitleNOK(){
+    public void testTitleNOK() {
         testSeminar.setTitle("");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("title"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Titel"));
         testSeminar.setTitle(null);
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("title"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Titel"));
         testSeminar.setTitle("      ");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("title"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Titel"));
         testSeminar.setTitle("A");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("title"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Titel"));
     }
 
 
     //test for date
     @Test
-    public void testDateOK(){
+    public void testDateOK() {
         testSeminar.setDate(LocalDateTime.now().plusDays(1));
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setDate(LocalDateTime.now().plusMonths(1));
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setDate(LocalDateTime.now().plusHours(1));
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setDate(LocalDateTime.now().plusMinutes(1));
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setDate(LocalDateTime.now().plusYears(4));
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
     }
 
     @Test
-    public void testDateNOK(){
+    public void testDateNOK() {
         testSeminar.setDate(LocalDateTime.now().minusMinutes(1));
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("date"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Datum"));
         testSeminar.setDate(LocalDateTime.now().plusYears(6));
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("date"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Datum"));
     }
 
 
     //test for category
     @Test
-    public void testCategoryOK(){
+    public void testCategoryOK() {
         testSeminar.setCategory(new SeminarCategory("test"));
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
 
     }
 
     @Test
-    public void testCategoryNOK(){
+    public void testCategoryNOK() {
         testSeminar.setCategory(null);
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("category"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Kategorie"));
     }
 
     //test for url
     @Test
-    public void testUrlOK(){
+    public void testUrlOK() {
         testSeminar.setUrl("https://docs.jboss.org/hibernate/beanvalidation/spec/2.0/api/javax/validation/constraints/NotBlank.html");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setUrl("https://www.vogella.com/tutorials/JUnit/article.html");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setUrl("www.google.ch");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setUrl("http://test.org");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
     }
+
     @Test
-    public void testUrlNOK(){
+    public void testUrlNOK() {
         testSeminar.setUrl("");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("URL"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Link"));
         testSeminar.setUrl(null);
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("URL"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Link"));
         testSeminar.setUrl("   ");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("URL"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Link"));
         testSeminar.setUrl("A");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("URL"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Link"));
         testSeminar.setUrl("www.göögle.com");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("URL"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Link"));
     }
 
 
     //test for description
     @Test
-    public void testDescriptionOK(){
+    public void testDescriptionOK() {
         testSeminar.setDescription("Description mit Ümläütén");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setDescription("Description mit Z4hl3n");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setDescription("Dies ist ein sehr sehr langer Descriptionnname denn es muss getestet werden ob auch sehr sehr lange Descriptionnnamen funktionieren");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
         testSeminar.setDescription("AbkürzungsDescription.");
-        Assert.assertEquals("", manager.validateSeminar(testSeminar));
+        Assert.assertEquals("", seminarManager.validateSeminar(testSeminar));
 
     }
+
     @Test
-    public void testDescriptionNOK(){
+    public void testDescriptionNOK() {
         testSeminar.setDescription("");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("description"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Beschreibung"));
         testSeminar.setDescription(null);
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("description"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Beschreibung"));
         testSeminar.setDescription("      ");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("description"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Beschreibung"));
         testSeminar.setDescription("A");
-        Assert.assertTrue(manager.validateSeminar(testSeminar).contains("description"));
+        Assert.assertTrue(seminarManager.validateSeminar(testSeminar).contains("Beschreibung"));
     }
 }

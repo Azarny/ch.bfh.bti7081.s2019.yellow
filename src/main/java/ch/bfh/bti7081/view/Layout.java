@@ -126,7 +126,7 @@ public class Layout extends VerticalLayout implements RouterLayout {
                     userDTO.setEncryptedPassword(presenter.encryptPassword(userName.getValue(),password));
                     }
                     catch(Exception e){
-                        status.setText("Could not save Password.");
+                        status.setText("Passwort konnte nicht gespeichert werden");
                     }});
 
         Button loginBtn = new Button("Login");
