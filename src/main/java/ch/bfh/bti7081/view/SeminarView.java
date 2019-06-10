@@ -16,7 +16,11 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.Anchor;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -71,9 +75,6 @@ public class SeminarView extends VerticalLayout {
     private Grid<SeminarDTO> seminarGrid = new Grid<>();
     private Dialog details = new Dialog();
     private Button closeDetails = new Button("", new Icon(VaadinIcon.CLOSE));
-
-    private VerticalLayout leftLayout = new VerticalLayout();
-
     //Seminar-Map and settings for having Switzerland focused. (Standard.)
     private GoogleMap seminarMap = new GoogleMap();
     private List<SeminarDTO> mapSeminaries;
@@ -165,7 +166,7 @@ public class SeminarView extends VerticalLayout {
         seminarGrid.asSingleSelect().addValueChangeListener(event -> showDetails(event.getValue()));
         seminarGrid.setHeightByRows(true);
 
-        contentLayout.getStyle().set("width","100%");
+        contentLayout.getStyle().set("width", "100%");
         details.setCloseOnEsc(false);
         details.setCloseOnOutsideClick(true);
 
@@ -314,10 +315,11 @@ public class SeminarView extends VerticalLayout {
 
     /**
      * Generates a dialog, which shows the details from the clicked seminary
+     *
      * @param seminar DTO of the seminar to be visible in the pop-up
      * @author: oppls7
      * @author: siegn2
-     * */
+     */
     private void generateDialog(SeminarDTO seminar) {
         Div content = new Div();
         String seminarTitle = seminar.getTitle();
@@ -341,38 +343,38 @@ public class SeminarView extends VerticalLayout {
 
         Div categoryLabel = new Div(new Span("Kategorie:"));
         categoryLabel.setClassName("detail-label");
-        Div category = new Div( new Span(seminar.getCategory()));
+        Div category = new Div(new Span(seminar.getCategory()));
         category.setClassName("detail-wert");
-        Div categoryDiv = new Div(categoryLabel,category);
+        Div categoryDiv = new Div(categoryLabel, category);
         categoryDiv.setClassName("detail-div");
 
-        Div dateLabel = new Div( new Span("Termin:"));
+        Div dateLabel = new Div(new Span("Termin:"));
         dateLabel.setClassName("detail-label");
-        Div dateTime = new Div(new Span(formatDate+", "+ formatTime+" Uhr"));
+        Div dateTime = new Div(new Span(formatDate + ", " + formatTime + " Uhr"));
         dateTime.setClassName("detail-wert");
-        Div dateDiv = new Div(dateLabel,dateTime);
+        Div dateDiv = new Div(dateLabel, dateTime);
         dateDiv.setClassName("detail-div");
 
         Div linkLabel = new Div(new Span("Link zum Veranstalter:"));
         linkLabel.setClassName("detail-label");
-        Anchor linkAnchor = new Anchor(seminar.getUrl(),seminar.getUrl());
+        Anchor linkAnchor = new Anchor(seminar.getUrl(), seminar.getUrl());
         // opens in a new tab
         linkAnchor.setTarget("_blank");
         Div link = new Div(linkAnchor);
         link.setClassName("detail-wert");
-        Div linkDiv = new Div(linkLabel,link);
+        Div linkDiv = new Div(linkLabel, link);
         linkDiv.setClassName("detail-div");
 
         Div descriptionLabel = new Div(new Span("Beschreibung:"));
         descriptionLabel.setClassName("detail-label");
         Div description = new Div(new Span(seminar.getDescription()));
         description.setClassName("detail-wert");
-        Div descriptionDiv = new Div(descriptionLabel,description);
+        Div descriptionDiv = new Div(descriptionLabel, description);
         descriptionDiv.setClassName("detail-div");
         Div last = new Div();
         last.setClassName("last");
 
-        content.add(title, dateDiv, locationDiv, categoryDiv, linkDiv, descriptionDiv,last,closeDetails);
+        content.add(title, dateDiv, locationDiv, categoryDiv, linkDiv, descriptionDiv, last, closeDetails);
         details.add(content);
         content.setId("details");
     }

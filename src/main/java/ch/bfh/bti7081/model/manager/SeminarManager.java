@@ -198,9 +198,9 @@ public class SeminarManager {
         }
 
         String result;
-        if (errorMessages.isEmpty()){
+        if (errorMessages.isEmpty()) {
             result = "";
-        }else{
+        } else {
             result = String.join(", ", errorMessages);
         }
         return result;
