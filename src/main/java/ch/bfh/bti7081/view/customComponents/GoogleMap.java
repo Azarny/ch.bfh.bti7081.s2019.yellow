@@ -12,8 +12,6 @@ import com.vaadin.flow.shared.Registration;
  * (See @HTMLImport and Polymer)
  * Properties are set via JavaScript.
  * Please use the isMapReady boolean to check if markers can be set.
- *
- * @author walty1
  */
 @Tag("google-map")
 @HtmlImport("bower_components/google-map/google-map.html")

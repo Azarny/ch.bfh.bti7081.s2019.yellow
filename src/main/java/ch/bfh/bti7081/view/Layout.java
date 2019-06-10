@@ -29,9 +29,6 @@ import java.util.stream.Collectors;
 /**
  * This View contains components that are present on every page of our product.
  * Navigation-Header and login.
- *
- * @author heuzl1
- * @author oppls7
  */
 @StyleSheet("styles/style.css")
 public class Layout extends VerticalLayout implements RouterLayout {

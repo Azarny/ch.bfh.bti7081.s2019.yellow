@@ -12,9 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-/**
- * @author heuzl1
- */
 @Route(value = "", layout = Layout.class)
 public class MainView extends VerticalLayout {
     @Autowired
