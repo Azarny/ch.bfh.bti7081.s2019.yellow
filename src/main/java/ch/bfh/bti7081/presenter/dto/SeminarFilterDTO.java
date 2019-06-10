@@ -18,33 +18,43 @@ public class SeminarFilterDTO {
     private String category;
     private String location;
 
-    public String getKeyword() { return keyword; }
+    public String getKeyword() {
+        return keyword;
+    }
 
     public void setKeyword(String keyword) {
-      this.keyword = keyword;
+        this.keyword = keyword;
     }
 
-    public LocalDate getFromDate() { return fromDate; }
+    public LocalDate getFromDate() {
+        return fromDate;
+    }
 
     public void setFromDate(LocalDate fromDate) {
-      this.fromDate = fromDate;
+        this.fromDate = fromDate;
     }
 
-    public LocalDate getToDate() { return toDate; }
+    public LocalDate getToDate() {
+        return toDate;
+    }
 
     public void setToDate(LocalDate toDate) {
-      this.toDate = toDate;
+        this.toDate = toDate;
     }
 
-    public String getCategory() { return category; }
+    public String getCategory() {
+        return category;
+    }
 
     public void setCategory(String category) {
-      this.category = category;
+        this.category = category;
     }
 
-    public String getLocation() { return location; }
+    public String getLocation() {
+        return location;
+    }
 
     public void setLocation(String location) {
-      this.location = location;
+        this.location = location;
     }
 }
