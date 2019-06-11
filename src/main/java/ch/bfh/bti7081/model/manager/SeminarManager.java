@@ -7,11 +7,13 @@ import ch.bfh.bti7081.model.seminar.SeminarFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.nio.charset.Charset;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Controller
@@ -68,8 +70,8 @@ public class SeminarManager {
                     if (filter.getCategory() == null) {
                         return true;
                     } else {
-                        return seminar.getCategory().getName().toLowerCase().equals(filter.getCategory()
-                                .getName().toLowerCase());
+                        return seminar.getCategory().getName().toLowerCase(Locale.GERMAN).equals(filter.getCategory()
+                                .getName().toLowerCase(Locale.GERMAN));
                     }
                 })
                 //filter location
@@ -77,7 +79,7 @@ public class SeminarManager {
                     if (filter.getLocation() == null) {
                         return true;
                     } else {
-                        return seminar.getLocation().toLowerCase().contains(filter.getLocation().toLowerCase());
+                        return seminar.getLocation().toLowerCase(Locale.GERMAN).contains(filter.getLocation().toLowerCase(Locale.GERMAN));
                     }
                 })
                 //filter date
@@ -104,8 +106,8 @@ public class SeminarManager {
                         String[] keywords = filter.getKeyword().split(" ");
                         int matchedKeywordsCount = 0;
                         for (String keyword : keywords) {
-                            if (seminar.getTitle().toLowerCase().contains(keyword.toLowerCase())
-                                    || seminar.getDescription().toLowerCase().contains(keyword.toLowerCase())) {
+                            if (seminar.getTitle().toLowerCase(Locale.GERMAN).contains(keyword.toLowerCase(Locale.GERMAN))
+                                    || seminar.getDescription().toLowerCase(Locale.GERMAN).contains(keyword.toLowerCase(Locale.GERMAN))) {
                                 matchedKeywordsCount++;
                             }
                         }
