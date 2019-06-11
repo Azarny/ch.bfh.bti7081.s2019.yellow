@@ -70,6 +70,7 @@ public class SeminarManager {
                     if (filter.getCategory() == null) {
                         return true;
                     } else {
+                        //SpotBugs wants Locale for toLowerCase()-Method
                         return seminar.getCategory().getName().toLowerCase(Locale.GERMAN).equals(filter.getCategory()
                                 .getName().toLowerCase(Locale.GERMAN));
                     }
@@ -79,6 +80,7 @@ public class SeminarManager {
                     if (filter.getLocation() == null) {
                         return true;
                     } else {
+                        //SpotBugs wants Locale for toLowerCase()-Method
                         return seminar.getLocation().toLowerCase(Locale.GERMAN).contains(filter.getLocation().toLowerCase(Locale.GERMAN));
                     }
                 })
@@ -106,6 +108,7 @@ public class SeminarManager {
                         String[] keywords = filter.getKeyword().split(" ");
                         int matchedKeywordsCount = 0;
                         for (String keyword : keywords) {
+                            //SpotBugs wants Locale for toLowerCase()-Method
                             if (seminar.getTitle().toLowerCase(Locale.GERMAN).contains(keyword.toLowerCase(Locale.GERMAN))
                                     || seminar.getDescription().toLowerCase(Locale.GERMAN).contains(keyword.toLowerCase(Locale.GERMAN))) {
                                 matchedKeywordsCount++;
