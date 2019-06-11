@@ -7,7 +7,6 @@ import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.presenter.dto.SeminarDTO;
 import ch.bfh.bti7081.presenter.dto.UserDTO;
-import ch.bfh.bti7081.view.NewSeminarView;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
