@@ -366,7 +366,14 @@ public class SeminarView extends VerticalLayout {
 
         Div linkLabel = new Div(new Span("Link zum Veranstalter:"));
         linkLabel.setClassName("detail-label");
-        Anchor linkAnchor = new Anchor(seminar.getUrl(), seminar.getUrl());
+        String url;
+        //add https:// to links without it, otherwise vaadin can't handle it
+        if (seminar.getUrl().contains("http")){
+            url = seminar.getUrl();
+        }else{
+            url = "https://" + seminar.getUrl();
+        }
+        Anchor linkAnchor = new Anchor(url, seminar.getUrl());
         // opens in a new tab
         linkAnchor.setTarget("_blank");
         Div link = new Div(linkAnchor);
