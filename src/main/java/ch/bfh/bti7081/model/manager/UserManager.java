@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
+import java.nio.charset.Charset;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
@@ -67,7 +68,7 @@ public class UserManager {
      */
     public String generateHash(String password, String salt) throws Exception {
         char[] chars = password.toCharArray();
-        byte[] bytes = salt.getBytes();
+        byte[] bytes = salt.getBytes(Charset.defaultCharset());
 
         PBEKeySpec spec = new PBEKeySpec(chars, bytes, ITERATIONS, KEY_LENGTH);
 

@@ -35,7 +35,6 @@ public class Layout extends VerticalLayout implements RouterLayout {
     @Autowired
     private UserPresenter presenter;
     private HorizontalLayout menuBar = new HorizontalLayout();
-    private Label filler = new Label("");
     // elements for login
     private Button loginDialogBtn = new Button("Login");
     private HorizontalLayout loginLayout = new HorizontalLayout(loginDialogBtn);
