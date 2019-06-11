@@ -11,8 +11,8 @@ import com.vaadin.flow.component.notification.Notification;
  * @author walty1
  */
 public class ErrorNotification extends Notification {
-    private final static String CLASSNAME = "error-notification";
-    private final static int DURATION_IN_MS = 5000;
+    private static final String CLASSNAME = "error-notification";
+    private static final int DURATION_IN_MS = 5000;
 
     /**
      * Creates the notification.

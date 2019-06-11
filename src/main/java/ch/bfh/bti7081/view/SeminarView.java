@@ -195,7 +195,9 @@ public class SeminarView extends VerticalLayout {
     private void setActions() {
         seminarGrid.asSingleSelect();
         seminarGrid.addSelectionListener(event -> {
-            if (event.getFirstSelectedItem().isPresent()) showDetails(event.getFirstSelectedItem().get());
+            if (event.getFirstSelectedItem().isPresent()) {
+                showDetails(event.getFirstSelectedItem().get());
+            }
         });
         details.addDialogCloseActionListener(event -> {
             seminarGrid.getSelectedItems().forEach(s -> seminarGrid.deselect(s));
