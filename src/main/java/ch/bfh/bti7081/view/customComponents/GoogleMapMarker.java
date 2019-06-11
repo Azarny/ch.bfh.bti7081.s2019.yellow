@@ -11,8 +11,6 @@ import com.vaadin.flow.shared.Registration;
  * The marker is in HTML an is appended as a child to the map.
  * (See @HTMLImport and Polymer)
  * Properties are set via JavaScript.
- *
- * @author walty1
  */
 @Tag("google-map-marker")
 @HtmlImport("bower_components/google-map/google-map-marker.html")
