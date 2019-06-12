@@ -7,7 +7,6 @@ import ch.bfh.bti7081.model.seminar.Seminar;
 import ch.bfh.bti7081.model.seminar.SeminarCategory;
 import ch.bfh.bti7081.presenter.dto.SeminarDTO;
 import ch.bfh.bti7081.presenter.dto.UserDTO;
-import ch.bfh.bti7081.view.NewSeminarView;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.errors.ApiException;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
 
 @Component
 public class NewSeminarPresenter {
-    private NewSeminarView view;
     @Autowired
     private SeminarManager seminarManager;
     @Autowired
@@ -62,7 +60,7 @@ public class NewSeminarPresenter {
      */
     public void sendSeminarToBackend(SeminarDTO frontendObject) throws Exception {
         String userName = (String) VaadinSession.getCurrent().getAttribute("userName");
-        if (userName != null || !userName.isEmpty()) {
+        if (userName != null && !userName.isEmpty()) {
             UserDTO user = userPresenter.getUserByUsername(userName);
             if (user != null) {
                 // check if user is expert or moderator
@@ -75,7 +73,7 @@ public class NewSeminarPresenter {
                             + user.getUsername());
                 }
             } else {
-                throw new IllegalArgumentException("Es wurde kein User " + user.getUsername() + " gefunden");
+                throw new IllegalArgumentException("Es wurde kein User " + userName + " gefunden");
             }
         } else {
             throw new IllegalArgumentException("Kein User ist eingeloggt");
@@ -164,9 +162,4 @@ public class NewSeminarPresenter {
     public int getMaxYearsInFuture() {
         return ValidationConstants.MAX_YEARS_IN_FUTURE.value;
     }
-
-    public void setView(NewSeminarView view) {
-        this.view = view;
-    }
-
 }

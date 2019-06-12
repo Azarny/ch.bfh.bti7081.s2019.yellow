@@ -69,7 +69,7 @@ public class SeminarView extends VerticalLayout {
     private Binder<SeminarFilterDTO> binder = new Binder<>();
     private FormLayout filterFormLayout = new FormLayout(
             searchTf, fromDateDp, toDateDp, categoriesCb, ortTf, filterBtn, resetFilterBtn);
-    private Details filterDetails = new Details("Filter",new Div());
+    private Details filterDetails = new Details("Filter", new Div());
     //New-Seminar-Button
     private Button newSeminar = new Button("Neues Seminar", new Icon(VaadinIcon.EDIT));
     //Seminar-Components
@@ -164,9 +164,9 @@ public class SeminarView extends VerticalLayout {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("kk:mm");
         seminarGrid.addColumn(TemplateRenderer.<SeminarDTO>of("<div style='padding:10px'>" +
-                        "<div style='font-weight:bold'>[[item.title]]<br></div>" +
-                        "<div>[[item.date]] [[item.time]]<div style='float:right'>[[item.location]]</div></div>" +
-                        "</div>")
+                "<div style='font-weight:bold'>[[item.title]]<br></div>" +
+                "<div>[[item.date]] [[item.time]]<div style='float:right'>[[item.location]]</div></div>" +
+                "</div>")
                 .withProperty("title", SeminarDTO::getTitle)
                 .withProperty("date", SeminarDTO -> dateFormatter.format(SeminarDTO.getDate()))
                 .withProperty("time", SeminarDTO -> timeFormatter.format(SeminarDTO.getTime()))
@@ -195,10 +195,12 @@ public class SeminarView extends VerticalLayout {
     private void setActions() {
         seminarGrid.asSingleSelect();
         seminarGrid.addSelectionListener(event -> {
-            if(event.getFirstSelectedItem().isPresent()) showDetails(event.getFirstSelectedItem().get());
+            if (event.getFirstSelectedItem().isPresent()) {
+                showDetails(event.getFirstSelectedItem().get());
+            }
         });
         details.addDialogCloseActionListener(event -> {
-            seminarGrid.getSelectedItems().forEach(s->seminarGrid.deselect(s));
+            seminarGrid.getSelectedItems().forEach(s -> seminarGrid.deselect(s));
             details.close();
         });
         // filter-button action
@@ -253,17 +255,12 @@ public class SeminarView extends VerticalLayout {
      * @author walty1
      */
     private void setViewContent(List<SeminarDTO> seminaries) {
-        try {
-            seminarGrid.setItems(seminaries);
-            if (seminaries.size() == 0) {
-                Notification note = new Notification("Es wurden keine Seminare gefunden.", 3000);
-                note.open();
-            }
-            setSeminarMarkers(seminaries);
-        } catch (Exception e) {
-            this.add(new ErrorNotification("Es ist ein technischer Fehler aufgetreten. " +
-                    "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support."));
+        seminarGrid.setItems(seminaries);
+        if (seminaries.size() == 0) {
+            Notification note = new Notification("Es wurden keine Seminare gefunden.", 3000);
+            note.open();
         }
+        setSeminarMarkers(seminaries);
     }
 
     /**
@@ -328,7 +325,7 @@ public class SeminarView extends VerticalLayout {
      * @param seminar DTO of the seminar to be visible in the pop-up
      * @author oppls7
      * @author siegn2
-     * */
+     */
     private void generateDialog(SeminarDTO seminar) {
         Div content = new Div();
         String seminarTitle = seminar.getTitle();
@@ -368,9 +365,9 @@ public class SeminarView extends VerticalLayout {
         linkLabel.setClassName("detail-label");
         String url;
         //add https:// to links without it, otherwise vaadin can't handle it
-        if (seminar.getUrl().contains("http")){
+        if (seminar.getUrl().contains("http")) {
             url = seminar.getUrl();
-        }else{
+        } else {
             url = "https://" + seminar.getUrl();
         }
         Anchor linkAnchor = new Anchor(url, seminar.getUrl());

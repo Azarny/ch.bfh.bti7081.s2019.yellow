@@ -21,8 +21,6 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.component.timepicker.TimePicker;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.binder.BinderValidationStatus;
-import com.vaadin.flow.data.binder.BindingValidationStatus;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.VaadinSession;
 import com.vaadin.flow.spring.annotation.UIScope;
@@ -32,8 +30,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @StyleSheet("styles/style.css")
 @UIScope
@@ -222,7 +218,6 @@ public class NewSeminarView extends VerticalLayout {
      * @author walty1
      */
     private void mvpBinding() {
-        presenter.setView(this);
         setFormActions();
     }
 
@@ -237,9 +232,10 @@ public class NewSeminarView extends VerticalLayout {
                 try {
                     presenter.sendSeminarToBackend(newSeminar);
                     save.getUI().ifPresent(ui -> ui.navigate("seminar"));
-                } catch (IllegalArgumentException | NotFoundException e) {
+                } catch (IllegalArgumentException | NotFoundException | IllegalStateException e) {
                     displayErrorMessage(e.getMessage());
                 } catch (Exception e) {
+                    e.printStackTrace();
                     displayErrorMessage("Es ist ein technischer Fehler aufgetreten. " +
                             "Bitte versuchen Sie es später noch einmal oder wenden sie sich an den Support.");
                 }
