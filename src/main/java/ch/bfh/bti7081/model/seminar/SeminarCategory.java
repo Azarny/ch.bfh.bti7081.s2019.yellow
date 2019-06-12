@@ -7,6 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * @author siegn2
+ */
 @Entity
 @Table(name = "seminar_category")
 public class SeminarCategory {
@@ -20,11 +23,13 @@ public class SeminarCategory {
     @Column(name = PREFIX + "NAME")
     private String name;
 
+    //Empty constructor needed for creation of elements with Spring.
+    public SeminarCategory() {
+    }
+
     public SeminarCategory(String name) {
         this.name = name;
-}
-
-    public SeminarCategory(){};
+    }
 
     public String getName() {
         return name;

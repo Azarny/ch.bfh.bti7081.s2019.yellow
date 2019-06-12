@@ -13,6 +13,9 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author siegn2
+ */
 @Entity
 @Table(name = "faq_entry")
 public class FaqEntry {

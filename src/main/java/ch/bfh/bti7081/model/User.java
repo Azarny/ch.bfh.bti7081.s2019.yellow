@@ -13,17 +13,22 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 
+/**
+ * User-object in the data model
+ *
+ * @author siegn2
+ */
 @Entity
 @Table(name = "user")
 public class User {
     private static final String PREFIX = "USER_";
 
     @Id
-    @Column(name=PREFIX + "ID")
+    @Column(name = PREFIX + "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = PREFIX + "USERNAME", length = 20)
+    @Column(name = PREFIX + "USERNAME", unique = true, length = 20)
     private String username;
 
     @Column(name = PREFIX + "EMAIL", length = 255)
@@ -50,6 +55,13 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "author")
     private List<ForumEntryComment> comments;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;

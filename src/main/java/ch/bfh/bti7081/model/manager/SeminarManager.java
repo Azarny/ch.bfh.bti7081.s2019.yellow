@@ -7,37 +7,72 @@ import ch.bfh.bti7081.model.seminar.SeminarFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.nio.charset.Charset;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Controller
 public class SeminarManager {
-    // manages the communication between backend and frontend
-    // the list of methods isn't completed yet, just some sample methods for the class diagramm
 
     @Autowired
     private SeminarRepository seminarRepository;
 
+    /**
+     * Gets all seminaries from DB that take place after today, sorted by date
+     *
+     * @return list of seminaries
+     * @author siegn2
+     */
     public List<Seminar> getSeminaries() {
-        return seminarRepository.findAll();
+        List<Seminar> seminaries = seminarRepository.findByDateGreaterThanEqual(LocalDateTime.now());
+        return seminaries.stream()
+                .sorted(Comparator.nullsLast(Comparator.comparing(Seminar::getDate)))
+                .collect(Collectors.toList());
     }
 
-    /*
+    /**
      * Returns filtered seminaries from db
      *
-     * Author: luscm1
-     * */
+     * @param filter Filters for the seminaries
+     * @return List of filtered and sorted seminaries
+     * @author luscm1
+     * @author siegn2
+     */
     public List<Seminar> getFilteredSeminars(SeminarFilter filter) {
-        return getSeminaries().stream()
+        List<Seminar> listToFilter;
+
+        LocalDate from = filter.getFromDate();
+        LocalDate to = filter.getToDate();
+        if (from != null && to != null) {
+            // get all seminaries that take place in the given time period
+            listToFilter = seminarRepository.getAllBetweenDates(from.atStartOfDay(), to.atStartOfDay());
+        } else if (from != null) {
+            // get all seminaries that take place after the given date
+            listToFilter = seminarRepository.findByDateGreaterThanEqual(from.atStartOfDay());
+        } else if (to != null) {
+            // get all seminaries that is before the given date
+            listToFilter = seminarRepository.findByDateLessThanEqual(to.atStartOfDay());
+        } else {
+            // if we have no date-filter active, we just get all seminaries in the future,
+            // and stream-filter them here
+            listToFilter = getSeminaries();
+        }
+
+        // filter the list with the other filters
+        return listToFilter.stream()
                 //filter category
                 .filter(seminar -> {
                     if (filter.getCategory() == null) {
                         return true;
                     } else {
-                        return seminar.getCategory().getName().toLowerCase().equals(filter.getCategory()
-                                .getName().toLowerCase());
+                        //SpotBugs wants Locale for toLowerCase()-Method
+                        return seminar.getCategory().getName().toLowerCase(Locale.GERMAN).equals(filter.getCategory()
+                                .getName().toLowerCase(Locale.GERMAN));
                     }
                 })
                 //filter location
@@ -45,7 +80,8 @@ public class SeminarManager {
                     if (filter.getLocation() == null) {
                         return true;
                     } else {
-                        return seminar.getLocation().toLowerCase().contains(filter.getLocation().toLowerCase());
+                        //SpotBugs wants Locale for toLowerCase()-Method
+                        return seminar.getLocation().toLowerCase(Locale.GERMAN).contains(filter.getLocation().toLowerCase(Locale.GERMAN));
                     }
                 })
                 //filter date
@@ -72,8 +108,9 @@ public class SeminarManager {
                         String[] keywords = filter.getKeyword().split(" ");
                         int matchedKeywordsCount = 0;
                         for (String keyword : keywords) {
-                            if (seminar.getTitle().toLowerCase().contains(keyword.toLowerCase())
-                                            || seminar.getDescription().toLowerCase().contains(keyword.toLowerCase())){
+                            //SpotBugs wants Locale for toLowerCase()-Method
+                            if (seminar.getTitle().toLowerCase(Locale.GERMAN).contains(keyword.toLowerCase(Locale.GERMAN))
+                                    || seminar.getDescription().toLowerCase(Locale.GERMAN).contains(keyword.toLowerCase(Locale.GERMAN))) {
                                 matchedKeywordsCount++;
                             }
                         }
@@ -81,61 +118,70 @@ public class SeminarManager {
                         return matchedKeywordsCount == keywords.length;
                     }
                 })
+                // order the seminaries according to their date
+                .sorted(Comparator.nullsLast(Comparator.comparing(Seminar::getDate)))
                 .collect(Collectors.toList());
-
     }
 
+    /**
+     * Saves a seminar in the database.
+     *
+     * @param seminar seminar with informations
+     * @throws IllegalArgumentException Aborts if validation-errors occur.
+     * @author luscm1
+     */
     public void createSeminar(Seminar seminar) throws IllegalArgumentException {
         String validationResult = validateSeminar(seminar);
-        if ("".equals(validationResult)){
+        if (validationResult.isEmpty()) {
             seminarRepository.save(seminar);
-        }
-        else{
-            throw new IllegalArgumentException("Following errors occured: "+ validationResult);
+        } else {
+            throw new IllegalArgumentException(validationResult);
         }
     }
 
-    /*
+    /**
      * validates if the seminar fulfills all the requirements
      *
-     * Author: luscm1
-     * */
+     * @param seminar seminarobject with new information
+     * @return a string containing the result of the validation (which errors were found).
+     * @author luscm1
+     */
     public String validateSeminar(Seminar seminar) {
-        String returnString = "";
+        HashSet<String> errorMessages = new HashSet<>();
 
         if (seminar.getStreet() == null || seminar.getStreet().trim().length() <
                 ValidationConstants.MIN_STREET_LENGTH.value) {
-            returnString += "no valid street name, ";
+            errorMessages.add("bitte gültiger Strassenname angeben");
         }
 
         if (seminar.getHouseNumber() == null || !seminar.getHouseNumber().matches("^\\d*\\w$") ||
                 seminar.getHouseNumber().trim().length() <
                         ValidationConstants.MIN_STREETNUMBER_LENGTH.value) {
-            returnString += "no valid house number, ";
+            errorMessages.add("bitte gültige Strassennummer angeben");
         }
 
         if (seminar.getPlz() == null || !((seminar.getPlz() > 999 && seminar.getPlz() < 10000) ||
                 (seminar.getPlz() > 99999 && seminar.getPlz() < 1000000))) {
-            returnString += "no valid PLZ, ";
+            errorMessages.add("bitte gültige PLZ angeben");
         }
 
         if (seminar.getLocation() == null || seminar.getLocation().trim().length() <
                 ValidationConstants.MIN_LOCATION_LENGTH.value) {
-            returnString += "no valid location, ";
+            errorMessages.add("bitte gültiger Ort angeben");
         }
 
         if (seminar.getTitle() == null || seminar.getTitle().trim().length() <
                 ValidationConstants.MIN_TITLE_LENGTH.value) {
-            returnString += "no valid title, ";
+            errorMessages.add("bitte gültiger Titel angeben");
         }
 
         if (seminar.getDate() == null || seminar.getDate().isBefore(LocalDateTime.now()) || seminar.getDate()
                 .isAfter(LocalDateTime.now().plusYears(ValidationConstants.MAX_YEARS_IN_FUTURE.value))) {
-            returnString += "no valid date, ";
+            errorMessages.add("bitte gültige Datum/Zeit Kombination angeben (nur zukünftige Seminare sind erlaubt)");
         }
 
         if (seminar.getCategory() == null) {
-            returnString += "no valid category, ";
+            errorMessages.add("bitte gültige Kategorie angeben");
         }
 
         //regex pattern description:
@@ -145,26 +191,24 @@ public class SeminarManager {
         // (/\S+(\./\S+)*)?$ --> allows all the stuff after the last / but no whitespaces
         if (seminar.getUrl() == null || !seminar.getUrl().
                 matches("^((https?)://)?(\\w+\\.)+(\\w{2}|\\w{3})(/\\S+(\\./\\S+)*)?$")) {
-            returnString += "no valid URL, ";
+            errorMessages.add("bitte gültiger Link angeben");
         }
 
         if (seminar.getDescription() == null || seminar.getDescription().trim().length() <
                 ValidationConstants.MIN_DESCRIPTION_LENGTH.value) {
-            returnString += "no valid description, ";
+            errorMessages.add("bitte gültige Beschreibung angeben");
         }
 
-        return returnString;
+        String result;
+        if (errorMessages.isEmpty()) {
+            result = "";
+        } else {
+            result = String.join(", ", errorMessages);
+        }
+        return result;
     }
-
-    private LocalDateTime dateGenerator(String timeToParse) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return LocalDateTime.parse(timeToParse, formatter);
-    }
-
 
     public void deleteSeminar(Seminar seminar) {
         seminarRepository.delete(seminar);
     }
-
-
 }
